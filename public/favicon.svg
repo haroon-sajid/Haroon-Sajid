@@ -1,0 +1,29 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="favicon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#5044E5" />
+      <stop offset="50%" stopColor="#6366f1" />
+      <stop offset="100%" stopColor="#8b5cf6" />
+    </linearGradient>
+  </defs>
+  <!-- Background with rounded corners - Purple gradient -->
+  <rect width="100" height="100" rx="26" fill="url(#favicon-gradient)"/>
+  <!-- Letter H - Left vertical line -->
+  <path d="M28 22V78" 
+        stroke="white" 
+        stroke-width="11" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  <!-- Letter H - Horizontal line -->
+  <path d="M28 50H58" 
+        stroke="white" 
+        stroke-width="11" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  <!-- Letter H - Right vertical line -->
+  <path d="M58 22V78" 
+        stroke="white" 
+        stroke-width="11" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+</svg>
