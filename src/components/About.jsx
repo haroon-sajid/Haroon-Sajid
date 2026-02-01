@@ -9,37 +9,37 @@ const About = () => {
     const contentRef = useRef(null)
 
     return (
-        <section 
+        <section
             ref={sectionRef}
-            id="about" 
-            className={`relative py-12 sm:py-16 md:py-24 px-4 sm:px-12 lg:px-24 xl:px-40 overflow-hidden 
+            id="about"
+            className={`relative py-8 sm:py-16 md:py-24 px-4 sm:px-12 lg:px-24 xl:px-40 overflow-hidden 
               bg-gradient-to-br from-gray-50 via-white to-gray-50/50 
               dark:from-gray-950 dark:via-black dark:to-gray-900 
               scroll-mt-20
               transition-opacity duration-700 ${hasIntersected ? 'opacity-100' : 'opacity-0'}`}
         >
-          {/* Decorative Background Elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-20 right-10 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-20 left-10 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-blue-500/3 via-cyan-500/3 to-indigo-500/3 rounded-full blur-3xl"></div>
-          </div>
+            {/* Decorative Background Elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-20 right-10 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-20 left-10 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-blue-500/3 via-cyan-500/3 to-indigo-500/3 rounded-full blur-3xl"></div>
+            </div>
             <div className="relative z-10">
-              <Title
-                  title="About Me"
-                  desc="I am a Full-Stack Developer dedicated to building intelligent, high-impact, production-ready web and AI solutions."
-              />
+                <Title
+                    title="About Me"
+                    desc="I am a Full-Stack Developer dedicated to building intelligent, high-impact, production-ready web and AI solutions."
+                />
             </div>
 
             {/* Main Content Area */}
-            <div className="relative z-10 flex flex-col lg:flex-row items-stretch gap-12 sm:gap-16 lg:gap-20 mt-10 sm:mt-16 lg:mt-20">
+            <div className="relative z-10 flex flex-col lg:flex-row items-stretch gap-8 sm:gap-16 lg:gap-20 mt-8 sm:mt-16 lg:mt-20">
                 {/* Image Section */}
                 <div
                     ref={imageRef}
                     className={`w-full lg:w-1/2 relative min-h-[300px] sm:min-h-[400px] group
                       transition-opacity duration-800 ${hasIntersected ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                     style={{
-                      transition: 'opacity 0.8s ease-out, transform 0.8s ease-out'
+                        transition: 'opacity 0.8s ease-out, transform 0.8s ease-out'
                     }}
                 >
                     <div
@@ -82,17 +82,18 @@ const About = () => {
                     className={`w-full lg:w-1/2 text-black dark:text-white
                       transition-opacity duration-800 delay-200 ${hasIntersected ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                     style={{
-                      transition: 'opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s'
+                        transition: 'opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s'
                     }}
                 >
 
-                    <p className="text-base sm:text-lg text-black dark:text-white leading-relaxed mb-4 sm:mb-6 text-justify">
+
+                    <p className="text-sm sm:text-lg text-black dark:text-white leading-relaxed mb-4 sm:mb-6 text-justify">
                         I am a <strong>Full-Stack Developer</strong> with over 1.5 years of experience building scalable web systems and AI-assisted workflows using Python, FastAPI, Django, MySQL, and PostgreSQL. My passion lies in designing and maintaining RESTful APIs and building modern frontend interfaces with React, Next.js, and TypeScript.
                     </p>
-                    <p className="text-base sm:text-lg text-black dark:text-white leading-relaxed mb-4 sm:mb-6 text-justify">
+                    <p className="text-sm sm:text-lg text-black dark:text-white leading-relaxed mb-4 sm:mb-6 text-justify">
                         Unlocking the potential of AI is central to my work. I specialize in integrating Large Language Models (LLMs) with frameworks like LangChain and LangGraph to create intelligent, context-aware applications. From optimizing backend performance with asynchronous programming to deploying robust solutions via Docker and CI/CD pipelines, I ensure every system is built for reliability and scale.
                     </p>
-                    <p className="text-base sm:text-lg text-black dark:text-white leading-relaxed mb-8 sm:mb-10 text-justify">
+                    <p className="text-sm sm:text-lg text-black dark:text-white leading-relaxed mb-8 sm:mb-10 text-justify">
                         Beyond the code, I value clear communication and collaborative problem-solving. I am constantly exploring new technologies to stay ahead of the curve, striving to deliver not just functional software, but intuitive digital experiences that drive real value for businesses and users alike.
                     </p>
 

@@ -9,7 +9,7 @@ const Footer = ({ theme }) => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
-      className="bg-slate-50 dark:bg-gray-900 pt-8 sm:pt-10 mt-12 sm:mt-20 md:mt-40 px-4 sm:px-10 lg:px-24 xl:px-40"
+      className="bg-slate-50 dark:bg-gray-900 pt-8 sm:pt-10 mt-12 sm:mt-20 md:mt-40 px-6 sm:px-10 lg:px-16 xl:px-24"
     >
       {/* Footer Top */}
       <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-8 sm:gap-12 lg:gap-10">
@@ -31,7 +31,7 @@ const Footer = ({ theme }) => {
           </p>
 
           <nav>
-            <ul className="flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-3 sm:gap-y-4 text-xs sm:text-sm md:text-base font-medium">
+            <ul className="flex flex-wrap gap-x-4 sm:gap-x-8 gap-y-3 sm:gap-y-4 text-sm sm:text-sm md:text-base font-medium">
               <li>
                 <a className="hover:text-primary transition-colors duration-300" href="#hero">
                   Home
@@ -74,7 +74,7 @@ const Footer = ({ theme }) => {
           className="text-black dark:text-white lg:max-w-md w-full"
         >
           <h3 className="font-bold text-base sm:text-lg">Let's Connect</h3>
-          <p className="text-xs sm:text-sm mt-2 mb-4 sm:mb-6 text-gray-600 dark:text-gray-400">
+          <p className="text-sm sm:text-sm mt-2 mb-4 sm:mb-6 text-gray-600 dark:text-gray-400">
             Open for opportunities. Drop me a line!
           </p>
 
@@ -101,6 +101,11 @@ const Footer = ({ theme }) => {
           <a href="https://www.facebook.com/share/1CqRy9mzjM/" target="_blank" rel="noopener noreferrer" className="hover:scale-120 hover:text-primary transition-all cursor-pointer text-gray-500 dark:text-gray-400">
             <svg className="w-5 h-5 hover:opacity-100 opacity-70" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.791-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+            </svg>
+          </a>
+          <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hover:scale-120 hover:text-primary transition-all cursor-pointer text-gray-500 dark:text-gray-400">
+            <svg className="w-5 h-5 hover:opacity-100 opacity-70" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
             </svg>
           </a>
           <a href="https://www.linkedin.com/in/haroon-sajid-ai?" target="_blank" rel="noopener noreferrer" className="hover:scale-120 hover:text-primary transition-all cursor-pointer">

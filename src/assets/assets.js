@@ -8,7 +8,7 @@ import microsoft_logo from './microsoft_logo.png'
 import zoom_logo from './zoom_logo.png'
 import rakuten_logo from './rakuten_logo.png'
 import coinbase_logo from './coinbase_logo.png'
-import ads_icon from './ads_icon.svg'
+import ads_icon from './promotion_icon.svg'
 import content_icon from './content_icon.svg'
 import marketing_icon from './marketing_icon.svg'
 import social_icon from './social_icon.svg'
@@ -21,7 +21,7 @@ import work_dashboard_management from './work_dashboard_management.png'
 import email_icon from './email_icon.svg'
 import person_icon from './person_icon.svg'
 import facebook_icon from './facebook_icon.svg'
-import twitter_icon from './twitter_icon.svg'
+import twitter_icon from './x_social_icon.svg'
 import instagram_icon from './instagram_icon.svg'
 import linkedin_icon from './linkedin_icon.svg'
 import whatsapp_icon from './whatsapp_icon.svg'
@@ -31,6 +31,7 @@ import google_logo from './google_logo.svg'
 import menu_icon_dark from './menu_icon_dark.svg'
 import sun_icon from './sun_icon.svg'
 import moon_icon from './moon_icon.svg'
+import Haroon_Resume from './Haroon_Resume.pdf'
 
 
 export const company_logos = [
@@ -69,7 +70,8 @@ const assets = {
   logo_dark,
   menu_icon_dark,
   sun_icon,
-  moon_icon
+  moon_icon,
+  Haroon_Resume
 }
 
 export default assets

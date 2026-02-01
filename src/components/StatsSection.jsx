@@ -10,13 +10,13 @@ const StatsSection = () => {
     ];
 
     return (
-        <section className="py-20 px-4 sm:px-12 lg:px-24 xl:px-40 bg-white dark:bg-gray-950">
+        <section className="py-12 sm:py-20 px-4 sm:px-12 lg:px-24 xl:px-40 bg-white dark:bg-gray-950">
             <div className="max-w-7xl mx-auto">
                 <div className="mb-16">
                     <div className="flex items-center gap-2 mb-4">
                         <div className="w-2 h-8 bg-primary rounded-full transform -skew-x-12"></div>
                         <h2 className="text-3xl md:text-4xl font-bold text-black dark:text-white">
-                            Why Choose Zerisol
+                            Why Choose Haroon
                         </h2>
                     </div>
                     <p className="text-gray-500 dark:text-gray-400 max-w-2xl">

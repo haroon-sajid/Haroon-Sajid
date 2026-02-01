@@ -90,12 +90,12 @@ const Skills = () => {
   return (
     <div
       ref={sectionRef}
-      id='skills' 
-      className={`relative flex flex-col items-center gap-7 px-4 sm:px-12 lg:px-24 xl:px-40 pt-30 
+      id='skills'
+      className={`relative flex flex-col items-center gap-7 px-4 sm:px-12 lg:px-24 xl:px-40 pt-16 sm:pt-30 
         text-black dark:text-white scroll-mt-20
         bg-gradient-to-br from-white via-gray-50/30 to-white
         dark:from-gray-950 dark:via-black dark:to-gray-900
-        py-12 sm:py-16 md:py-24
+        py-8 sm:py-16 md:py-24
         transition-opacity duration-700 ${hasIntersected ? 'opacity-100' : 'opacity-0'}`}
     >
       {/* Decorative Background Elements */}
@@ -103,7 +103,7 @@ const Skills = () => {
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-indigo-500/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-blue-500/10 via-cyan-500/10 to-indigo-500/10 rounded-full blur-3xl"></div>
         {/* Subtle Grid Pattern */}
-        <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.05]" 
+        <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.05]"
           style={{
             backgroundImage: `linear-gradient(to right, #5044E5 1px, transparent 1px),
                               linear-gradient(to bottom, #5044E5 1px, transparent 1px)`,

@@ -6,31 +6,22 @@ const Experience = () => {
 
   const experienceData = [
     {
-      company: "Orvox AI",
-      role: "Full Stack Developer",
-      period: "Aug 2024 - Present",
-      description: "Developing full-stack applications using Python, FastAPI, Django, PostgreSQL, React, and TypeScript. Building AI chatbot solutions using LangChain.",
-      technologies: ["FastAPI", "Django", "React", "Docker"],
+      company: "Camden Health System/OrvoxAI",
+      role: "Full Stack AI Engineer",
+      period: "Sep 2025 - Present",
+      description: "Developed full-stack applications using Python, FastAPI, Django, PostgreSQL, React, and TypeScript for CRM and project management systems. Built AI chatbots and workflow automation solutions integrating LLMs with LangChain and n8n. Designed RESTful APIs and implemented responsive UIs with React, TypeScript, and Tailwind CSS. Automated CI/CD pipelines with GitHub Actions and Docker. Deployed applications on cloud platforms including Render, Vercel, DigitalOcean, and AWS.",
+      technologies: [],
       icon: "💻",
-      location: "Remote"
-    },
-    {
-      company: "Camden Health System",
-      role: "Web Developer Intern",
-      period: "Feb 2024 - Jul 2024",
-      description: "Developed FastAPI-based RESTful APIs for healthcare workflows. Built AI-powered appointment booking chatbot. Created responsive frontend components.",
-      technologies: ["FastAPI", "React", "Node.js"],
-      icon: "🚀",
-      location: "Remote"
+      location: "Onsite"
     },
     {
       company: "Enigmatix",
       role: "Backend Developer",
-      period: "Aug 2023 - Jan 2024",
-      description: "Developed backend services using Python and FastAPI. Designed database schemas and wrote efficient SQL queries.",
-      technologies: ["Python", "FastAPI", "PostgreSQL"],
-      icon: "🎯",
-      location: "Remote"
+      period: "July 2024 - Aug 2025",
+      description: "Developed RESTful APIs and backend services using Python, Django, and FastAPI. Designed and implemented database models, endpoints, and CRUD operations with PostgreSQL. Created, tested, and documented APIs. Optimized backend logic and maintained production-ready code. Contributed to AI-powered chatbot workflows using LangChain, vector databases, and RAG pipelines.",
+      technologies: [],
+      icon: "⚙️",
+      location: "Onsite"
     }
   ];
 
@@ -39,8 +30,8 @@ const Experience = () => {
       institution: "The Islamia University of Bahawalpur",
       degree: "Bachelor of Science in Artificial Intelligence",
       period: "2020 - 2024",
-      description: "Specialized in ML, DL, NLP, and AI System Development. Developed JARVIS Desktop Assistant for FYP.",
-      technologies: ["ML/DL", "NLP", "AI Systems"],
+      description: "Specialized in ML, DL, NLP, and AI System Development. Developed JARVIS Desktop Assistant for FYP. Gained strong foundation in computer science and advanced AI concepts.",
+      technologies: [],
       icon: "🎓",
       location: "Bahawalpur, Pakistan"
     },
@@ -49,18 +40,9 @@ const Experience = () => {
       degree: "Intermediate in Science",
       period: "2018 - 2020",
       description: "Pre-Engineering focus with strong foundation in Mathematics and Physics.",
-      technologies: ["Mathematics", "Physics", "Chemistry"],
-      icon: "📚",
+      technologies: [],
+      icon: "�",
       location: "Bahawalpur, Pakistan"
-    },
-    {
-      institution: "Online Certification Program",
-      degree: "Generative AI Mastery with 15+ Real Time project certificate",
-      period: "2024",
-      description: "Comprehensive certification program covering Generative AI technologies with hands-on experience building 15+ real-time projects using advanced AI frameworks.",
-      technologies: ["Generative AI", "LLMs", "LangChain"],
-      icon: "📜",
-      location: "Online"
     }
   ];
 
@@ -87,7 +69,7 @@ const Experience = () => {
 
     return (
       <div
-        className={`group relative aspect-square 
+        className={`group relative min-h-[300px] 
           bg-gray-50/80 dark:bg-[rgba(255,255,255,0.05)] 
           backdrop-blur-[10px] 
           border border-gray-200/50 dark:border-[rgba(255,255,255,0.1)] 
@@ -131,11 +113,11 @@ const Experience = () => {
             <span>📍</span>
             <span>{data.location}</span>
           </div>
-          <p 
-            className="text-[0.8rem] sm:text-[0.85rem] text-gray-600 dark:text-[#b0b0b0] leading-relaxed overflow-hidden" 
+          <p
+            className="text-[0.8rem] sm:text-[0.85rem] text-gray-600 dark:text-[#b0b0b0] leading-relaxed overflow-hidden"
             style={{
               display: '-webkit-box',
-              WebkitLineClamp: 3,
+              WebkitLineClamp: 10,
               WebkitBoxOrient: 'vertical'
             }}
           >
@@ -144,25 +126,27 @@ const Experience = () => {
         </div>
 
         {/* Card Footer */}
-        <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-4">
-          {data.technologies.map((tech, i) => (
-            <span
-              key={i}
-              className="px-2.5 py-1 sm:px-3 sm:py-1.5 
-                bg-[rgba(102,126,234,0.15)] dark:bg-[rgba(102,126,234,0.15)] 
-                border border-[rgba(102,126,234,0.3)] dark:border-[rgba(102,126,234,0.3)] 
-                rounded-xl 
-                text-[0.65rem] sm:text-[0.7rem] 
-                text-[#667eea] dark:text-[#a5b4fc] 
-                transition-all duration-300 
-                hover:bg-[rgba(102,126,234,0.25)] dark:hover:bg-[rgba(102,126,234,0.25)] 
-                hover:border-[rgba(102,126,234,0.5)] dark:hover:border-[rgba(102,126,234,0.5)] 
-                hover:-translate-y-0.5 active:translate-y-0"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
+        {data.technologies.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-4">
+            {data.technologies.map((tech, i) => (
+              <span
+                key={i}
+                className="px-2.5 py-1 sm:px-3 sm:py-1.5 
+                  bg-[rgba(102,126,234,0.15)] dark:bg-[rgba(102,126,234,0.15)] 
+                  border border-[rgba(102,126,234,0.3)] dark:border-[rgba(102,126,234,0.3)] 
+                  rounded-xl 
+                  text-[0.65rem] sm:text-[0.7rem] 
+                  text-[#667eea] dark:text-[#a5b4fc] 
+                  transition-all duration-300 
+                  hover:bg-[rgba(102,126,234,0.25)] dark:hover:bg-[rgba(102,126,234,0.25)] 
+                  hover:border-[rgba(102,126,234,0.5)] dark:hover:border-[rgba(102,126,234,0.5)] 
+                  hover:-translate-y-0.5 active:translate-y-0"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     );
   };
@@ -171,12 +155,12 @@ const Experience = () => {
     <section
       ref={sectionRef}
       id="experience"
-      className={`relative py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-5 lg:px-6
+      className={`relative py-8 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-5 lg:px-6
         bg-white dark:bg-[#0a0a0f]
         overflow-hidden scroll-mt-20
         transition-opacity duration-700 ${hasIntersected ? 'opacity-100' : 'opacity-0'}`}
     >
-      <div className="max-w-[1200px] mx-auto">
+      <div className="max-w-[1400px] mx-auto">
         {/* Work Experience Section */}
         <div className="mb-16 sm:mb-20">
           <SectionHeader
@@ -185,7 +169,7 @@ const Experience = () => {
             subtitle="My professional journey building innovative solutions"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6 mt-8">
             {experienceData.map((exp, index) => (
               <Card
                 key={index}
@@ -202,11 +186,11 @@ const Experience = () => {
         <div className="mt-16 sm:mt-20">
           <SectionHeader
             badge="🎓 Academic Background"
-            title="Education & Certifications"
+            title="Education"
             subtitle="My academic journey and professional certifications"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6 mt-8">
             {educationData.map((edu, index) => (
               <Card
                 key={index}

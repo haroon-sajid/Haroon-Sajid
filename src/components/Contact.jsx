@@ -39,7 +39,7 @@ const Contact = () => {
     <section
       ref={sectionRef}
       id="contact"
-      className={`relative py-12 sm:py-16 md:py-24 px-4 sm:px-12 lg:px-24 xl:px-40 
+      className={`relative py-8 sm:py-16 md:py-24 px-4 sm:px-12 lg:px-16 xl:px-24 
         bg-gradient-to-br from-white via-gray-50/30 to-white
         dark:from-gray-950 dark:via-black dark:to-gray-900 
         overflow-hidden scroll-mt-20
