@@ -32,24 +32,24 @@ const About = () => {
             </div>
 
             {/* Main Content Area */}
-            <div className="relative z-10 flex flex-col lg:flex-row items-stretch gap-8 sm:gap-16 lg:gap-20 mt-8 sm:mt-16 lg:mt-20">
+            <div className="relative z-10 flex flex-col lg:flex-row items-stretch gap-8 sm:gap-16 lg:gap-20 mt-8 sm:mt-16 lg:mt-20 lg:min-h-[620px]">
                 {/* Image Section */}
                 <div
                     ref={imageRef}
-                    className={`w-full lg:w-1/2 relative min-h-[300px] sm:min-h-[400px] group
+                    className={`w-full lg:w-1/2 relative min-h-[320px] sm:min-h-[420px] h-full flex flex-col justify-center group
                       transition-opacity duration-800 ${hasIntersected ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                     style={{
                         transition: 'opacity 0.8s ease-out, transform 0.8s ease-out'
                     }}
                 >
                     <div
-                        className="relative z-10 rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(255,255,255,0.05)] border border-gray-100 dark:border-gray-800 lg:absolute lg:inset-0 w-full h-full bg-slate-50/50 dark:bg-gray-950
+                        className="relative z-10 rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(255,255,255,0.05)] border border-gray-100 dark:border-gray-800 w-full h-full bg-slate-50/50 dark:bg-gray-950
                         hover:scale-[1.02] transition-transform duration-400"
                     >
                         <img
-                            src={assets.ai_agency_about_us}
+                            src={assets.haroon_profile_image}
                             alt="Haroon Sajid"
-                            className="w-full h-full object-contain object-bottom p-2 lg:p-4 transition-transform duration-700 group-hover:scale-105"
+                            className="w-full h-full object-cover p-2 lg:p-4 transition-transform duration-700 group-hover:scale-105"
                             loading="lazy"
                         />
                         {/* Simplified static wave overlay */}
@@ -79,7 +79,7 @@ const About = () => {
                 {/* Text Content */}
                 <div
                     ref={contentRef}
-                    className={`w-full lg:w-1/2 text-black dark:text-white
+                    className={`w-full lg:w-1/2 h-full flex flex-col justify-between text-black dark:text-white
                       transition-opacity duration-800 delay-200 ${hasIntersected ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                     style={{
                         transition: 'opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s'

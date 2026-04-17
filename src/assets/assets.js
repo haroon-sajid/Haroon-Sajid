@@ -17,6 +17,7 @@ import close_icon from './close_icon.svg'
 import work_mobile_app from './work_mobile_app.png'
 import work_fitness_app from './work_fitness_app.png'
 import ai_agency_about_us from './ai_agency_about_us.png'
+import haroon_profile_image from './haroon-profile-image.jpg'
 import work_dashboard_management from './work_dashboard_management.png'
 import email_icon from './email_icon.svg'
 import person_icon from './person_icon.svg'
@@ -59,6 +60,7 @@ const assets = {
   work_mobile_app,
   work_fitness_app,
   ai_agency_about_us,
+  haroon_profile_image,
   work_dashboard_management,
   email_icon,
   person_icon,

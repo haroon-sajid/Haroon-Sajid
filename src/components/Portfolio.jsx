@@ -41,11 +41,11 @@ const Portfolio = () => {
       liveLink: "https://calstudio.com/?ref=pmfm"
     },
     {
-      title: "Demo Project",
-      category: "Upcoming Innovation",
-      description: "An upcoming showcase of cutting-edge AI capabilities and interactive web experiences. This project will demonstrate the future of automated workflows and intelligent user interfaces.",
-      technologies: ["Next.js", "AI Integration", "Future Tech"],
-      liveLink: "#"
+      title: "AllBooked",
+      category: "Workforce Management",
+      description: "A cloud-based workforce management platform offering staff scheduling, time-tracking, payroll, invoicing, and integrated communication tools for streamlined operations.",
+      technologies: ["React", "Node.js", "PostgreSQL", "Tailwind CSS", "JavaScript"],
+      liveLink: "https://allbooked.co.uk/"
     }
   ];
 
