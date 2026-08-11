@@ -1,0 +1,441 @@
+.about-container {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5% 10%;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.about-container .about-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 430px) minmax(0, 640px);
+    grid-gap: 70px;
+    align-items: stretch;
+}
+
+/* ---------------- Left: visual panel ---------------- */
+
+.about-container .about-visual {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.about-container .about-panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background-color: #11161c;
+    flex: 1;
+    width: 100%;
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-container .about-vertical {
+    position: absolute;
+    top: 3.5%;
+    right: 5%;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: 'Inter', sans-serif;
+    font-size: 3.4rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.07);
+    user-select: none;
+    pointer-events: none;
+}
+
+.about-container .about-photo {
+    position: relative;
+    width: 62%;
+    margin-bottom: 8%;
+    margin-right: 8%;
+
+    img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+}
+
+.about-container .about-photo::before {
+    content: '';
+    position: absolute;
+    top: -7%;
+    right: -7%;
+    bottom: -7%;
+    left: -7%;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.about-container .about-badge {
+    position: absolute;
+    left: 6%;
+    bottom: 6%;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.55);
+
+    .badge-value {
+        font-family: 'Inter', sans-serif;
+        font-size: 2.4rem;
+        font-weight: 800;
+        line-height: 1;
+        color: #ffffff;
+    }
+
+    .badge-label {
+        padding-top: 6px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        line-height: 1.3;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #ffffff;
+    }
+
+    .badge-sub {
+        padding-top: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.6rem;
+        letter-spacing: 0.12em;
+        color: rgba(255, 255, 255, 0.5);
+    }
+}
+
+.about-container .about-script {
+    position: absolute;
+    right: 6%;
+    bottom: 8%;
+    max-width: 45%;
+    margin: 0;
+    text-align: right;
+    font-family: "Segoe Script", "Brush Script MT", cursive;
+    font-size: 1.15rem;
+    font-style: italic;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* ---------------- Right: content ---------------- */
+
+.about-container .about-eyebrow {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: #8b95a1;
+}
+
+.about-container .about-content h1 {
+    font-size: clamp(2.2rem, 4.5vw, 4rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    margin-block-start: 12px;
+    margin-block-end: 0px;
+
+    .about-outline {
+        color: transparent;
+        -webkit-text-stroke: 2px #ffffff;
+    }
+}
+
+.about-container .about-rule {
+    display: block;
+    width: 70px;
+    height: 3px;
+    margin-top: 22px;
+    border-radius: 2px;
+    background-color: var(--accent);
+}
+
+.about-container .about-text {
+    padding-top: 26px;
+
+    p {
+        margin-block-start: 0px;
+        margin-block-end: 1.1em;
+        font-size: 1rem;
+        line-height: 1.75;
+        color: #9aa4b2;
+        /* Even edges at every width. No hyphenation — split words
+           read worse than slightly wider spaces. */
+        text-align: justify;
+
+        strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
+    }
+
+    p:last-child {
+        margin-block-end: 0px;
+    }
+}
+
+.about-container .about-divider {
+    display: block;
+    height: 1px;
+    margin: 34px 0;
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+.about-container .about-do h3 {
+    margin-block-start: 0px;
+    margin-block-end: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+}
+
+.about-container .do-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 40px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 0;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        color: #c6ccd4;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+
+    .do-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 6px;
+
+        svg {
+            width: 14px;
+            height: 14px;
+            color: var(--accent);
+        }
+    }
+}
+
+/* ---------------- Light mode ---------------- */
+
+.light-mode {
+    .about-container .about-panel {
+        background-color: #e6e9ed;
+    }
+
+    .about-container .about-vertical {
+        color: rgba(13, 17, 22, 0.09);
+    }
+
+    .about-container .about-photo::before {
+        border-color: rgba(13, 17, 22, 0.35);
+    }
+
+    .about-container .about-badge {
+        border-color: rgba(13, 17, 22, 0.14);
+        background-color: rgba(255, 255, 255, 0.85);
+
+        .badge-value,
+        .badge-label {
+            color: #0d1116;
+        }
+
+        .badge-sub {
+            color: rgba(13, 17, 22, 0.55);
+        }
+    }
+
+    .about-container .about-script {
+        color: rgba(13, 17, 22, 0.7);
+    }
+
+    .about-container .about-eyebrow {
+        color: #5a636e;
+    }
+
+    .about-container .about-content h1 .about-outline {
+        color: transparent;
+        -webkit-text-stroke: 2px #0d1116;
+    }
+
+    .about-container .about-rule {
+        background-color: var(--accent);
+    }
+
+    .about-container .about-text p {
+        color: #4d5661;
+
+        strong {
+            color: #0d1116;
+        }
+    }
+
+    .about-container .about-divider {
+        background-color: rgba(13, 17, 22, 0.14);
+    }
+
+    .about-container .do-list li {
+        color: #3f4750;
+        border-bottom-color: rgba(13, 17, 22, 0.1);
+    }
+
+    .about-container .do-list .do-icon {
+        border-color: rgba(13, 17, 22, 0.16);
+
+        svg {
+            color: var(--accent-text);
+        }
+    }
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media screen {
+    @media (max-width: 1100px) {
+        .about-container .about-layout {
+            grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+            grid-gap: 45px;
+        }
+
+        .about-container .about-vertical {
+            font-size: 3rem;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .about-container {
+            display: block;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+
+        /* Text leads, portrait follows — reading "who is this" first and
+           meeting the face after reads better than a photo pushing the
+           heading below the fold. */
+        .about-container .about-layout {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .about-container .about-content {
+            order: 1;
+        }
+
+        .about-container .about-visual {
+            order: 2;
+            display: block;
+            height: auto;
+            width: 100%;
+            max-width: 420px;
+            margin: 45px auto 0 auto;
+        }
+
+        /* Body copy justifies like the hero paragraph. */
+        .about-container .about-text p {
+            text-align: justify;
+        }
+
+        .about-container .about-panel {
+            aspect-ratio: 3 / 4;
+            min-height: 0;
+        }
+
+        /* The corner composition was drawn for the tall desktop panel. On the
+           3:4 card the photo centres and lifts instead, clearing a bottom band
+           that the badge (left) and the script line (right) share without
+           either one crossing the portrait ring. */
+        .about-container .about-photo {
+            width: 66%;
+            margin-right: 0;
+            margin-bottom: 24%;
+        }
+
+        [dir="rtl"] .about-container .about-photo {
+            margin-left: 0;
+        }
+
+        .about-container .about-badge {
+            left: 5%;
+            bottom: 5%;
+            max-width: 52%;
+            box-sizing: border-box;
+            padding: 14px 16px;
+        }
+
+        .about-container .about-script {
+            right: 5%;
+            bottom: 6%;
+            max-width: 40%;
+            font-size: 1.05rem;
+        }
+
+        /* Slimmed and pinned to the edge: at watermark scale it was crossing
+           the centred portrait ring on the narrow card. */
+        .about-container .about-vertical {
+            font-size: 1.6rem;
+            right: 12px;
+        }
+
+        .about-container .about-content h1 {
+            margin-block-start: 10px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .about-container .do-list {
+            grid-template-columns: minmax(0, 1fr);
+            column-gap: 0px;
+        }
+
+        .about-container .about-vertical {
+            font-size: 1.4rem;
+        }
+
+        /* Badge and script split the bottom band — capped so the pair can
+           never meet in the middle on a narrow phone. */
+        .about-container .about-script {
+            font-size: 0.95rem;
+            max-width: 42%;
+        }
+
+        .about-container .about-badge {
+            max-width: 48%;
+            padding: 12px 14px;
+
+            .badge-value {
+                font-size: 1.9rem;
+            }
+
+            .badge-label {
+                font-size: 0.72rem;
+            }
+        }
+    }
+}

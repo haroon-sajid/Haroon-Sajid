@@ -1,0 +1,369 @@
+/* The AppBar sits behind the Toolbar. Give it the page colour too — MUI's
+   default is primary blue, and it shows through anywhere the Toolbar doesn't
+   cover. Learned this the hard way. */
+#navigation {
+    background-color: var(--bg);
+    background-image: none;
+    box-shadow: none;
+    transition: box-shadow .2s ease-in-out;
+}
+
+/* Shadow only once scrolled (class toggled in Navigation.tsx) */
+#navigation.scrolled {
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
+                0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                0 1px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Full-width bar, inset by padding so the background always reaches the
+   edges. 10% matches every section container, so the logo lines up with
+   the section headings below it. */
+.navigation-bar {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 10% !important;
+    padding-right: 10% !important;
+    min-height: 76px !important;
+    gap: 16px;
+    /* Stated rather than inherited from MUI's defaults: the links take the
+       slack and centre themselves, so on mobile — where the links are hidden —
+       the logo and the actions land on opposite edges with nothing else to do. */
+    justify-content: space-between;
+}
+
+.nav-links {
+    flex: 1 1 auto;
+    /* MUI's sx sets display on this Box, so it may resolve to block rather than
+       flex — centre it both ways so the links sit mid-bar regardless. */
+    justify-content: center;
+    text-align: center;
+}
+
+/* Saira Stencil One — the wordmark face from the source logo. It ships at a
+   single weight, so the heaviness is in the face itself, not font-weight. */
+.nav-logo {
+    display: inline-flex;
+    align-items: baseline;
+    flex-shrink: 0;
+    font-family: 'Saira Stencil One', 'Inter', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    color: #ffffff;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity .15s ease-in-out;
+}
+
+.nav-logo:hover {
+    opacity: 0.75;
+}
+
+.nav-logo .nav-logo-dot {
+    margin-left: 2px;
+    color: var(--brand-dot);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+/* Three classes beat MUI's generated colour class without !important */
+.navigation-bar .nav-links .MuiButton-root {
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    margin: 0 6px;
+    min-width: auto;
+    padding: 6px 8px;
+}
+
+.navigation-bar .nav-links .MuiButton-root:hover {
+    color: var(--accent-text);
+    background-color: transparent;
+}
+
+/* EN / ع switch — active side reads full strength, the other recedes.
+   Inter rather than mono: this is UI chrome, not metadata, and mono's
+   fixed advance widths make a two-letter label look loose. Each side
+   also gets the face that actually covers its script. */
+.nav-lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 13px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: none;
+    cursor: pointer;
+    line-height: 1;
+    transition: border-color .2s ease;
+
+    span {
+        color: #8b95a1;
+        transition: color .2s ease;
+    }
+
+    span.active {
+        color: #ffffff;
+    }
+
+    .nav-lang-en {
+        font-family: 'Inter', sans-serif;
+        font-size: 12.5px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+    }
+
+    .nav-lang-ar {
+        font-family: 'IBM Plex Sans Arabic', 'Inter', sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .nav-lang-sep {
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.28);
+    }
+}
+
+.nav-lang:hover {
+    border-color: var(--accent);
+
+    span.active {
+        color: var(--accent-text);
+    }
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 12px;
+
+    svg {
+        cursor: pointer;
+        font-size: 1.5rem;
+        transition: color .15s ease-in-out;
+    }
+
+    svg:hover {
+        color: var(--accent-text);
+    }
+}
+
+/* ---------------- Mobile drawer ----------------
+   The paper is a portalled element on <body>, so everything here is written
+   against the palette variables and the theme class handed to it in
+   Navigation.tsx — no descendant selector from .main-container can reach it. */
+
+.nav-drawer.MuiDrawer-paper {
+    box-sizing: border-box;
+    /* Never full-bleed: the strip of dimmed page left showing is what tells you
+       the menu is a layer you can dismiss, not a new screen. */
+    width: min(82vw, 320px);
+    background-color: var(--bg);
+    background-image: none;
+    border: none;
+    /* MUI's Paper defaults to the light theme's near-black text, which is
+       invisible on the dark panel — so the foreground is set here too. */
+    color: #ffffff;
+    /* Respects notches and the home indicator on modern phones */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.nav-drawer .nav-drawer-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.nav-drawer .nav-drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 20px 16px;
+    border-bottom: 1px solid var(--accent-line);
+}
+
+.nav-drawer .nav-drawer-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+}
+
+.nav-drawer .nav-drawer-close.MuiIconButton-root {
+    /* 44px is the smallest reliable touch target */
+    width: 44px;
+    height: 44px;
+    margin-inline-end: -10px;
+    color: var(--accent-text);
+}
+
+.nav-drawer .nav-drawer-list {
+    padding: 8px 0;
+
+    .MuiListItemButton-root {
+        min-height: 54px;
+        padding: 10px 20px;
+        /* Menus read as a column of destinations; centred text turns that
+           column into a ragged shape with no shared edge to scan. */
+        text-align: start;
+        border-inline-start: 2px solid transparent;
+        transition: background-color .15s ease, border-color .15s ease;
+    }
+
+    .MuiListItemButton-root:hover,
+    .MuiListItemButton-root:focus-visible {
+        background-color: var(--surface-hover);
+        border-inline-start-color: var(--accent);
+    }
+
+    .MuiListItemText-primary {
+        font-family: 'Inter', sans-serif;
+        font-size: 1.02rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+    }
+}
+
+.nav-drawer.light-mode.MuiDrawer-paper {
+    color: #0d1116;
+}
+
+.light-mode {
+    .nav-logo {
+        color: #0d1116;
+    }
+
+    .nav-lang {
+        border-color: rgba(13, 17, 22, 0.16);
+
+        span {
+            color: #5a636e;
+        }
+
+        span.active {
+            color: #0d1116;
+        }
+
+        .nav-lang-sep {
+            color: rgba(13, 17, 22, 0.3);
+        }
+    }
+
+    .nav-lang:hover {
+        border-color: var(--accent);
+
+        span.active {
+            color: var(--accent-text);
+        }
+    }
+
+    .navigation-bar .nav-links .MuiButton-root {
+        color: #0d1116;
+    }
+
+    .navigation-bar .nav-links .MuiButton-root:hover {
+        color: var(--accent-text);
+        background-color: transparent;
+    }
+
+    #navigation.scrolled {
+        box-shadow: 0 2px 4px -1px rgba(17, 17, 17, 0.08),
+                    0 4px 5px 0 rgba(17, 17, 17, 0.06),
+                    0 1px 10px 0 rgba(17, 17, 17, 0.05);
+    }
+}
+
+@media screen {
+    @media (max-width: 1280px) {
+        .navigation-bar {
+            padding-left: 5% !important;
+            padding-right: 5% !important;
+        }
+
+        .navigation-bar .nav-links .MuiButton-root {
+            font-size: 0.95rem;
+            margin: 0 2px;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .navigation-bar {
+            min-height: 64px !important;
+            /* 5% of a 390px phone is 19px — too tight for a bar whose contents
+               run edge to edge. A fixed inset holds regardless of screen size. */
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+        }
+
+        .nav-logo {
+            font-size: 1.4rem;
+        }
+
+        .nav-actions {
+            gap: 4px;
+        }
+
+        /* Trimmed so the language pill, the theme toggle and the menu button
+           fit one row on a 360px screen without crowding the wordmark. The
+           labels scale down with the padding — shrinking only the box left
+           the pill looking oversized next to the icons. */
+        .nav-lang {
+            padding: 5px 9px;
+            gap: 4px;
+
+            .nav-lang-en {
+                font-size: 11px;
+            }
+
+            .nav-lang-ar {
+                font-size: 13px;
+            }
+
+            .nav-lang-sep {
+                font-size: 10.5px;
+            }
+        }
+
+        .nav-actions svg {
+            font-size: 1.4rem;
+        }
+
+        .nav-menu-btn.MuiIconButton-root {
+            width: 44px;
+            height: 44px;
+            margin-inline-end: -8px;
+        }
+    }
+
+    /* Smallest phones: the wordmark gives up a little so the controls never
+       wrap to a second line. */
+    @media (max-width: 380px) {
+        .navigation-bar {
+            padding-left: 14px !important;
+            padding-right: 14px !important;
+        }
+
+        .nav-logo {
+            font-size: 1.25rem;
+        }
+
+        .nav-lang {
+            padding: 4px 7px;
+        }
+    }
+}

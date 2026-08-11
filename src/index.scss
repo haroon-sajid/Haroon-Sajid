@@ -1,0 +1,619 @@
+/* ============================================================
+   COLOUR SYSTEM — steel / silver
+   Black and white stay dominant. Grey is the third layer, not a
+   fill quota: the hero wave carries most of its weight, the rest
+   goes to borders, dividers, icons, metadata and hover states.
+
+   Because the accent is achromatic it cannot create emphasis by
+   hue — only by value. So anything that must SHOUT (primary CTA,
+   inline highlights) stays full-contrast white/black; grey is
+   reserved for what should sit one step back.
+   ============================================================ */
+
+:root {
+  /* Neutral ground. Two tones: the page sits back, surfaces step forward.
+     Pure-black pages crush shadows and read cheap; a soft charcoal gives
+     cards and inputs something to lift off. */
+  --bg: #212121;
+  --surface: #2a2a2a;
+  --surface-hover: #323232;
+  --surface-hi: #333333;
+
+  /* Dark theme: steel for structure, silver for anything that reads */
+  --accent: #9ca3af;
+  --accent-hi: #d1d5db;
+  --accent-text: #d1d5db;
+  --accent-deep: #4b5563;
+  --accent-on: #0d1116;
+  --accent-bg: rgba(156, 163, 175, 0.12);
+  --accent-line: rgba(156, 163, 175, 0.40);
+  --accent-glow: rgba(209, 213, 219, 0.22);
+  --accent-wash: rgba(209, 213, 219, 0.10);
+
+  /* The wordmark's dot. Taken from the logo mark in favicon.svg (#e38445)
+     so the header, footer and browser tab read as one identity. Reserved
+     for the logo, with one exception: the mobile hero's rotating words in
+     dark mode (Main.scss). */
+  --brand-dot: #e38445;
+
+  /* Status only — the single semantic exception to the achromatic palette.
+     Reads as "live", never used decoratively. */
+  --status: #4ade80;
+  --status-bg: rgba(74, 222, 128, 0.12);
+  --status-line: rgba(74, 222, 128, 0.35);
+  --status-glow: rgba(74, 222, 128, 0.75);
+}
+
+/* Light theme: #9ca3af is only 2.4:1 on #f8f9fa, so the ramp inverts —
+   the deep grey leads and silver drops to a recessive role. */
+.light-mode {
+  /* Same relationship inverted: the page is a soft grey so white surfaces
+     read as raised rather than dissolving into the background. */
+  --bg: #f4f5f6;
+  --surface: #ffffff;
+  --surface-hover: #ffffff;
+  --surface-hi: #ffffff;
+
+  --accent: #4b5563;
+  --accent-hi: #374151;
+  --accent-text: #4b5563;
+  --accent-deep: #9ca3af;
+  --accent-on: #ffffff;
+  --accent-bg: rgba(75, 85, 99, 0.08);
+  --accent-line: rgba(75, 85, 99, 0.28);
+  --accent-glow: rgba(75, 85, 99, 0.18);
+  --accent-wash: rgba(75, 85, 99, 0.07);
+
+  /* Deeper green on white — #4ade80 is only 1.7:1 here */
+  --status: #15803d;
+  --status-bg: rgba(21, 128, 61, 0.08);
+  --status-line: rgba(21, 128, 61, 0.30);
+  --status-glow: rgba(21, 128, 61, 0.55);
+}
+
+/* The nav bar is fixed, so scrollIntoView parks a section right underneath it.
+   Every section's inner box carries `padding: 5% 10%`, and percentage padding
+   resolves against the width — i.e. it IS 5vw, and it grows and shrinks as the
+   window does. Subtract it back out and the gap under the bar stays put at
+   every width: bar height (76px) + the 28px gap we want - the padding. */
+html {
+  scroll-padding-top: calc(104px - 5vw);
+}
+
+/* Under 900px the bar drops to 64px (Navigation.scss) */
+@media screen and (max-width: 900px) {
+  html {
+    scroll-padding-top: calc(92px - 5vw);
+  }
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 1.1rem !important;
+}
+
+code {
+  font-family: 'JetBrains Mono', Menlo, Monaco, Consolas, 'Courier New', monospace !important;
+  font-size: 1rem !important;
+}
+
+.main-container {
+  position: relative;
+  background-color: var(--bg);
+
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-text);
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+}
+
+p, a, h1, h2, h3, h4, h5, label, button {
+  color: white;
+  font-family: 'Inter', sans-serif;
+}
+
+.navigation-bar {
+  justify-content: space-between;
+  background-color: var(--bg);
+
+  button {
+    font-size: 1.1rem;
+    font-family: 'Inter', sans-serif;
+    text-transform: initial;
+    padding: 6px 10px;
+    transition: color .15s ease-in-out;
+  }
+
+  /* Active navigation state */
+  button:hover {
+    color: var(--accent-text);
+    background-color: transparent;
+  }
+
+  svg {
+    cursor: pointer;
+    transition: color .15s ease-in-out;
+  }
+
+  svg:hover {
+    color: var(--accent-text);
+  }
+}
+
+/* Colour comes from the theme class on the drawer paper now (see
+   Navigation.scss) — hardcoding #0d1116 here is what made the menu text black
+   on the dark panel. */
+.navigation-bar-responsive {
+  span, p {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+.container {
+  margin-top: 64px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-image {
+  width: 100%;
+  height: 450px;
+
+  img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+  }
+}
+
+.items-container {
+  padding: 5% 10%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.light-mode {
+  background-color: var(--bg);
+
+  .navigation-bar {
+    background-color: var(--bg);
+  }
+
+  p, a, h1, h2, h3, h4, h5, label, button {
+    color: #0d1116;
+  }
+
+  a:hover {
+    color: var(--accent-text);
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+  }
+
+  .navigation-bar svg {
+    color: #0d1116;
+  }
+
+  .navigation-bar svg:hover {
+    color: var(--accent-text);
+  }
+
+  .about-section::before {
+    background-image: url("./assets/images/bg-light.png");
+  }
+
+  .skills-container svg {
+    color: #0d1116;
+  }
+
+  .chip {
+    background-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  }
+
+  .vertical-timeline::before {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .vertical-timeline--animate .vertical-timeline-element-content.bounce-in {
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  }
+
+  .vertical-timeline--two-columns .vertical-timeline-element-content .vertical-timeline-element-date {
+    color: gray;
+  }
+
+  .vertical-timeline-element-content-arrow {
+    border-right: 7px solid rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .flex-chips .chip-title {
+    color: #0d1116;
+  }
+}
+
+@media screen {
+  /* ------------------------------------------------------------
+     SECTION RHYTHM — phones and tablets.
+     Every section's 5% vertical padding collapses to ~20px on a
+     narrow screen, so sections ran into each other. One shared
+     value here (scoped under .main-container to outrank each
+     component file's base padding regardless of import order)
+     gives the whole page a consistent 56px beat: 112px between
+     any two sections, and the Stats strip inherits the same air
+     from the sections around it. Horizontal insets stay with the
+     per-section rules.
+     ------------------------------------------------------------ */
+  @media (max-width: 900px) {
+    .main-container .about-container,
+    .main-container .expertise-container,
+    .main-container .projects-container,
+    .main-container .education-container,
+    .main-container .items-container {
+      padding-top: 56px;
+      padding-bottom: 56px;
+    }
+
+    /* History and Contact switched their side inset at 768px while every
+       other section switched at 900px — align them so the whole tablet
+       band shares one text edge. */
+    .main-container .items-container {
+      padding-left: 5%;
+      padding-right: 5%;
+    }
+
+    /* Body copy justifies on narrow screens, matching the hero and About
+       paragraphs: section intros and card blurbs alike. No hyphenation —
+       whole words only; `text-wrap: wrap` releases the intros' `balance`,
+       which fights justified edges. */
+    .main-container .expertise-intro,
+    .main-container .projects-intro,
+    .main-container .history-intro,
+    .main-container .education-intro,
+    .main-container .contact-intro,
+    .main-container .area p,
+    .main-container .project p,
+    .main-container .edu-card p,
+    .main-container .hx-desc {
+      text-align: justify;
+      text-wrap: wrap;
+    }
+  }
+}
+
+/* ============================================================
+   ARABIC / RTL
+   Inter has no Arabic coverage, so IBM Plex Sans Arabic leads the
+   stack when dir="rtl". It is a neutral technical sans that sits
+   comfortably next to Inter's Latin for the tech names that stay
+   in Latin script.
+   ============================================================ */
+
+[dir="rtl"] {
+  font-family: 'IBM Plex Sans Arabic', 'Inter', sans-serif;
+}
+
+[dir="rtl"] p,
+[dir="rtl"] a,
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] li,
+[dir="rtl"] span,
+[dir="rtl"] label,
+[dir="rtl"] button {
+  font-family: 'IBM Plex Sans Arabic', 'Inter', sans-serif;
+}
+
+/* Arabic has no uppercase — the transform does nothing but the wide
+   tracking built for Latin caps makes Arabic letters disconnect. */
+[dir="rtl"] .about-eyebrow,
+[dir="rtl"] .expertise-eyebrow,
+[dir="rtl"] .projects-eyebrow,
+[dir="rtl"] .history-eyebrow,
+[dir="rtl"] .education-eyebrow,
+[dir="rtl"] .contact-eyebrow,
+[dir="rtl"] .area-stack-label,
+[dir="rtl"] .stat-label,
+[dir="rtl"] .badge-sub,
+[dir="rtl"] .hx-company,
+[dir="rtl"] .hx-status,
+[dir="rtl"] .hx-loc,
+[dir="rtl"] .hx-date,
+[dir="rtl"] .edu-date,
+[dir="rtl"] .contact-label,
+[dir="rtl"] .footer-col h4,
+[dir="rtl"] .footer-top,
+[dir="rtl"] .hx-role,
+[dir="rtl"] .area h3,
+[dir="rtl"] .project h2,
+[dir="rtl"] .about-content h1,
+[dir="rtl"] .expertise-head-left h1,
+[dir="rtl"] .projects-head h1,
+[dir="rtl"] .history-head h1,
+[dir="rtl"] .education-head h1,
+[dir="rtl"] .contact-head h1 {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+/* Text-stroke outlines are built around Latin letterforms; on Arabic
+   script they close the counters entirely. Fall back to a solid tone. */
+[dir="rtl"] .about-outline,
+[dir="rtl"] .expertise-outline,
+[dir="rtl"] .projects-outline,
+[dir="rtl"] .history-outline,
+[dir="rtl"] .education-outline,
+[dir="rtl"] .contact-outline,
+[dir="rtl"] .hx-role-outline {
+  color: var(--accent-text) !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* ------------------------------------------------------------
+   IMPORTANT: every selector below repeats the full descendant
+   chain of the rule it overrides. `[dir="rtl"] .about-badge`
+   (0,2,0) TIES with `.about-container .about-badge` (0,2,0) and
+   then loses on source order, which is why the panel never
+   mirrored. Matching the chain wins the cascade outright.
+   ------------------------------------------------------------ */
+
+/* Sections start-align to the right */
+[dir="rtl"] .about-container,
+[dir="rtl"] .expertise-container,
+[dir="rtl"] .projects-container,
+[dir="rtl"] .education-container,
+[dir="rtl"] .items-container {
+  text-align: right;
+}
+
+/* ---- About: visual panel ---- */
+
+[dir="rtl"] .about-container .about-vertical {
+  right: auto;
+  left: 5%;
+}
+
+[dir="rtl"] .about-container .about-photo {
+  margin-right: 0;
+  margin-left: 8%;
+}
+
+[dir="rtl"] .about-container .about-badge {
+  left: auto;
+  right: 6%;
+}
+
+/* The script line's cursive face has no Arabic coverage, so `italic` would
+   synthesise a fake oblique — Arabic is never slanted. Upright instead,
+   with the size and measure matched to the English version. */
+[dir="rtl"] .about-container .about-script {
+  right: auto;
+  left: 6%;
+  text-align: left;
+  font-style: normal;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  max-width: 42%;
+}
+
+/* The Arabic badge copy runs longer; cap it so the card keeps the same
+   footprint it has in English rather than growing across the photo. */
+[dir="rtl"] .about-container .about-badge {
+  max-width: 40%;
+}
+
+[dir="rtl"] .about-container .about-badge .badge-sub {
+  font-size: 0.62rem;
+  line-height: 1.4;
+}
+
+/* Project titles stay in English — they are product names, not copy */
+[dir="rtl"] .projects-container .projects-grid .project h2 {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: right;
+}
+
+/* Numerals render as authored instead of the bidi algorithm
+   relocating the "+" to the far side of the digits */
+[dir="rtl"] .about-container .badge-value {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* ---- Expertise ---- */
+
+[dir="rtl"] .stats-band .stat + .stat {
+  border-left: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.light-mode[dir="rtl"] .stats-band .stat + .stat {
+  border-right-color: rgba(13, 17, 22, 0.14);
+}
+
+[dir="rtl"] .stats-band::before {
+  left: auto;
+  right: -9px;
+  border-width: 2px 2px 0 0;
+}
+
+[dir="rtl"] .stats-band::after {
+  right: auto;
+  left: -9px;
+  border-width: 0 0 2px 2px;
+}
+
+[dir="rtl"] .stats-band .stat-value {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+[dir="rtl"] .expertise-container .area-ghost {
+  right: auto;
+  left: 16px;
+  direction: ltr;
+}
+
+[dir="rtl"] .expertise-container .area::after {
+  left: auto;
+  right: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 12px;
+}
+
+/* ---- Projects ---- */
+
+[dir="rtl"] .projects-container .projects-grid .project::after {
+  left: auto;
+  right: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 12px;
+}
+
+/* ---- Education ---- */
+
+[dir="rtl"] .education-container .edu-card::before {
+  background: linear-gradient(270deg, var(--accent) 0%, transparent 100%);
+}
+
+[dir="rtl"] .education-container .edu-card::after {
+  left: auto;
+  right: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 12px;
+}
+
+[dir="rtl"] .education-container .edu-date {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* ---- Career history ---- */
+
+[dir="rtl"] #history .hx-card {
+  padding: 26px 32px 24px 28px;
+}
+
+[dir="rtl"] #history .hx-card::before {
+  left: auto;
+  right: 0;
+}
+
+[dir="rtl"] #history .hx-card::after {
+  right: auto;
+  left: -50px;
+}
+
+[dir="rtl"] #history .hx-divider {
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.18) 0%, transparent 100%);
+}
+
+.light-mode[dir="rtl"] #history .hx-divider {
+  background: linear-gradient(270deg, rgba(13, 17, 22, 0.16) 0%, transparent 100%);
+}
+
+[dir="rtl"] #history .hx-item.left .hx-date {
+  padding-left: 0;
+  padding-right: 28px;
+  text-align: right;
+}
+
+[dir="rtl"] #history .hx-item.right .hx-date {
+  padding-right: 0;
+  padding-left: 28px;
+  text-align: left;
+}
+
+[dir="rtl"] #history .hx-date {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* ---- Contact form ---- */
+
+[dir="rtl"] #contact .contact-form .MuiInputBase-input,
+[dir="rtl"] #contact .contact-form .MuiOutlinedInput-root {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] #contact .contact-form .MuiInputLabel-root {
+  left: auto;
+  right: 26px;
+  transform-origin: top right;
+}
+
+[dir="rtl"] #contact .contact-form .MuiOutlinedInput-notchedOutline legend {
+  text-align: right;
+}
+
+[dir="rtl"] #contact .contact-form .MuiButton-root {
+  float: left;
+}
+
+/* Latin runs (tech names, emails, phone numbers, dates) must stay LTR
+   even inside an RTL paragraph, or punctuation jumps to the wrong end. */
+[dir="rtl"] .tech,
+[dir="rtl"] .contact-value,
+[dir="rtl"] .footer-logo,
+[dir="rtl"] .nav-logo {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* The wordmark is a logo, not copy — it keeps its face in both languages */
+[dir="rtl"] .nav-logo,
+[dir="rtl"] .nav-logo span,
+[dir="rtl"] .footer-logo,
+[dir="rtl"] .footer-logo span {
+  font-family: 'Saira Stencil One', 'Inter', sans-serif;
+}
+
+/* The header keeps its LTR arrangement in Arabic: logo left, nav centre,
+   controls right. Only the container direction is pinned — each label is
+   still its own bidi run, so Arabic text inside a button renders correctly
+   right-to-left. Page content below the header stays RTL. */
+[dir="rtl"] .navigation-bar,
+[dir="rtl"] .navigation-bar-responsive {
+  direction: ltr;
+}
+
+[dir="rtl"] .nav-links .MuiButton-root,
+[dir="rtl"] .navigation-bar-responsive .MuiListItemText-root {
+  direction: rtl;
+}
+
+/* Footer keeps its LTR arrangement as well — brand left, links centre,
+   contact right, icon tiles before their labels. Same reasoning as the
+   header: the page furniture stays put across languages while the
+   Arabic inside each run still shapes right-to-left. */
+[dir="rtl"] footer {
+  direction: ltr;
+  text-align: left;
+}
+
+[dir="rtl"] footer .footer-bottom {
+  justify-content: space-between;
+}
+
+[dir="rtl"] #contact .contact-form .MuiFormHelperText-root {
+  text-align: right;
+  margin-right: 4px;
+  margin-left: 0;
+}

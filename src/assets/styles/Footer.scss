@@ -1,0 +1,569 @@
+/* Hairline top edge separates the footer from the last section without
+   introducing a second surface colour. */
+footer {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 64px 10% 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+    text-align: left;
+    overflow: hidden;
+}
+
+footer .footer-inner {
+    width: 100%;
+}
+
+footer .footer-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.9fr) minmax(0, 0.9fr) minmax(0, 1.5fr);
+    grid-gap: 60px;
+    padding-bottom: 48px;
+}
+
+/* ---------------- Brand ---------------- */
+
+footer .footer-logo {
+    display: inline-block;
+    font-family: 'Saira Stencil One', 'Inter', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    color: #ffffff;
+}
+
+footer .footer-logo .footer-logo-dot {
+    margin-left: 2px;
+    color: var(--brand-dot);
+}
+
+footer .footer-brand .footer-tagline {
+    max-width: 420px;
+    margin: 18px 0 0 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #9aa4b2;
+}
+
+footer .footer-social {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding-top: 24px;
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 10px;
+        background-color: var(--surface);
+        transition: border-color .2s ease, background-color .2s ease, transform .2s ease;
+    }
+
+    a:hover {
+        border-color: var(--accent);
+        background-color: var(--surface-hover);
+        transform: translateY(-2px);
+    }
+
+    svg {
+        width: 18px !important;
+        height: 18px !important;
+        margin-right: 0px;
+        color: #c6ccd4;
+        transition: color .2s ease;
+    }
+
+    a:hover svg {
+        color: var(--accent-text);
+    }
+}
+
+/* ---------------- Link columns ---------------- */
+
+footer .footer-col h4 {
+    margin: 0 0 20px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: #8b95a1;
+}
+
+footer .footer-col ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+footer .footer-col li {
+    padding-bottom: 11px;
+}
+
+footer .footer-col li:last-child {
+    padding-bottom: 0;
+}
+
+footer .footer-col a,
+footer .footer-col button,
+footer .footer-col .footer-static {
+    display: inline-block;
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: left;
+    color: #9aa4b2;
+    transition: color .15s ease-in-out;
+}
+
+footer .footer-col a,
+footer .footer-col button {
+    cursor: pointer;
+}
+
+footer .footer-col a:hover,
+footer .footer-col button:hover {
+    color: var(--accent-text);
+}
+
+footer .footer-col .footer-static {
+    cursor: default;
+}
+
+/* ---------------- Contact blocks ----------------
+   Icon tile + label + value, reusing the bordered-tile pattern from
+   About's do-icons and Education's icon tiles. */
+
+footer .footer-contact li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 18px;
+}
+
+footer .footer-contact .contact-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    background-color: var(--surface);
+    transition: border-color .2s ease;
+
+    svg {
+        width: 17px !important;
+        height: 17px !important;
+        margin-right: 0px;
+        color: #c6ccd4;
+        transition: color .2s ease;
+    }
+}
+
+footer .footer-contact li:hover .contact-tile {
+    border-color: var(--accent);
+
+    svg {
+        color: var(--accent-text);
+    }
+}
+
+footer .footer-contact .contact-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+footer .footer-contact .contact-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8b95a1;
+}
+
+footer .footer-contact .contact-value {
+    padding-top: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #ffffff;
+    transition: color .15s ease-in-out;
+}
+
+footer .footer-contact a.contact-value:hover {
+    color: var(--accent-text);
+}
+
+footer .footer-contact .contact-static {
+    cursor: default;
+}
+
+/* ---------------- Bottom bar ---------------- */
+
+footer .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding-top: 26px;
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+footer .footer-bottom .footer-copy,
+footer .footer-bottom .footer-credit {
+    margin: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    color: #8b95a1;
+}
+
+footer .footer-bottom .footer-credit a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #c6ccd4;
+    transition: color .15s ease-in-out;
+}
+
+footer .footer-bottom .footer-credit a:hover {
+    color: var(--accent-text);
+}
+
+footer .footer-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    background-color: var(--surface);
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c6ccd4;
+    transition: border-color .2s ease, color .2s ease, transform .2s ease;
+
+    svg {
+        width: 15px !important;
+        height: 15px !important;
+        margin-right: 0px;
+        color: #c6ccd4;
+        transition: color .2s ease;
+    }
+}
+
+footer .footer-top:hover {
+    border-color: var(--accent);
+    color: var(--accent-text);
+    transform: translateY(-2px);
+
+    svg {
+        color: var(--accent-text);
+    }
+}
+
+/* ---------------- Light mode ---------------- */
+
+.light-mode {
+    footer {
+        border-top-color: rgba(13, 17, 22, 0.10);
+    }
+
+    footer .footer-logo {
+        color: #0d1116;
+    }
+
+    footer .footer-brand .footer-tagline,
+    footer .footer-col a,
+    footer .footer-col button,
+    footer .footer-col .footer-static {
+        color: #4d5661;
+    }
+
+    footer .footer-col h4 {
+        color: #5a636e;
+    }
+
+    footer .footer-social a {
+        border-color: rgba(13, 17, 22, 0.12);
+    }
+
+    footer .footer-social svg {
+        color: #3f4750;
+    }
+
+    footer .footer-contact .contact-tile {
+        border-color: rgba(13, 17, 22, 0.12);
+
+        svg {
+            color: #3f4750;
+        }
+    }
+
+    footer .footer-contact .contact-label {
+        color: #5a636e;
+    }
+
+    footer .footer-contact .contact-value {
+        color: #0d1116;
+    }
+
+    footer .footer-contact li:hover .contact-tile svg,
+    footer .footer-contact a.contact-value:hover {
+        color: var(--accent-text);
+    }
+
+    footer .footer-bottom {
+        border-top-color: rgba(13, 17, 22, 0.10);
+    }
+
+    footer .footer-bottom .footer-copy,
+    footer .footer-bottom .footer-credit {
+        color: #55555e;
+    }
+
+    footer .footer-bottom .footer-credit a {
+        color: #3f4750;
+    }
+
+    footer .footer-top {
+        border-color: rgba(13, 17, 22, 0.14);
+        color: #3f4750;
+
+        svg {
+            color: #3f4750;
+        }
+    }
+
+    footer .footer-col a:hover,
+    footer .footer-col button:hover,
+    footer .footer-bottom .footer-credit a:hover,
+    footer .footer-social a:hover svg,
+    footer .footer-top:hover,
+    footer .footer-top:hover svg {
+        color: var(--accent-text);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    footer .footer-social a,
+    footer .footer-top {
+        transition: none;
+    }
+
+    footer .footer-social a:hover,
+    footer .footer-top:hover {
+        transform: none;
+    }
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media screen {
+    @media (max-width: 900px) {
+        footer {
+            padding: 56px 5% 28px;
+        }
+
+        footer .footer-grid {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            grid-gap: 40px;
+        }
+
+        footer .footer-brand {
+            grid-column: 1 / -1;
+        }
+
+        /* Justified like every other paragraph on the small-screen page */
+        footer .footer-brand .footer-tagline {
+            text-align: justify;
+        }
+    }
+
+    @media (max-width: 600px) {
+        /* One flat column so the pieces can be ordered freely: logo,
+           tagline, nav, contact, copyright bar, social icons last. The grid
+           and brand wrappers dissolve; the laptop layout is untouched. */
+        footer .footer-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        footer .footer-grid,
+        footer .footer-brand {
+            display: contents;
+        }
+
+        footer .footer-logo {
+            order: 1;
+        }
+
+        footer .footer-brand .footer-tagline {
+            order: 2;
+            margin-top: 0;
+        }
+
+        footer .footer-col:not(.footer-contact) {
+            order: 3;
+        }
+
+        footer .footer-contact {
+            order: 4;
+        }
+
+        footer .footer-social {
+            order: 5;
+        }
+
+        footer .footer-bottom {
+            order: 6;
+        }
+
+        /* NAVIGATE keeps its heading; the links run as one horizontal row,
+           centred, wrapping when they must. */
+        footer .footer-col:not(.footer-contact) ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px 24px;
+        }
+
+        footer .footer-col li {
+            padding-bottom: 0;
+        }
+
+        /* Reachability order: WhatsApp first, then email, then location */
+        footer .footer-contact ul {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Values only — the little category labels are noise at this size.
+           Explicit row gap keeps the tiles apart now that the rows are
+           tile-height; the value type steps down a point so the location
+           line fits unbroken beside its icon on narrow phones. */
+        footer .footer-contact .contact-label {
+            display: none;
+        }
+
+        footer .footer-contact ul {
+            gap: 16px;
+        }
+
+        footer .footer-contact li {
+            gap: 12px;
+            padding-bottom: 0;
+        }
+
+        footer .footer-contact .contact-tile {
+            width: 38px;
+            height: 38px;
+        }
+
+        footer .footer-contact .contact-value {
+            padding-top: 0;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        footer .footer-contact li:nth-child(1) {
+            order: 2;
+        }
+
+        footer .footer-contact li:nth-child(2) {
+            order: 1;
+        }
+
+        footer .footer-contact li:nth-child(3) {
+            order: 3;
+        }
+
+        /* Bottom bar: copyright on the left, a circular back-to-top mark on
+           the right — one row, never stacked; the credit line sits this one
+           out on phones. */
+        footer .footer-bottom {
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+            gap: 14px;
+            padding-top: 22px;
+        }
+
+        footer .footer-bottom .footer-copy {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        /* Dropping the rights clause is what lets the line and the arrow
+           share one row on a narrow screen */
+        footer .footer-bottom .footer-rights {
+            display: none;
+        }
+
+        footer .footer-bottom .footer-credit {
+            display: none;
+        }
+
+        /* The pill becomes an icon-only circle; the label is hidden but the
+           button keeps its aria-label for screen readers. The arrow takes
+           the wordmark's orange — same note as the logo dot. */
+        footer .footer-top {
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+            justify-content: center;
+            gap: 0;
+            padding: 0;
+            border-radius: 50%;
+            background: none;
+            font-size: 0;
+            letter-spacing: 0;
+
+            svg {
+                width: 18px !important;
+                height: 18px !important;
+                color: var(--brand-dot);
+            }
+        }
+
+        /* Social icons close the footer under the copyright, as plain
+           centred marks — per the reference. */
+        footer .footer-social {
+            justify-content: center;
+            gap: 30px;
+            padding-top: 0;
+        }
+
+        footer .footer-social a,
+        footer .footer-social a:hover {
+            width: auto;
+            height: auto;
+            border: none;
+            border-radius: 0;
+            background: none;
+        }
+
+        footer .footer-social svg {
+            width: 20px !important;
+            height: 20px !important;
+        }
+    }
+}

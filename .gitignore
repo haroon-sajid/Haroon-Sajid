@@ -1,57 +1,27 @@
-# Dependencies
-node_modules
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Build outputs
-build
-dist
-dist-ssr
-*.local
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# Environment variables
-.env
+# testing
+/coverage
+
+# production
+/build
+/dist
+
+# vite temp files
+vite.config.ts.timestamp-*.mjs
+
+# misc
+.DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# IDE and Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-*.sublime-project
-*.sublime-workspace
-
-# OS files
-Thumbs.db
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Vercel
-.vercel
-.vercel-build-env.json
-
-# Testing
-coverage
-.nyc_output
-
-# Logs
-logs
-*.log
-
-# Lock files (optional - remove if you want to commit lock files)
-# package-lock.json
-# yarn.lock
-# pnpm-lock.yaml
-
-# Misc
-.cache
-.parcel-cache
-.next
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

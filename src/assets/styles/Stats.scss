@@ -1,0 +1,129 @@
+/* Standalone band between About and Expertise. Same horizontal inset as
+   every section container so it lines up with the headings above and below,
+   but no vertical section padding — it is a strip, not a section. */
+.stats-container {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 10%;
+}
+
+.stats-band {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: clamp(26px, 4vh, 40px) 20px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    background-color: var(--surface);
+}
+
+/* Corner brackets — kept from the original stat band so the motif survives
+   the move out of the Expertise header */
+.stats-band::before,
+.stats-band::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-color: var(--accent);
+    border-style: solid;
+}
+
+.stats-band::before {
+    top: -9px;
+    left: -9px;
+    border-width: 2px 0 0 2px;
+}
+
+.stats-band::after {
+    right: -9px;
+    bottom: -9px;
+    border-width: 0 2px 2px 0;
+}
+
+.stats-band .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 16px;
+}
+
+.stats-band .stat + .stat {
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.stats-band .stat-value {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.9rem, 3vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: #ffffff;
+}
+
+.stats-band .stat-label {
+    padding-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #8b95a1;
+}
+
+/* ---------------- Light mode ---------------- */
+
+.light-mode {
+    .stats-band {
+        border-color: rgba(13, 17, 22, 0.12);
+    }
+
+    .stats-band .stat + .stat {
+        border-left-color: rgba(13, 17, 22, 0.14);
+    }
+
+    .stats-band .stat-value {
+        color: #0d1116;
+    }
+
+    .stats-band .stat-label {
+        color: #5a636e;
+    }
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media screen {
+    @media (max-width: 900px) {
+        .stats-container {
+            padding: 0 5%;
+        }
+
+        .stats-band .stat {
+            padding: 0 8px;
+        }
+
+        .stats-band .stat-label {
+            font-size: 10.5px;
+            letter-spacing: 0.08em;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .stats-band {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 26px;
+        }
+
+        .stats-band .stat + .stat {
+            border-left: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.14);
+            padding-top: 26px;
+        }
+
+        .light-mode .stats-band .stat + .stat {
+            border-top-color: rgba(13, 17, 22, 0.14);
+        }
+    }
+}

@@ -1,0 +1,302 @@
+/* Same padding as the other section containers so everything aligns */
+.education-container {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5% 10%;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+/* ---------------- Section heading ----------------
+   Identical to .about-container, .expertise-container, #projects,
+   #history and #contact. */
+
+.education-container .education-head {
+    margin-bottom: 40px;
+}
+
+.education-container .education-eyebrow {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: #8b95a1;
+    font-family: 'Inter', sans-serif;
+}
+
+.education-container .education-head h1 {
+    font-size: clamp(2.2rem, 4.5vw, 4rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    margin-block-start: 12px;
+    margin-block-end: 0px;
+
+    .education-outline {
+        color: transparent;
+        -webkit-text-stroke: 2px #ffffff;
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+.education-container .education-rule {
+    display: block;
+    width: 70px;
+    height: 3px;
+    margin-top: 22px;
+    border-radius: 2px;
+    background-color: var(--accent);
+}
+
+.education-container .education-intro {
+    max-width: 660px;
+    margin-block-start: 26px;
+    margin-block-end: 0px;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #9aa4b2;
+    text-wrap: balance;
+}
+
+/* ---------------- Cards (mirror .expertise-container .area) ---------------- */
+
+.education-container .education-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    grid-gap: 30px;
+}
+
+.education-container .edu-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 26px 28px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    background-color: var(--surface);
+    transition: transform .35s cubic-bezier(.22, .61, .36, 1),
+                box-shadow .35s ease,
+                border-color .35s ease,
+                background-color .35s ease;
+}
+
+/* Accent bar across the top edge */
+.education-container .edu-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
+}
+
+.education-container .edu-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.education-container .edu-icon-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 54px;
+    height: 54px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+    background-color: rgba(255, 255, 255, 0.06);
+
+    svg {
+        width: 26px;
+        height: 26px;
+        color: var(--accent);
+    }
+}
+
+.education-container .edu-card:hover {
+    border-color: var(--accent);
+    background-color: var(--surface-hover);
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Bar that sweeps across the bottom edge on hover */
+.education-container .edu-card::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 4px;
+    border-bottom-left-radius: 12px;
+    background-color: var(--accent);
+    transition: width .35s ease;
+}
+
+.education-container .edu-card:hover::after {
+    width: 100%;
+}
+
+/* Date pill, top-right */
+.education-container .edu-date {
+    flex-shrink: 0;
+    padding: 6px 13px;
+    border: 1px solid var(--accent-line);
+    border-radius: 999px;
+    background-color: var(--accent-bg);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    line-height: 1.45;
+    white-space: nowrap;
+    color: var(--accent-text);
+}
+
+.education-container .edu-card h3 {
+    margin: 0 0 8px 0;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    color: #ffffff;
+}
+
+/* Institution, in the accent already used by the timeline nodes */
+.education-container .edu-school {
+    display: block;
+    margin-bottom: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--accent-text);
+}
+
+.education-container .edu-loc {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #8b95a1;
+
+    svg {
+        width: 11px;
+        height: 11px;
+        color: #8b95a1;
+    }
+}
+
+.education-container .edu-card p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #9aa4b2;
+}
+
+/* ---------------- Light mode ---------------- */
+
+.light-mode {
+    .education-container .education-eyebrow {
+        color: #5a636e;
+    }
+
+    .education-container .education-head h1 .education-outline {
+        color: transparent;
+        -webkit-text-stroke: 2px #0d1116;
+    }
+
+    .education-container .education-rule {
+        background-color: var(--accent);
+    }
+
+    .education-container .education-intro {
+        color: #4d5661;
+    }
+
+    .education-container .edu-card {
+        border-color: rgba(13, 17, 22, 0.12);
+        background-color: var(--surface);
+    }
+
+    .education-container .edu-card:hover {
+        border-color: var(--accent);
+        background-color: var(--surface-hover);
+        box-shadow: 0 18px 40px rgba(17, 17, 17, 0.1);
+    }
+
+    .education-container .edu-card::after {
+        background-color: var(--accent);
+    }
+
+    .education-container .edu-icon-tile {
+        border-color: rgba(13, 17, 22, 0.14);
+        background-color: rgba(13, 17, 22, 0.05);
+
+        svg {
+            color: var(--accent-text);
+        }
+    }
+
+    .education-container .edu-date {
+        border-color: var(--accent-line);
+        background-color: var(--accent-bg);
+        color: var(--accent-text);
+    }
+
+    .education-container .edu-card h3 {
+        color: #0d1116;
+    }
+
+    .education-container .edu-school {
+        color: var(--accent-text);
+    }
+
+    .education-container .edu-loc,
+    .education-container .edu-loc svg {
+        color: #55555e;
+    }
+
+    .education-container .edu-card p {
+        color: #4d5661;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .education-container .edu-card,
+    .education-container .edu-card::after {
+        transition: none;
+    }
+
+    .education-container .edu-card:hover {
+        transform: none;
+    }
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media screen {
+    @media (max-width: 900px) {
+        .education-container {
+            display: block;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+
+        .education-container .education-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+}

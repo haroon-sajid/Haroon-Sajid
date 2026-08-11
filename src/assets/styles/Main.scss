@@ -1,0 +1,837 @@
+.dark-mode .about-section {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.about-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0px 5%;
+    min-height: 700px;
+}
+
+/* Wave visualisation on its own layer. The artwork ships tinted, so it is
+   fully desaturated to steel; the contrast lift lets the silver linework
+   read as the accent rather than as background noise. This is where most
+   of the accent weight sits on the page. */
+.about-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    background-image: url("../images/bg-dark.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    filter: grayscale(1) contrast(1.12) brightness(1.08);
+}
+
+/* Soft silver field behind the name, lifting the wave off the black */
+.about-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(58% 52% at 50% 46%, var(--accent-wash) 0%, transparent 70%);
+}
+
+/* Mobile-hero furniture. Rendered on every screen but shown only under 768px,
+   so the desktop hero is byte-for-byte what it was. */
+.hero-net,
+.about-section .hero-eyebrow,
+.about-section .hero-rotator,
+.about-section .hero-statusbar {
+    display: none;
+}
+
+/* The name is one text run on desktop — the wrappers exist for the phone's
+   line-by-line reveal and must not disturb it here. */
+.about-section .content h1 .hero-word,
+.about-section .content h1 .hero-word > span {
+    display: inline;
+}
+
+/* "Haroon" hollowed out on desktop too, matching the phone hero — the
+   mobile block below re-declares its own (thinner) stroke width. */
+.about-section .content h1 .hero-word-outline > span {
+    color: transparent;
+    -webkit-text-stroke: 2px #ffffff;
+}
+
+.about-section .content {
+    text-align: center;
+    z-index: 2;
+    width: 100%;
+    max-width: 1000px;
+
+    h1 {
+        font-size: clamp(1.5rem, 5vw, 4.5rem);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+        white-space: nowrap;
+        margin-block-start: 0px;
+        margin-block-end: 0px;
+    }
+
+    h2 {
+        font-size: clamp(1.1rem, 2.6vw, 2.4rem);
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+        margin-block-start: 14px;
+        margin-block-end: 0px;
+    }
+
+    p {
+        font-size: 1.15em;
+        line-height: 1.6;
+        max-width: 750px;
+        margin-block-start: 24px;
+        margin-block-end: 0px;
+        margin-left: auto;
+        margin-right: auto;
+
+        /* Full-contrast, not grey: the tagline sits on white body text, so a
+           grey highlight would recede instead of emphasise. Weight carries it. */
+        .highlight {
+            font-weight: 700;
+            color: #ffffff;
+        }
+    }
+}
+
+/* Social rail, pinned to the hero's outer margin at the bottom corner */
+.about-section .hero-rail {
+    position: absolute;
+    bottom: 48px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Physically left in both languages — the rail is page furniture like the
+   header and footer, so it stays put rather than mirroring with the text. */
+.about-section .hero-rail-start {
+    left: 40px;
+}
+
+.about-section .hero-rail a {
+    display: inline-flex;
+    color: var(--accent);
+    line-height: 0;
+    transition: color .15s ease-in-out, transform .15s ease-in-out;
+
+    svg {
+        font-size: 1.35rem;
+    }
+}
+
+.about-section .hero-rail a:hover {
+    color: var(--accent-hi);
+    transform: translateY(-2px);
+}
+
+/* Hairline anchoring the stack, so the icons read as a deliberate rail */
+.about-section .hero-rail-line {
+    width: 1px;
+    height: 90px;
+    margin-block-start: 8px;
+    background: var(--accent-line);
+}
+
+/* Below this the side margin is too narrow to hold the rail clear of the
+   headline, so it drops rather than crowding it. Phones get it back as a row
+   under the buttons — see the mobile block at the bottom of this file. */
+@media (max-width: 1100px) {
+    .about-section .hero-rail {
+        display: none;
+    }
+}
+
+.about-section .hero-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+    padding-top: 32px;
+    flex-wrap: wrap;
+}
+
+.about-section .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, transform .15s ease-in-out;
+
+    svg {
+        font-size: 1.25em;
+    }
+}
+
+.about-section .hero-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Primary CTA stays full-contrast white. A grey fill would read as a
+   disabled button — with an achromatic accent, emphasis has to come from
+   value, so the strongest action takes the strongest value. The accent
+   appears only as the silver lift on hover. */
+.about-section .hero-btn-primary {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: #0d1116;
+
+    svg {
+        color: #0d1116;
+    }
+}
+
+.about-section .hero-btn-primary:hover {
+    background-color: var(--accent-hi);
+    border-color: var(--accent-hi);
+    color: #0d1116;
+    box-shadow: 0 8px 26px var(--accent-glow);
+
+    svg {
+        color: #0d1116;
+    }
+}
+
+.about-section .hero-btn-secondary {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+
+    svg {
+        color: #ffffff;
+    }
+}
+
+/* Secondary stays neutral; only its edge picks up the accent on hover */
+.about-section .hero-btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-hi);
+    color: #ffffff;
+
+    svg {
+        color: #ffffff;
+    }
+}
+
+/* Light mode: black fill on the light hero */
+.light-mode {
+    /* Light artwork needs the opposite correction — darkened, not lifted,
+       so the linework holds against the pale ground. */
+    .about-section::before {
+        filter: grayscale(1) contrast(1.1) brightness(0.96);
+    }
+
+    .about-section .hero-btn-primary {
+        background-color: #0d1116;
+        border-color: #0d1116;
+        color: #ffffff;
+
+        svg {
+            color: #ffffff;
+        }
+    }
+
+    .about-section .hero-btn-primary:hover {
+        background-color: var(--accent-hi);
+        border-color: var(--accent-hi);
+        color: #ffffff;
+        box-shadow: 0 8px 26px var(--accent-glow);
+
+        svg {
+            color: #ffffff;
+        }
+    }
+
+    .about-section .content p .highlight {
+        color: #0d1116;
+    }
+
+    .about-section .content h1 .hero-word-outline > span {
+        -webkit-text-stroke-color: #0d1116;
+    }
+
+    .about-section .hero-btn-secondary {
+        background-color: transparent;
+        border-color: rgba(13, 17, 22, 0.3);
+        color: #0d1116;
+
+        svg {
+            color: #0d1116;
+        }
+    }
+
+    .about-section .hero-btn-secondary:hover {
+        background-color: rgba(13, 17, 22, 0.05);
+        border-color: var(--accent-hi);
+        color: #0d1116;
+
+        svg {
+            color: #0d1116;
+        }
+    }
+}
+
+.about p {
+    text-align: center;
+    padding-top: 30%;
+    padding-bottom: 30%;
+}
+
+@media screen {
+    @media (max-width: 567px) {
+        body {
+            width: 100%;
+        }
+
+        .about {
+            padding-left: 5%;
+            padding-right: 5%;
+            font-size: 12px;
+        }
+
+    }
+
+    @media (max-width:768px) {
+        .about-section p {
+            text-align: center;
+            font-size: 1em;
+        }
+
+        /* `display: initial` resolved to `inline` here, and inline boxes
+           ignore vertical margins — which silently dropped the 64px
+           margin-top that keeps content clear of the fixed AppBar. The
+           whole hero slid up underneath the header. Block restores normal
+           flow; the bar offset moves into the hero's own padding below,
+           where it can be stated against the real mobile bar height. */
+        .container {
+            display: block;
+            margin-top: 0;
+        }
+
+        /* ============================================================
+           MOBILE HERO
+           Height comes from the content, and the content is top-aligned.
+
+           Both of those are load-bearing. A viewport-height hero plus a
+           centred, flex-grown content block clips its own top the moment the
+           content is taller than the space — centring overflows in both
+           directions, and the overflow above is unreachable. That is a
+           function of device height, so it broke on short phones only.
+           Content-driven height cannot overflow, so it cannot clip, on any
+           device.
+           ============================================================ */
+        .about-section {
+            --hero-pad: 22px;
+            /* Height of the fixed navbar under 900px (Navigation.scss).
+               The bar overlays the page, so the hero must clear it itself. */
+            --nav-h: 64px;
+
+            min-height: auto;
+            justify-content: flex-start;
+            padding: calc(var(--nav-h) + 28px) var(--hero-pad) 0;
+            gap: 0;
+            /* Left-aligned like the reference: a stacked display headline needs
+               a shared left edge to read as one mass. */
+            text-align: start;
+            align-items: stretch;
+        }
+
+        /* The canvas replaces the wave artwork here — two layered textures on a
+           small screen is noise, and the wave was the heavier of the two. */
+        .about-section::before {
+            display: none;
+        }
+
+        .hero-net {
+            display: block;
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            /* HeroNet reads this to colour nodes and links */
+            color: var(--accent);
+        }
+
+        .about-section .content {
+            order: 1;
+            display: flex;
+            flex-direction: column;
+            /* Never centre and never grow — see the note above. The block is
+               as tall as what it holds, starting at the top. */
+            justify-content: flex-start;
+            flex: 0 0 auto;
+            width: 100%;
+            padding-bottom: 0;
+            text-align: start;
+        }
+
+        /* --- eyebrow: label, then a rule that draws itself in --- */
+        .about-section .hero-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            animation: heroFadeUp .8s .35s cubic-bezier(.22, 1, .36, 1) both;
+        }
+
+        .about-section .hero-eyebrow::after {
+            content: "";
+            flex: 0 0 40px;
+            height: 1px;
+            background: var(--accent);
+            transform-origin: left;
+            animation: heroGrowX .9s .5s cubic-bezier(.22, 1, .36, 1) both;
+        }
+
+        /* --- name: stacked, one line at a time out from behind a mask --- */
+        .about-section .content h1 {
+            white-space: normal;
+            font-size: clamp(2.4rem, 13.5vw, 4.4rem);
+            font-weight: 800;
+            /* Title case, same as the desktop hero — uppercase A and R have
+               closed counters that a hollow stroke draws as double lines.
+               Lowercase needs the looser leading: ascenders and the j's
+               descender clip against each word's overflow mask at 0.96. */
+            line-height: 1.08;
+            letter-spacing: -0.02em;
+        }
+
+        .about-section .content h1 .hero-word {
+            display: block;
+            /* The mask. Each word starts pushed below its own box and slides
+               up into it, so the line appears from nowhere rather than fading. */
+            overflow: hidden;
+        }
+
+        .about-section .content h1 .hero-word > span {
+            display: block;
+            transform: translateY(115%);
+            animation: heroRiseUp .95s cubic-bezier(.22, 1, .36, 1) forwards;
+        }
+
+        .about-section .content h1 .hero-word:nth-child(1) > span { animation-delay: .1s; }
+        .about-section .content h1 .hero-word:nth-child(2) > span { animation-delay: .22s; }
+        .about-section .content h1 .hero-word:nth-child(3) > span { animation-delay: .34s; }
+        .about-section .content h1 .hero-word:nth-child(4) > span { animation-delay: .46s; }
+
+        /* Arabic: the name sits on two lines — "محمد" alone on the first,
+           "هارون ساجد" together on the second. Inline-block keeps each word's
+           own reveal mask working; Latin stays one word per line. The size
+           drops half a step so the two-word line clears the narrowest phones,
+           with normal wrapping as the harmless fallback. */
+        [dir="rtl"] .about-section .content h1 .hero-word:nth-child(n+2) {
+            display: inline-block;
+            vertical-align: bottom;
+        }
+
+        [dir="rtl"] .about-section .content h1 {
+            font-size: clamp(2.1rem, 13.5vw, 4.3rem);
+        }
+
+        /* Middle word hollowed out — the same outline motif the section
+           headings already use, so the hero borrows the house style. */
+        .about-section .content h1 .hero-word-outline > span {
+            color: transparent;
+            -webkit-text-stroke: 1.6px #ffffff;
+        }
+
+        /* --- rotating speciality line --- */
+        .about-section .hero-rotator {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 18px;
+            font-size: 1rem;
+            font-weight: 600;
+            /* Spans sit outside the global element colour rules, so the
+               prefix must carry its own — otherwise it falls back to the
+               browser default black and vanishes on the dark hero. */
+            color: #ffffff;
+            animation: heroFadeUp .9s .55s cubic-bezier(.22, 1, .36, 1) both;
+        }
+
+        .about-section .hero-rotator-mask {
+            display: inline-block;
+            height: 1.4em;
+            overflow: hidden;
+        }
+
+        .about-section .hero-rotator-inner {
+            display: flex;
+            flex-direction: column;
+            animation: heroRotate 10s cubic-bezier(.22, 1, .36, 1) infinite;
+        }
+
+        .about-section .hero-rotator-inner span {
+            display: flex;
+            align-items: center;
+            height: 1.4em;
+            white-space: nowrap;
+            font-weight: 700;
+            color: var(--accent-text);
+        }
+
+        /* Dark mode: the rotating words pick up the wordmark's orange — the
+           one warm note on the page, tying the hero to the logo. Light mode
+           keeps the silver: the orange is too pale against a light ground. */
+        .dark-mode .about-section .hero-rotator-inner span {
+            color: var(--brand-dot);
+        }
+
+        /* Role is the eyebrow on mobile; the h2 would only repeat it */
+        .about-section .content h2 {
+            display: none;
+        }
+
+        .about-section .content p {
+            max-width: 42ch;
+            /* Beats the `.about-section p { text-align: center }` above.
+               Justified body copy, no hyphenation — whole words only. */
+            text-align: justify;
+            text-align-last: start;
+            margin-inline: 0;
+            margin-block-start: 16px;
+            font-size: 0.92rem;
+            font-weight: 400;
+            line-height: 1.72;
+            /* Steps back off pure white so the paragraph reads as body copy
+               under the name rather than as a second headline. */
+            color: var(--accent-hi);
+            animation: heroFadeUp .9s .65s cubic-bezier(.22, 1, .36, 1) both;
+
+            .highlight {
+                font-weight: 600;
+            }
+        }
+
+        .about-section .hero-actions {
+            justify-content: flex-start;
+            max-width: 420px;
+            padding-top: 26px;
+            animation: heroFadeUp .9s .75s cubic-bezier(.22, 1, .36, 1) both;
+        }
+
+        /* Pills, per the reference */
+        .about-section .hero-btn {
+            border-radius: 100px;
+        }
+
+        .about-section .hero-btn-primary {
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+        }
+
+        /* --- social row: circles, left-aligned under the buttons --- */
+        .about-section .hero-rail {
+            display: flex;
+            position: static;
+            order: 2;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 10px;
+            margin-top: 22px;
+            padding-bottom: 26px;
+            animation: heroFadeUp .9s .85s cubic-bezier(.22, 1, .36, 1) both;
+        }
+
+        .about-section .hero-rail a {
+            width: 42px;
+            height: 42px;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--accent-line);
+            border-radius: 50%;
+            color: var(--accent-text);
+
+            svg {
+                font-size: 1.15rem;
+            }
+        }
+
+        .about-section .hero-rail a:hover {
+            border-color: var(--accent-hi);
+            background-color: var(--accent-bg);
+        }
+
+        /* The hairline only makes sense as the spine of a vertical stack */
+        .about-section .hero-rail-line {
+            display: none;
+        }
+
+        /* Arabic runs ~90px shorter than the English hero (compact name and
+           copy), which let the About section ride into the first screen.
+           Rather than dumping the difference as one dead strip above the
+           statusbar, it is dealt out across every block — the Arabic hero
+           simply breathes a little more than the English one and lands its
+           statusbar in the same place. */
+        [dir="rtl"] .about-section .hero-eyebrow {
+            margin-bottom: 22px;
+        }
+
+        [dir="rtl"] .about-section .hero-rotator {
+            margin-top: 28px;
+        }
+
+        [dir="rtl"] .about-section .content p {
+            margin-block-start: 26px;
+            /* Arabic wants the taller line anyway — ascenders and dots sit
+               close at Latin leading. */
+            line-height: 1.9;
+        }
+
+        [dir="rtl"] .about-section .hero-actions {
+            padding-top: 40px;
+        }
+
+        [dir="rtl"] .about-section .hero-rail {
+            margin-top: 34px;
+            padding-bottom: 44px;
+        }
+
+        /* --- status bar --- */
+        .about-section .hero-statusbar {
+            display: grid;
+            order: 3;
+            position: relative;
+            z-index: 2;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 10px;
+            /* Bleeds past the hero's side padding to sit edge to edge */
+            width: calc(100% + var(--hero-pad) * 2);
+            margin-inline: calc(var(--hero-pad) * -1);
+            padding: 13px var(--hero-pad) 16px;
+            border-top: 1px solid var(--accent-line);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: var(--accent);
+            animation: heroFadeIn 1s .95s cubic-bezier(.22, 1, .36, 1) both;
+        }
+
+        .about-section .hs-left {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .about-section .hs-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--status);
+            animation: heroPulse 2s infinite;
+        }
+
+        /* Grid children default to min-width:auto, which refuses to shrink
+           below their text and pushes the bar wider than the screen. Arabic
+           runs longer than English here, so the guard is not theoretical. */
+        .about-section .hs-left,
+        .about-section .hs-right {
+            min-width: 0;
+        }
+
+        .about-section .hs-mid {
+            min-width: 0;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .about-section .hs-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* A line with a travelling fill — a scroll cue that costs no copy */
+        .about-section .hs-scroll {
+            position: relative;
+            width: 1px;
+            height: 20px;
+            overflow: hidden;
+            background: var(--accent-line);
+        }
+
+        .about-section .hs-scroll::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-text);
+            animation: heroScroll 1.7s cubic-bezier(.22, 1, .36, 1) infinite;
+        }
+    }
+
+    /* Light mode owns its own stroke and shadow values */
+    @media (max-width: 768px) {
+        .light-mode .about-section .content h1 .hero-word-outline > span {
+            -webkit-text-stroke-color: #0d1116;
+        }
+
+        .light-mode .about-section .hero-rotator {
+            color: #0d1116;
+        }
+
+        .light-mode .about-section .hero-btn-primary {
+            box-shadow: 0 12px 28px rgba(11, 13, 22, 0.22);
+        }
+    }
+
+    /* Phones: both actions share one row, split down the middle. flex-basis 0
+       makes the split exact rather than letting the longer label claim more
+       space, so the pair reads as one control block. */
+    @media (max-width: 600px) {
+        .about-section .hero-actions {
+            flex-direction: row;
+            flex-wrap: nowrap;
+            width: 100%;
+            gap: 12px;
+        }
+
+        .about-section .hero-btn {
+            flex: 1 1 0;
+            min-width: 0;
+            min-height: 48px;
+            padding: 12px 10px;
+            font-size: 0.92rem;
+            gap: 8px;
+            white-space: nowrap;
+
+            svg {
+                font-size: 1.15em;
+            }
+        }
+    }
+
+    /* Smallest phones: the labels stay whole, the padding gives way */
+    @media (max-width: 380px) {
+        /* One variable, so the status bar's edge-to-edge bleed stays in step
+           with the padding it is cancelling out */
+        .about-section {
+            --hero-pad: 16px;
+        }
+
+        .about-section .hero-statusbar {
+            font-size: 9px;
+            letter-spacing: 0.4px;
+        }
+
+        .about-section .hero-btn {
+            padding: 12px 6px;
+            font-size: 0.85rem;
+            gap: 6px;
+        }
+    }
+}
+
+/* ============================================================
+   MOBILE HERO MOTION
+   Entrance runs once on load; the rotator, the availability dot and the
+   scroll cue are the only things that keep moving. Every animation named
+   here is used exclusively inside the max-width: 768px block above.
+   ============================================================ */
+
+@keyframes heroRiseUp {
+    to { transform: translateY(0); }
+}
+
+@keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes heroGrowX {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+
+@keyframes heroPulse {
+    0%   { box-shadow: 0 0 0 0 var(--status-glow); }
+    70%  { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+}
+
+@keyframes heroScroll {
+    0%   { top: -100%; }
+    60%  { top: 100%; }
+    100% { top: 100%; }
+}
+
+/* Four stops: three phrases plus a repeat of the first, so the loop closes
+   without snapping backwards. Each step is one line box (1.4em). */
+@keyframes heroRotate {
+    0%, 24%   { transform: translateY(0); }
+    30%, 57%  { transform: translateY(-1.4em); }
+    63%, 90%  { transform: translateY(-2.8em); }
+    96%, 100% { transform: translateY(-4.2em); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .about-section .hero-eyebrow,
+    .about-section .hero-eyebrow::after,
+    .about-section .hero-rotator,
+    .about-section .content h1 .hero-word > span,
+    .about-section .content p,
+    .about-section .hero-actions,
+    .about-section .hero-rail,
+    .about-section .hero-statusbar,
+    .about-section .hs-dot {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    /* Rotator settles on the first phrase; the mask hides the rest */
+    .about-section .hero-rotator-inner,
+    .about-section .hs-scroll::after {
+        animation: none !important;
+    }
+}

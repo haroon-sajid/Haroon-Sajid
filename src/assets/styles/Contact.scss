@@ -1,0 +1,269 @@
+/* ---------------- Section heading ----------------
+   Eyebrow / heading / rule match .about-container, .expertise-container,
+   #projects and #history exactly, so all five section headings are consistent. */
+
+#contact .contact-head {
+  margin-bottom: 40px;
+}
+
+#contact .contact-eyebrow {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #8b95a1;
+  font-family: 'Inter', sans-serif;
+}
+
+#contact .contact-head h1 {
+  font-size: clamp(2.2rem, 4.5vw, 4rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin-block-start: 12px;
+  margin-block-end: 0px;
+
+  .contact-outline {
+    color: transparent;
+    -webkit-text-stroke: 2px #ffffff;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+#contact .contact-rule {
+  display: block;
+  width: 70px;
+  height: 3px;
+  margin-top: 22px;
+  border-radius: 2px;
+  background-color: var(--accent);
+}
+
+#contact .contact-intro {
+  max-width: 660px;
+  margin-block-start: 26px;
+  margin-block-end: 0px;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #9aa4b2;
+  text-wrap: balance;
+}
+
+.light-mode {
+  #contact .contact-eyebrow {
+    color: #5a636e;
+  }
+
+  #contact .contact-head h1 .contact-outline {
+    color: transparent;
+    -webkit-text-stroke: 2px #0d1116;
+  }
+
+  #contact .contact-rule {
+    background-color: var(--accent);
+  }
+
+  #contact .contact-intro {
+    color: #4d5661;
+  }
+
+  /* ---- Form ---- */
+
+  #contact .contact-form .MuiOutlinedInput-root {
+    background-color: var(--surface-hi);
+
+    fieldset {
+      border-color: rgba(13, 17, 22, 0.12);
+    }
+
+    &:hover fieldset {
+      border-color: rgba(13, 17, 22, 0.3);
+    }
+
+    &.Mui-focused fieldset {
+      border-color: var(--accent);
+    }
+  }
+
+  #contact .contact-form .MuiInputBase-input {
+    color: #0d1116;
+  }
+
+  #contact .contact-form .MuiInputBase-input::placeholder {
+    color: #5a636e;
+  }
+
+  #contact .contact-form .MuiInputLabel-root {
+    color: #55555e;
+  }
+
+  #contact .contact-form .MuiInputBase-input:-webkit-autofill {
+    -webkit-text-fill-color: #0d1116;
+    -webkit-box-shadow: 0 0 0 1000px var(--surface-hi) inset;
+    caret-color: #0d1116;
+  }
+
+  #contact .contact-form .MuiButton-root {
+    background-color: #0d1116;
+    color: #ffffff;
+
+    svg {
+      color: #ffffff;
+    }
+  }
+
+  #contact .contact-form .MuiButton-root:hover {
+    background-color: var(--accent-hi);
+    color: #ffffff;
+
+    svg {
+      color: #ffffff;
+    }
+  }
+}
+
+/* ---------------- Form ---------------- */
+
+.contact_wrapper svg {
+  font-size: 1em;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.contact-form {
+  padding-top: 20px;
+
+  button {
+    float: right;
+  }
+}
+
+/* Fields adopt the card language used in Expertise / Projects / Education:
+   hairline border, 12px radius, near-transparent surface. The template's
+   `fieldset { background: white }` is what produced the solid white blocks. */
+#contact .contact-form .MuiOutlinedInput-root {
+  border-radius: 12px;
+  background-color: var(--surface-hi);
+  transition: background-color .2s ease;
+
+  fieldset {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    transition: border-color .2s ease;
+  }
+
+  &:hover fieldset {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Focus is the one moment the accent appears in this section */
+  &.Mui-focused {
+    fieldset {
+      border-width: 1px;
+      border-color: var(--accent);
+    }
+  }
+}
+
+#contact .contact-form .MuiInputBase-input {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+#contact .contact-form .MuiInputBase-input::placeholder {
+  color: #8b95a1;
+  opacity: 1;
+}
+
+#contact .contact-form .MuiInputLabel-root {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: #9aa4b2;
+}
+
+#contact .contact-form .MuiInputLabel-root.Mui-focused {
+  color: var(--accent-text);
+}
+
+#contact .contact-form .MuiFormHelperText-root {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  margin-left: 4px;
+}
+
+/* Chrome's autofill repaints the field — pin it back to the surface colour */
+#contact .contact-form .MuiInputBase-input:-webkit-autofill {
+  -webkit-text-fill-color: #ffffff;
+  -webkit-box-shadow: 0 0 0 1000px var(--surface-hi) inset;
+  caret-color: #ffffff;
+}
+
+/* Submit mirrors the hero's primary CTA: full-contrast fill, silver on hover */
+#contact .contact-form .MuiButton-root {
+  padding: 12px 26px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  box-shadow: none;
+  background-color: #ffffff;
+  color: #0d1116;
+  transition: background-color .15s ease-in-out, box-shadow .15s ease-in-out, transform .15s ease-in-out;
+
+  svg {
+    color: #0d1116;
+  }
+}
+
+#contact .contact-form .MuiButton-root:hover {
+  background-color: var(--accent-hi);
+  color: #0d1116;
+  box-shadow: 0 8px 26px var(--accent-glow);
+  transform: translateY(-2px);
+}
+
+label {
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.form-flex {
+  display: flex;
+  gap: 15px;
+  padding-bottom: 15px;
+}
+
+.form-flex .MuiFormControl-root {
+  width: 100%;
+}
+
+form {
+  width: 100% !important;
+}
+
+.body-form {
+  width: 100% !important;
+  margin-bottom: 15px !important;
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media screen {
+  @media (max-width: 600px) {
+    /* Name and email stack — side by side they squeeze to ~150px each on a
+       phone, truncating their own labels. Works as-is in RTL. */
+    .form-flex {
+      flex-direction: column;
+      gap: 0;
+      padding-bottom: 0;
+    }
+
+    .form-flex .MuiFormControl-root {
+      margin-bottom: 15px;
+    }
+  }
+}

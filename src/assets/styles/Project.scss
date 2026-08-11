@@ -1,0 +1,371 @@
+.projects-container {
+    display: flex;
+    flex-direction: column;
+    padding: 5% 10%;
+    text-align: left;
+}
+
+/* ---------------- Section heading ----------------
+   Eyebrow / heading / rule match .about-container, .expertise-container
+   and #history exactly, so all four section headings are consistent. */
+
+#projects .projects-head {
+    margin-bottom: 40px;
+}
+
+#projects .projects-eyebrow {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: #8b95a1;
+    font-family: 'Inter', sans-serif;
+}
+
+#projects .projects-head h1 {
+    font-size: clamp(2.2rem, 4.5vw, 4rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    margin-block-start: 12px;
+    margin-block-end: 0px;
+
+    .projects-outline {
+        color: transparent;
+        -webkit-text-stroke: 2px #ffffff;
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+#projects .projects-rule {
+    display: block;
+    width: 70px;
+    height: 3px;
+    margin-top: 22px;
+    border-radius: 2px;
+    background-color: var(--accent);
+}
+
+#projects .projects-intro {
+    max-width: 660px;
+    margin-block-start: 26px;
+    margin-block-end: 0px;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #9aa4b2;
+    text-wrap: balance;
+}
+
+/* ---------------- Cards (mirrors .expertise-container .area) ---------------- */
+
+/* grid-auto-rows: 1fr keeps every row the same height, so all nine cards match */
+.projects-container .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    grid-gap: 40px;
+}
+
+.projects-container .projects-grid .project {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding: 20px 20px 22px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    background-color: var(--surface);
+    transition: transform .35s cubic-bezier(.22, .61, .36, 1),
+                box-shadow .35s ease,
+                border-color .35s ease,
+                background-color .35s ease;
+}
+
+.projects-container .projects-grid .project:hover {
+    border-color: var(--accent);
+    background-color: var(--surface-hover);
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Bar that sweeps across the bottom edge on hover */
+.projects-container .projects-grid .project::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 4px;
+    background-color: var(--accent);
+    transition: width .35s ease;
+}
+
+.projects-container .projects-grid .project:hover::after {
+    width: 100%;
+}
+
+/* Fixed aspect ratio so every thumbnail is exactly the same height,
+   whatever the source image's dimensions are */
+.project .project-thumb {
+    display: block;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 18px;
+}
+
+.project .project-thumb img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
+
+.project .project-link {
+    display: block;
+}
+
+.project h2 {
+    /* Was min-height: 2.6em to reserve a second line — but every title here is
+       one line, so that reservation just showed up as dead space under the
+       title. Titles now take their natural height; the chip row is still pinned
+       to the card bottom, so a title that does wrap costs the row 1 line rather
+       than every card paying for it up front. */
+    margin: 0 0 12px 0;
+    font-size: 17px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+}
+
+.project h2:hover {
+    text-decoration: underline;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+}
+
+.project p {
+    /* Exactly three lines — min-height reserves them, line-clamp caps them. Both
+       halves matter: without the clamp one long description stretches the whole
+       grid row (auto-rows: 1fr), which is what pushed the cards taller when the
+       chip row arrived. */
+    min-height: 4.8em;
+    max-height: 4.8em;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #9aa4b2;
+    /* Flush on both edges. text-align-last keeps the final line from being
+       stretched across the column, which is what makes justified text look
+       broken when the last line is short. */
+    text-align: justify;
+    text-align-last: start;
+}
+
+/* Same pill as the Expertise cards' TECH STACK row, so the two sections read as
+   one system. margin-top:auto pins the row to the bottom of the card, which
+   keeps the chips aligned across a row even when descriptions differ in length. */
+.project .project-stack {
+    display: flex;
+    /* nowrap + the +N chip is what guarantees a single row, so the card height
+       is fixed no matter how long a project's stack is */
+    flex-wrap: nowrap;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 14px;
+
+    .tech {
+        padding: 4px 8px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 999px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        line-height: 1.45;
+        color: #c6ccd4;
+        /* Safety valve for the narrowest 3-column width (~227px inside the
+           card): a long name gives up a character instead of spilling out of
+           the card or wrapping to a second row. */
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+    }
+
+    /* The counter is the one chip that must stay readable, so it never shrinks */
+    .tech-more {
+        flex-shrink: 0;
+        cursor: help;
+    }
+
+    .tech:hover {
+        background-color: var(--accent-bg);
+        border-color: var(--accent-line);
+        color: var(--accent-text);
+        cursor: default;
+    }
+}
+
+.zoom {
+    transition: transform .3s ease;
+    margin: 0 auto;
+}
+
+.project:hover .zoom {
+    transform: scale(1.05);
+}
+
+/* ---------------- See more toggle ----------------
+   Same voice as the hero's secondary CTA: a neutral outline that only
+   picks up the accent on hover, so the grid keeps the strongest value. */
+
+.projects-container .projects-more {
+    display: flex;
+    justify-content: center;
+    margin-top: 48px;
+}
+
+.projects-container .projects-more-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 30px;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out,
+        border-color .15s ease-in-out, transform .15s ease-in-out;
+
+    svg {
+        font-size: 1.3em;
+    }
+}
+
+.projects-container .projects-more-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-hi);
+    transform: translateY(-2px);
+}
+
+/* ---------------- Light mode ---------------- */
+
+.light-mode {
+    #projects .projects-eyebrow {
+        color: #5a636e;
+    }
+
+    #projects .projects-head h1 .projects-outline {
+        color: transparent;
+        -webkit-text-stroke: 2px #0d1116;
+    }
+
+    #projects .projects-rule {
+        background-color: var(--accent);
+    }
+
+    #projects .projects-intro,
+    .projects-container .projects-grid .project p {
+        color: #4d5661;
+    }
+
+    .projects-container .projects-grid .project {
+        border-color: rgba(13, 17, 22, 0.12);
+        background-color: var(--surface);
+    }
+
+    .projects-container .projects-grid .project:hover {
+        border-color: var(--accent);
+        background-color: var(--surface-hover);
+        box-shadow: 0 18px 40px rgba(17, 17, 17, 0.1);
+    }
+
+    .projects-container .projects-grid .project::after {
+        background-color: var(--accent);
+    }
+
+    .project .project-stack .tech {
+        border-color: rgba(13, 17, 22, 0.25);
+        color: #3f4750;
+    }
+
+    .project .project-stack .tech:hover {
+        background-color: var(--accent-bg);
+        border-color: var(--accent-line);
+        color: var(--accent-text);
+    }
+
+    .projects-container .projects-more-btn {
+        border-color: rgba(13, 17, 22, 0.3);
+        color: #0d1116;
+    }
+
+    .projects-container .projects-more-btn:hover {
+        background-color: rgba(13, 17, 22, 0.05);
+        border-color: var(--accent-hi);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .projects-container .projects-grid .project,
+    .projects-container .projects-grid .project::after,
+    .project .project-stack .tech,
+    .projects-container .projects-more-btn,
+    .zoom {
+        transition: none;
+    }
+
+    .projects-container .projects-more-btn:hover {
+        transform: none;
+    }
+
+    .projects-container .projects-grid .project:hover {
+        transform: none;
+    }
+
+    .project:hover .zoom {
+        transform: none;
+    }
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media screen {
+    @media (max-width: 1100px) {
+        .projects-container .projects-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 700px) {
+        .projects-container {
+            display: block;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+
+        .projects-container .projects-grid {
+            display: block;
+        }
+
+        .projects-container .projects-grid .project {
+            margin-bottom: 5%;
+        }
+
+        .project h2,
+        .project p {
+            min-height: 0;
+        }
+    }
+}

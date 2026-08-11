@@ -1,0 +1,312 @@
+/* Vertical rhythm is viewport-height aware (vh inside clamp) so the whole
+   section collapses to fit shorter laptop screens without losing content. */
+/* Same padding as .about-container so both sections align down the page */
+.expertise-container {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5% 10%;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+/* ---------------- Header ---------------- */
+
+/* Left column sized closer to the heading so the middle gap stays tight;
+   bottom-aligned so the rule and the stat band share a baseline. */
+/* Single column now that the stat band lives in its own section. Bottom
+   margin replaces the spacing the old divider row used to provide. */
+.expertise-container .expertise-head {
+    margin-bottom: clamp(36px, 5vh, 64px);
+}
+
+/* Eyebrow / heading / rule below are byte-identical to .about-container's,
+   so both section headings share size, weight and spacing. */
+.expertise-container .expertise-eyebrow {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: #8b95a1;
+}
+
+.expertise-container .expertise-head-left h1 {
+    font-size: clamp(2.2rem, 4.5vw, 4rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    margin-block-start: 12px;
+    margin-block-end: 0px;
+
+    .expertise-outline {
+        color: transparent;
+        -webkit-text-stroke: 2px #ffffff;
+    }
+}
+
+.expertise-container .expertise-rule {
+    display: block;
+    width: 70px;
+    height: 3px;
+    margin-top: 22px;
+    border-radius: 2px;
+    background-color: var(--accent);
+}
+
+/* Matches the intro paragraph in About / Projects / History / Education /
+   Contact so all six sections read as one system */
+.expertise-container .expertise-intro {
+    max-width: 660px;
+    margin-block-start: 26px;
+    margin-block-end: 0px;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #9aa4b2;
+    text-wrap: balance;
+}
+
+/* ---------------- Cards ---------------- */
+
+/* grid-auto-rows: 1fr makes every row the same height, so all six cards
+   are identical — not just the three within a row. */
+.expertise-container .expertise-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    grid-gap: clamp(14px, 2vh, 24px);
+}
+
+.expertise-container .area {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 24px 22px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    background-color: var(--surface);
+    transition: transform .35s cubic-bezier(.22, .61, .36, 1),
+                box-shadow .35s ease,
+                border-color .35s ease,
+                background-color .35s ease;
+}
+
+.expertise-container .area:hover {
+    border-color: var(--accent);
+    background-color: var(--surface-hover);
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+}
+
+.expertise-container .area:hover .area-ghost {
+    color: rgba(255, 255, 255, 0.09);
+}
+
+/* Bar that sweeps across the bottom edge on hover */
+.expertise-container .area::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 4px;
+    background-color: var(--accent);
+    transition: width .35s ease;
+}
+
+.expertise-container .area:hover::after {
+    width: 100%;
+}
+
+.expertise-container .area-ghost {
+    position: absolute;
+    top: 2px;
+    right: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 72px;
+    font-weight: 800;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.05);
+    user-select: none;
+    pointer-events: none;
+    transition: color .35s ease;
+}
+
+.expertise-container .area-icon {
+    width: 44px;
+    height: 44px;
+    margin-top: 0px;
+    margin-bottom: 18px;
+    color: #ffffff;
+}
+
+.expertise-container .area h3 {
+    margin-block-start: 0px;
+    margin-block-end: 12px;
+    font-size: 19px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+
+    .area-title-alt {
+        font-weight: 600;
+        color: #9aa4b2;
+    }
+}
+
+/* No flex:1 here — it absorbed the slack and opened a gap mid-card.
+   Content stays top-aligned and any spare height falls to the bottom. */
+/* min-height reserves 3 lines so every card's TECH STACK label starts on the
+   same baseline, regardless of how long the description runs. */
+.expertise-container .area p {
+    margin-block-start: 0px;
+    margin-block-end: 20px;
+    min-height: 4.95em;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #9aa4b2;
+}
+
+.expertise-container .area-stack-label {
+    display: block;
+    margin-bottom: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #8b95a1;
+}
+
+.expertise-container .area-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    .tech {
+        padding: 5px 8px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 999px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        line-height: 1.45;
+        color: #c6ccd4;
+        transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+    }
+
+    .tech:hover {
+        background-color: var(--accent-bg);
+        border-color: var(--accent-line);
+        color: var(--accent-text);
+        cursor: default;
+    }
+}
+
+/* ---------------- Light mode ---------------- */
+
+.light-mode {
+    .expertise-container .expertise-eyebrow,
+    .expertise-container .area-stack-label {
+        color: #5a636e;
+    }
+
+    .expertise-container .expertise-head-left h1 .expertise-outline {
+        color: transparent;
+        -webkit-text-stroke: 2px #0d1116;
+    }
+
+    .expertise-container .expertise-rule {
+        background-color: var(--accent);
+    }
+
+    .expertise-container .expertise-intro,
+    .expertise-container .area p,
+    .expertise-container .area h3 .area-title-alt {
+        color: #4d5661;
+    }
+
+    .expertise-container .area {
+        border-color: rgba(13, 17, 22, 0.12);
+        background-color: var(--surface);
+    }
+
+    .expertise-container .area:hover {
+        border-color: var(--accent);
+        background-color: var(--surface-hover);
+        box-shadow: 0 18px 40px rgba(17, 17, 17, 0.1);
+    }
+
+    .expertise-container .area:hover .area-ghost {
+        color: rgba(13, 17, 22, 0.09);
+    }
+
+    .expertise-container .area::after {
+        background-color: var(--accent);
+    }
+
+    .expertise-container .area-ghost {
+        color: rgba(13, 17, 22, 0.05);
+    }
+
+    .expertise-container .area-icon {
+        color: #0d1116;
+    }
+
+    .expertise-container .area-stack .tech {
+        border-color: rgba(13, 17, 22, 0.25);
+        color: #3f4750;
+    }
+
+    .expertise-container .area-stack .tech:hover {
+        background-color: var(--accent-bg);
+        border-color: var(--accent-line);
+        color: var(--accent-text);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .expertise-container .area,
+    .expertise-container .area::after,
+    .expertise-container .area-ghost,
+    .expertise-container .area-stack .tech {
+        transition: none;
+    }
+
+    .expertise-container .area:hover {
+        transform: none;
+    }
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media screen {
+    @media (max-width: 1100px) {
+        .expertise-container .expertise-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 900px) {
+        .expertise-container {
+            display: block;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+
+        /* Block, not initial: `initial` resolves to inline for a div, and
+           inline boxes drop vertical margins — which silently ate the head's
+           margin-bottom and glued the intro to the first card. */
+        .expertise-container .expertise-head {
+            display: block;
+        }
+
+    }
+
+    @media (max-width: 600px) {
+        .expertise-container .expertise-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+}
