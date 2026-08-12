@@ -119,8 +119,10 @@
 .project .project-thumb img {
     display: block;
     width: 100%;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
+    /* Natural height: the whole screenshot shows with no crop and no
+       letterbox filler. Thumb heights vary a little by image shape; the
+       chip row's margin-top:auto pins the card bottoms level anyway. */
+    height: auto;
 }
 
 .project .project-link {
@@ -147,17 +149,11 @@
 }
 
 .project p {
-    /* Exactly three lines — min-height reserves them, line-clamp caps them. Both
-       halves matter: without the clamp one long description stretches the whole
-       grid row (auto-rows: 1fr), which is what pushed the cards taller when the
-       chip row arrived. */
+    /* Three lines reserved so short descriptions do not collapse the card,
+       but no cap — a longer description shows in full, and the chip row's
+       margin-top:auto keeps the row's card bottoms level. */
     min-height: 4.8em;
-    max-height: 4.8em;
     margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
     font-size: 13.5px;
     line-height: 1.6;
     color: #9aa4b2;

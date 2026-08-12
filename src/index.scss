@@ -438,32 +438,6 @@ p, a, h1, h2, h3, h4, h5, label, button {
 
 /* ---- Expertise ---- */
 
-[dir="rtl"] .stats-band .stat + .stat {
-  border-left: 0;
-  border-right: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-.light-mode[dir="rtl"] .stats-band .stat + .stat {
-  border-right-color: rgba(13, 17, 22, 0.14);
-}
-
-[dir="rtl"] .stats-band::before {
-  left: auto;
-  right: -9px;
-  border-width: 2px 2px 0 0;
-}
-
-[dir="rtl"] .stats-band::after {
-  right: auto;
-  left: -9px;
-  border-width: 0 0 2px 2px;
-}
-
-[dir="rtl"] .stats-band .stat-value {
-  direction: ltr;
-  unicode-bidi: isolate;
-}
-
 [dir="rtl"] .expertise-container .area-ghost {
   right: auto;
   left: 16px;

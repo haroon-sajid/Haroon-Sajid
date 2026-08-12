@@ -58,6 +58,7 @@ const en = {
     ]
   },
 
+  statsEyebrow: 'By the Numbers',
   stats: [
     { value: '2+', label: 'Years Experience' },
     { value: '20+', label: 'Technologies' },
@@ -113,9 +114,9 @@ const en = {
     seeLess: 'Show Less',
     items: [
       { title: 'Publisha.io', desc: 'Multi-tenant platform automating content and marketing campaigns, with AI-drafted posts routed through human approval before publishing.' },
-      { title: 'High Speed Chase', desc: 'A 3D multiplayer racing game designed, developed, and launched with C# and Unity, published on Itch.io for players worldwide.' },
+      { title: 'Caregivers Monitoring System', desc: 'End-to-end n8n automation for overnight caregiver operations: scheduled SMS check-ins, voice-call escalation, streak scoring with a live leaderboard, and AI morning reports.' },
       { title: 'Idolfluence', desc: 'AI-powered platform that turns a chosen niche and persona into finished marketing videos, then publishes them straight to TikTok on autopilot.' },
-      { title: 'Datum: Learning Platform', desc: 'An online educational platform offering data science learning resources in Japanese, built entirely from scratch with Ruby on Rails.' },
+      { title: 'AI Inbox Management System', desc: 'An online educational platform offering data science learning resources in Japanese, built entirely from scratch with Ruby on Rails.' },
       { title: 'WeManage: Asset Management', desc: 'A mobile app letting realtors in Japan securely manage property information and view income predictions, built with Ruby on Rails.' },
       { title: 'COVID-19 Case Management', desc: 'Official tracking charts for an educational institution using JavaScript and the Google Sheets API v4, serving university leadership.' },
       { title: 'Regression Property Analysis', desc: 'Analysis of the Japanese real estate market, predicting property prices with OLS and multi-regression models.' },
@@ -137,7 +138,12 @@ const en = {
         company: 'Builberg',
         location: 'Hybrid',
         date: 'Jun 2026 - Present',
-        desc: 'Building AI automation workflows and LLM agents for client businesses, along with full-stack development and cloud deployment of production solutions.'
+        desc: 'Building AI automation workflows and LLM agents for client businesses, along with full-stack development and cloud deployment of production solutions.',
+        points: [
+          'Building AI automation workflows and LLM agents',
+          'Full-stack development of client solutions',
+          'Cloud deployment of production systems'
+        ]
       },
       {
         role: 'Full-Stack AI Engineer',
@@ -145,7 +151,12 @@ const en = {
         company: 'Camden Health System',
         location: 'Onsite',
         date: 'Sep 2025 - May 2026',
-        desc: 'Developed full-stack CRM and business applications with Python, FastAPI, and React. Built AI chatbots and workflow automations integrating LLMs with LangChain and n8n, deployed on cloud platforms.'
+        desc: 'Developed full-stack CRM and business applications with Python, FastAPI, and React. Built AI chatbots and workflow automations integrating LLMs with LangChain and n8n, deployed on cloud platforms.',
+        points: [
+          'Built full-stack CRM apps with Python and React',
+          'Created AI chatbots with LangChain and n8n',
+          'Deployed solutions on cloud platforms'
+        ]
       },
       {
         role: 'Backend Developer',
@@ -153,7 +164,12 @@ const en = {
         company: 'Enigmatix',
         location: 'Onsite',
         date: 'May 2024 - Aug 2025',
-        desc: 'Worked on backend services and REST APIs, with a focus on database design, CRUD operations, and third party API integrations for business applications.'
+        desc: 'Worked on backend services and REST APIs, with a focus on database design, CRUD operations, and third party API integrations for business applications.',
+        points: [
+          'Built backend services and REST APIs',
+          'Designed database schemas and CRUD operations',
+          'Integrated third-party APIs for businesses'
+        ]
       },
       {
         role: 'Python Developer',
@@ -161,7 +177,12 @@ const en = {
         company: 'Enigmatix',
         location: 'Onsite',
         date: 'Feb 2024 - Apr 2024',
-        desc: 'Supported backend development with Python and built AI chatbot features using LangChain, RAG, vector databases, and prompt engineering.'
+        desc: 'Supported backend development with Python and built AI chatbot features using LangChain, RAG, vector databases, and prompt engineering.',
+        points: [
+          'Supported backend development with Python',
+          'Built AI chatbot features using LangChain and RAG',
+          'Worked with vector databases and prompt engineering'
+        ]
       }
     ]
   },
@@ -213,6 +234,24 @@ const en = {
     explore: 'Take a look',
     feedback: 'Give feedback',
     close: 'Close'
+  },
+
+  chat: {
+    open: 'Open chat',
+    close: 'Close chat',
+    title: "Haroon's Assistant",
+    online: 'Online',
+    intro: 'How would you like to connect?',
+    aiTitle: 'Ask my AI assistant',
+    aiDesc: 'Instant answers about my work and skills',
+    waTitle: 'Chat on WhatsApp',
+    waDesc: 'Talk to me directly',
+    back: 'Back',
+    welcome: "Hi! 👋 I'm Haroon's AI assistant. Ask me anything about his skills, projects, or experience.",
+    placeholder: 'Type your message...',
+    send: 'Send',
+    demoReply: "Thanks for your message! I'm still being connected. Meanwhile, you can reach Haroon directly on WhatsApp below.",
+    demoCta: 'Open WhatsApp'
   },
 
   footer: {
@@ -286,6 +325,7 @@ const ar: typeof en = {
     ]
   },
 
+  statsEyebrow: 'بالأرقام',
   stats: [
     { value: '2+', label: 'سنوات خبرة' },
     { value: '20+', label: 'تقنية وأداة' },
@@ -341,9 +381,9 @@ const ar: typeof en = {
     seeLess: 'عرض أقل',
     items: [
       { title: 'Publisha.io', desc: 'منصة متعددة المستأجرين لأتمتة المحتوى والحملات التسويقية: يكتب الذكاء الاصطناعي المسودات، ثم تُعتمد بشريًا قبل النشر.' },
-      { title: 'High Speed Chase', desc: 'لعبة سباق ثلاثية الأبعاد متعددة اللاعبين صُممت وطُوّرت وأُطلقت باستخدام C# وUnity، ومنشورة على Itch.io للاعبين حول العالم.' },
+      { title: 'Caregivers Monitoring System', desc: 'أتمتة متكاملة عبر n8n لعمليات الرعاية الليلية: رسائل تحقق مجدولة، وتصعيد بمكالمات صوتية، وتقييم أداء مع لوحة صدارة مباشرة، وتقارير صباحية بالذكاء الاصطناعي.' },
       { title: 'Idolfluence', desc: 'منصة تحوّل المجال والشخصية المختارة إلى فيديوهات تسويقية جاهزة بالذكاء الاصطناعي، ثم تنشرها مباشرة على TikTok بشكل تلقائي.' },
-      { title: 'Datum: Learning Platform', desc: 'منصة تعليمية إلكترونية تقدم موارد تعلّم علوم البيانات باللغة اليابانية، بُنيت بالكامل من الصفر باستخدام Ruby on Rails.' },
+      { title: 'AI Inbox Management System', desc: 'منصة تعليمية إلكترونية تقدم موارد تعلّم علوم البيانات باللغة اليابانية، بُنيت بالكامل من الصفر باستخدام Ruby on Rails.' },
       { title: 'WeManage: Asset Management', desc: 'تطبيق جوال يتيح لوكلاء العقارات في اليابان إدارة معلومات العقارات بأمان وعرض توقعات الدخل، مبني باستخدام Ruby on Rails.' },
       { title: 'COVID-19 Case Management', desc: 'مخططات تتبع رسمية لمؤسسة تعليمية باستخدام JavaScript وواجهة Google Sheets API v4، لخدمة قيادة الجامعة.' },
       { title: 'Regression Property Analysis', desc: 'تحليل لسوق العقارات الياباني وتوقع الأسعار باستخدام الانحدار المتعدد وOLS، بالاعتماد على Python وPandas وScikit-Learn.' },
@@ -365,7 +405,12 @@ const ar: typeof en = {
         company: 'Builberg',
         location: 'عمل هجين',
         date: 'يونيو 2026 - حتى الآن',
-        desc: 'بناء سير عمل الأتمتة بالذكاء الاصطناعي والوكلاء الأذكياء لعملاء الشركات، إلى جانب التطوير المتكامل والنشر السحابي للحلول الإنتاجية.'
+        desc: 'بناء سير عمل الأتمتة بالذكاء الاصطناعي والوكلاء الأذكياء لعملاء الشركات، إلى جانب التطوير المتكامل والنشر السحابي للحلول الإنتاجية.',
+        points: [
+          'بناء سير عمل الأتمتة والوكلاء الأذكياء',
+          'تطوير متكامل لحلول العملاء',
+          'النشر السحابي للأنظمة الإنتاجية'
+        ]
       },
       {
         role: 'مهندس ذكاء اصطناعي متكامل',
@@ -373,7 +418,12 @@ const ar: typeof en = {
         company: 'Camden Health System',
         location: 'من المقر',
         date: 'سبتمبر 2025 - مايو 2026',
-        desc: 'طوّرت تطبيقات إدارة علاقات العملاء والأعمال باستخدام Python وFastAPI وReact. وبنيت روبوتات محادثة وأتمتة سير عمل تدمج نماذج اللغة مع LangChain وn8n، ونشرتها على منصات سحابية.'
+        desc: 'طوّرت تطبيقات إدارة علاقات العملاء والأعمال باستخدام Python وFastAPI وReact. وبنيت روبوتات محادثة وأتمتة سير عمل تدمج نماذج اللغة مع LangChain وn8n، ونشرتها على منصات سحابية.',
+        points: [
+          'بنيت تطبيقات CRM متكاملة بـ Python وReact',
+          'أنشأت روبوتات محادثة مع LangChain وn8n',
+          'نشرت الحلول على منصات سحابية'
+        ]
       },
       {
         role: 'مطوّر أنظمة خلفية',
@@ -381,7 +431,12 @@ const ar: typeof en = {
         company: 'Enigmatix',
         location: 'من المقر',
         date: 'مايو 2024 - أغسطس 2025',
-        desc: 'عملت على الخدمات الخلفية وواجهات REST، مع التركيز على تصميم قواعد البيانات وعمليات المعالجة وتكامل واجهات البرمجة الخارجية لتطبيقات الأعمال.'
+        desc: 'عملت على الخدمات الخلفية وواجهات REST، مع التركيز على تصميم قواعد البيانات وعمليات المعالجة وتكامل واجهات البرمجة الخارجية لتطبيقات الأعمال.',
+        points: [
+          'بنيت خدمات خلفية وواجهات REST',
+          'صممت قواعد البيانات وعمليات المعالجة',
+          'دمجت واجهات برمجة خارجية للشركات'
+        ]
       },
       {
         role: 'مطوّر Python',
@@ -389,7 +444,12 @@ const ar: typeof en = {
         company: 'Enigmatix',
         location: 'من المقر',
         date: 'فبراير 2024 - أبريل 2024',
-        desc: 'دعمت تطوير الأنظمة الخلفية باستخدام Python وبنيت ميزات روبوتات المحادثة باستخدام LangChain وRAG وقواعد البيانات المتجهية وهندسة التوجيهات.'
+        desc: 'دعمت تطوير الأنظمة الخلفية باستخدام Python وبنيت ميزات روبوتات المحادثة باستخدام LangChain وRAG وقواعد البيانات المتجهية وهندسة التوجيهات.',
+        points: [
+          'دعمت تطوير الأنظمة الخلفية باستخدام Python',
+          'بنيت ميزات روبوتات المحادثة باستخدام LangChain وRAG',
+          'عملت مع قواعد البيانات المتجهية وهندسة التوجيهات'
+        ]
       }
     ]
   },
@@ -441,6 +501,24 @@ const ar: typeof en = {
     explore: 'تفضل بجولة',
     feedback: 'شاركني رأيك',
     close: 'إغلاق'
+  },
+
+  chat: {
+    open: 'افتح المحادثة',
+    close: 'إغلاق المحادثة',
+    title: 'مساعد هارون',
+    online: 'متصل',
+    intro: 'كيف تودّ التواصل؟',
+    aiTitle: 'اسأل مساعدي الذكي',
+    aiDesc: 'إجابات فورية عن أعمالي ومهاراتي',
+    waTitle: 'المحادثة عبر واتساب',
+    waDesc: 'تحدث معي مباشرة',
+    back: 'رجوع',
+    welcome: 'أهلاً! 👋 أنا مساعد هارون الذكي. اسألني ما تشاء عن مهاراته ومشاريعه وخبراته.',
+    placeholder: 'اكتب رسالتك...',
+    send: 'إرسال',
+    demoReply: 'شكرًا لرسالتك! ما زلت قيد الربط حاليًا. يمكنك التواصل مع هارون مباشرة عبر واتساب أدناه.',
+    demoCta: 'افتح واتساب'
   },
 
   footer: {

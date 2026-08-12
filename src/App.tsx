@@ -11,6 +11,7 @@ import {
   Navigation,
   Footer,
   WelcomePopup,
+  ChatWidget,
 } from "./components";
 import FadeIn from './components/FadeIn';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
@@ -50,6 +51,7 @@ function AppShell() {
             <Contact/>
         </FadeIn>
         <Footer />
+        <ChatWidget />
     </div>
     );
 }

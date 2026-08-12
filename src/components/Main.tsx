@@ -4,7 +4,6 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import XIcon from '@mui/icons-material/X';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import HeroNet from './HeroNet';
 import { useLanguage } from '../context/LanguageContext';
 import '../assets/styles/Main.scss';
 
@@ -62,8 +61,6 @@ function Main() {
   return (
     <div className="container">
       <div className="about-section">
-        {/* Animated backdrop — mobile only, see HeroNet */}
-        <HeroNet/>
 
         {/* Social rail, pinned to the hero's leading edge */}
         <div className="hero-rail hero-rail-start">

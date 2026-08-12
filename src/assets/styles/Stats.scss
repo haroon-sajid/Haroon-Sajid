@@ -1,93 +1,124 @@
 /* Standalone band between About and Expertise. Same horizontal inset as
    every section container so it lines up with the headings above and below,
-   but no vertical section padding — it is a strip, not a section. */
+   but no vertical section padding — it is a strip, not a section.
+
+   Three separate stat cards: bold count with the "+" in the brand-dot
+   orange, a giant ghost of the number watermarked behind, and a mono
+   label underneath. */
+
 .stats-container {
     width: 100%;
     box-sizing: border-box;
     padding: 0 10%;
 }
 
+/* Eyebrow: short rule, then the label in spaced mono caps */
+.stats-container .stats-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: #8b95a1;
+
+    &::before {
+        content: '';
+        flex-shrink: 0;
+        width: 30px;
+        height: 2px;
+        background-color: var(--accent);
+    }
+}
+
+/* Arabic carries no caps-tracking (index.scss convention) */
+[dir="rtl"] .stats-container .stats-eyebrow {
+    letter-spacing: 0;
+}
+
 .stats-band {
-    position: relative;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    padding: clamp(26px, 4vh, 40px) 20px;
+    gap: 26px;
+}
+
+.stats-band .stat {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: start;
+    padding: 30px 26px 24px;
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 12px;
     background-color: var(--surface);
 }
 
-/* Corner brackets — kept from the original stat band so the motif survives
-   the move out of the Expertise header */
-.stats-band::before,
-.stats-band::after {
-    content: '';
+/* Ghost of the number, watermarked into the corner */
+.stats-band .stat-ghost {
     position: absolute;
-    width: 18px;
-    height: 18px;
-    border-color: var(--accent);
-    border-style: solid;
-}
-
-.stats-band::before {
-    top: -9px;
-    left: -9px;
-    border-width: 2px 0 0 2px;
-}
-
-.stats-band::after {
-    right: -9px;
-    bottom: -9px;
-    border-width: 0 2px 2px 0;
-}
-
-.stats-band .stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 0 16px;
-}
-
-.stats-band .stat + .stat {
-    border-left: 1px solid rgba(255, 255, 255, 0.14);
+    top: -6px;
+    inset-inline-end: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(4.2rem, 6vw, 5.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+    user-select: none;
 }
 
 .stats-band .stat-value {
+    position: relative;
     font-family: 'Inter', sans-serif;
-    font-size: clamp(1.9rem, 3vw, 2.6rem);
+    font-size: clamp(2.1rem, 3vw, 2.7rem);
     font-weight: 800;
     letter-spacing: -0.02em;
     line-height: 1;
     color: #ffffff;
+    /* Digits then plus, as authored, in both text directions */
+    direction: ltr;
+    unicode-bidi: isolate;
+}
+
+/* Steps back to the accent silver so the count carries the weight */
+.stats-band .stat-plus {
+    color: var(--accent-text);
 }
 
 .stats-band .stat-label {
-    padding-top: 12px;
+    position: relative;
+    padding-top: 14px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     color: #8b95a1;
 }
 
 /* ---------------- Light mode ---------------- */
 
 .light-mode {
-    .stats-band {
+    .stats-band .stat {
         border-color: rgba(13, 17, 22, 0.12);
     }
 
-    .stats-band .stat + .stat {
-        border-left-color: rgba(13, 17, 22, 0.14);
+    .stats-band .stat-ghost {
+        color: rgba(13, 17, 22, 0.06);
     }
 
     .stats-band .stat-value {
         color: #0d1116;
     }
 
-    .stats-band .stat-label {
+    .stats-band .stat-label,
+    .stats-container .stats-eyebrow {
         color: #5a636e;
     }
 }
@@ -100,30 +131,27 @@
             padding: 0 5%;
         }
 
+        .stats-band {
+            gap: 18px;
+        }
+
         .stats-band .stat {
-            padding: 0 8px;
+            padding: 24px 20px 20px;
         }
 
         .stats-band .stat-label {
             font-size: 10.5px;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.1em;
         }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 640px) {
         .stats-band {
             grid-template-columns: minmax(0, 1fr);
-            gap: 26px;
         }
 
-        .stats-band .stat + .stat {
-            border-left: 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.14);
-            padding-top: 26px;
-        }
-
-        .light-mode .stats-band .stat + .stat {
-            border-top-color: rgba(13, 17, 22, 0.14);
+        .stats-band .stat-ghost {
+            font-size: 4.6rem;
         }
     }
 }

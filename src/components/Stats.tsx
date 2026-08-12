@@ -8,13 +8,22 @@ function Stats() {
     return (
     <div className="container" id="stats">
         <div className="stats-container">
+            <span className="stats-eyebrow">{t.statsEyebrow}</span>
             <div className="stats-band">
-                {t.stats.map((stat, index) => (
-                    <div className="stat" key={index}>
-                        <span className="stat-value">{stat.value}</span>
-                        <span className="stat-label">{stat.label}</span>
-                    </div>
-                ))}
+                {t.stats.map((stat, index) => {
+                    const number = stat.value.replace('+', '');
+                    const ghost = number.padStart(2, '0');
+                    return (
+                        <div className="stat" key={index}>
+                            <span className="stat-ghost" aria-hidden="true">{ghost}</span>
+                            <span className="stat-value">
+                                {number}
+                                <span className="stat-plus">+</span>
+                            </span>
+                            <span className="stat-label">{stat.label}</span>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     </div>

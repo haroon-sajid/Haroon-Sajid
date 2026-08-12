@@ -12,6 +12,7 @@ type Job = {
   location: string;
   date: string;
   desc: string;
+  points: string[];
 };
 
 function Timeline() {
@@ -37,6 +38,12 @@ function Timeline() {
       </div>
       <div className="hx-divider"></div>
       <p className="hx-desc">{job.desc}</p>
+      {/* Mobile only: the description as short curated bullets */}
+      <ul className="hx-points">
+        {job.points.map((point) => (
+          <li key={point}>{point}</li>
+        ))}
+      </ul>
     </article>
   );
 

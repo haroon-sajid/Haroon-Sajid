@@ -4,6 +4,8 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 /* Filename is idle-, not idol- — matches the file as it sits on disk. */
 import idolfluence from '../assets/images/idlefluence.jpeg';
 import publisha from '../assets/images/publisha.jpeg';
+import aiInbox from '../assets/images/ai-inbox-management-system.png';
+import caregivers from '../assets/images/caregivers-monitoring-system.png';
 import mock02 from '../assets/images/mock02.png';
 import mock03 from '../assets/images/mock03.png';
 import mock04 from '../assets/images/mock04.png';
@@ -23,9 +25,9 @@ const projectMeta = [
         stack: ['Django', 'PostgreSQL', 'Celery', 'LangChain', 'LangGraph']
     },
     {
-        image: mock09,
-        link: 'https://yujisatojr.itch.io/highspeedchase',
-        stack: ['C#', 'Unity']
+        image: caregivers,
+        link: '#projects',
+        stack: ['n8n', 'Twilio', 'OpenAI', 'GoTo SMS', 'Google Sheets', 'Gmail', 'SwyftOps']
     },
     {
         image: idolfluence,
@@ -33,9 +35,10 @@ const projectMeta = [
         stack: ['n8n', 'Make', 'Airtable', 'Softr', 'OpenAI', 'ElevenLabs', 'Twilio', 'REST APIs', 'Webhooks']
     },
     {
-        image: mock07,
-        link: 'https://www.datumlearn.com/',
-        stack: ['Ruby on Rails']
+        image: aiInbox,
+        /* Placeholder until the project details arrive */
+        link: '#projects',
+        stack: ['AI', 'Automation']
     },
     {
         image: mock06,

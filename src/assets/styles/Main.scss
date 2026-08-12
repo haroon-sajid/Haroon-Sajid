@@ -51,7 +51,6 @@
 
 /* Mobile-hero furniture. Rendered on every screen but shown only under 768px,
    so the desktop hero is byte-for-byte what it was. */
-.hero-net,
 .about-section .hero-eyebrow,
 .about-section .hero-rotator,
 .about-section .hero-statusbar {
@@ -366,21 +365,10 @@
             align-items: stretch;
         }
 
-        /* The canvas replaces the wave artwork here — two layered textures on a
-           small screen is noise, and the wave was the heavier of the two. */
+        /* No backdrop art on a small screen — the wave is too heavy for the
+           narrow viewport and the hero reads cleaner on the plain ground. */
         .about-section::before {
             display: none;
-        }
-
-        .hero-net {
-            display: block;
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            width: 100%;
-            height: 100%;
-            /* HeroNet reads this to colour nodes and links */
-            color: var(--accent);
         }
 
         .about-section .content {
