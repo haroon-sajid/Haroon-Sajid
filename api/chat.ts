@@ -11,8 +11,20 @@
    This file lives outside src/ on purpose — the site's `tsc --noEmit` step
    only checks src/, and Vercel compiles api/ functions independently. */
 
-const GEMINI_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+/* Model names tried in order. Google retires dated model names for new
+   accounts (gemini-2.5-flash already 404s on new keys), so the "-latest"
+   aliases go first; the index of the first working model sticks for the
+   lifetime of the warm function, so fallback probing costs one request. */
+const GEMINI_MODELS = [
+  'gemini-flash-latest',
+  'gemini-3-flash',
+  'gemini-2.5-flash',
+  'gemini-flash-lite-latest'
+];
+let activeModelIndex = 0;
+
+const geminiUrl = (model: string) =>
+  `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
 const WHATSAPP_NUMBER = '923116566318';
 
@@ -150,24 +162,35 @@ type GeminiPart = {
 class QuotaError extends Error {}
 
 async function callGemini(apiKey: string, contents: unknown[]): Promise<GeminiPart[]> {
-  const response = await fetch(GEMINI_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-      contents,
-      tools: [TOOLS],
-      generationConfig: { maxOutputTokens: 600, temperature: 0.7 }
-    })
-  });
-  if (response.status === 429 || response.status === 503) {
-    throw new QuotaError(`Gemini busy: ${response.status}`);
+  let lastError = '';
+  for (let i = activeModelIndex; i < GEMINI_MODELS.length; i++) {
+    const response = await fetch(geminiUrl(GEMINI_MODELS[i]), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents,
+        tools: [TOOLS],
+        generationConfig: { maxOutputTokens: 600, temperature: 0.7 }
+      })
+    });
+    if (response.status === 429 || response.status === 503) {
+      throw new QuotaError(`Gemini busy: ${response.status}`);
+    }
+    if (response.status === 404) {
+      /* Model retired/unknown for this key — remember and try the next one */
+      lastError = `Gemini API error 404 on ${GEMINI_MODELS[i]}: ${await response.text()}`;
+      activeModelIndex = Math.min(i + 1, GEMINI_MODELS.length - 1);
+      continue;
+    }
+    if (!response.ok) {
+      throw new Error(`Gemini API error ${response.status}: ${await response.text()}`);
+    }
+    activeModelIndex = i;
+    const data = await response.json();
+    return data?.candidates?.[0]?.content?.parts ?? [];
   }
-  if (!response.ok) {
-    throw new Error(`Gemini API error ${response.status}: ${await response.text()}`);
-  }
-  const data = await response.json();
-  return data?.candidates?.[0]?.content?.parts ?? [];
+  throw new Error(lastError || 'No Gemini model available');
 }
 
 function buildWhatsAppLink(args: Record<string, string>): string {
