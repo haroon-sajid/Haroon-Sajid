@@ -114,11 +114,11 @@ const en = {
     seeLess: 'Show Less',
     items: [
       { title: 'Publisha.io', desc: 'Multi-tenant platform automating content and marketing campaigns, with AI-drafted posts routed through human approval before publishing.' },
-      { title: 'Caregivers Monitoring System', desc: 'End-to-end n8n automation for overnight caregiver operations: scheduled SMS check-ins, voice-call escalation, streak scoring with a live leaderboard, and AI morning reports.' },
+      { title: 'Say-Vi: AI Avatar Videos', desc: 'Platform that turns one selfie into a reusable talking AI avatar: drafts the script with AI, renders a studio-quality vertical video, and publishes it straight to TikTok, Instagram, Facebook, YouTube and X in one tap.' },
       { title: 'Idolfluence', desc: 'AI-powered platform that turns a chosen niche and persona into finished marketing videos, then publishes them straight to TikTok on autopilot.' },
       { title: 'AI Inbox Management System', desc: 'An online educational platform offering data science learning resources in Japanese, built entirely from scratch with Ruby on Rails.' },
-      { title: 'WeManage: Asset Management', desc: 'A mobile app letting realtors in Japan securely manage property information and view income predictions, built with Ruby on Rails.' },
-      { title: 'COVID-19 Case Management', desc: 'Official tracking charts for an educational institution using JavaScript and the Google Sheets API v4, serving university leadership.' },
+      { title: 'Caregivers Monitoring System', desc: 'End-to-end n8n automation for overnight caregiver operations: scheduled SMS check-ins, voice-call escalation, streak scoring with a live leaderboard, and AI morning reports.' },
+      { title: 'AI Email Digest Automation for Zoho Mail', desc: 'n8n automation on the Zoho Mail API that filters and AI-classifies every email, then delivers daily and weekly HTML digest reports via Zoho SMTP — every email sorted, prioritised and summarised automatically.' },
       { title: 'Regression Property Analysis', desc: 'Analysis of the Japanese real estate market, predicting property prices with OLS and multi-regression models.' },
       { title: 'Programs of Study', desc: 'A custom component for a CMS-based platform built with Java, Handlebars, and LESS, helping students find their majors of interest.' },
       { title: 'Transfer Evaluation Matrix', desc: 'An interactive CSV table generator built with Java, Handlebars, and LESS, helping transfer students quickly identify eligible credits.' }
@@ -381,11 +381,11 @@ const ar: typeof en = {
     seeLess: 'عرض أقل',
     items: [
       { title: 'Publisha.io', desc: 'منصة متعددة المستأجرين لأتمتة المحتوى والحملات التسويقية: يكتب الذكاء الاصطناعي المسودات، ثم تُعتمد بشريًا قبل النشر.' },
-      { title: 'Caregivers Monitoring System', desc: 'أتمتة متكاملة عبر n8n لعمليات الرعاية الليلية: رسائل تحقق مجدولة، وتصعيد بمكالمات صوتية، وتقييم أداء مع لوحة صدارة مباشرة، وتقارير صباحية بالذكاء الاصطناعي.' },
+      { title: 'Say-Vi: AI Avatar Videos', desc: 'منصة تحوّل صورة سيلفي واحدة إلى أفاتار ناطق قابل لإعادة الاستخدام: يكتب الذكاء الاصطناعي النص، ثم يُنتَج فيديو عمودي بجودة الاستوديو ويُنشر مباشرة على TikTok وInstagram وFacebook وYouTube وX بضغطة واحدة.' },
       { title: 'Idolfluence', desc: 'منصة تحوّل المجال والشخصية المختارة إلى فيديوهات تسويقية جاهزة بالذكاء الاصطناعي، ثم تنشرها مباشرة على TikTok بشكل تلقائي.' },
       { title: 'AI Inbox Management System', desc: 'منصة تعليمية إلكترونية تقدم موارد تعلّم علوم البيانات باللغة اليابانية، بُنيت بالكامل من الصفر باستخدام Ruby on Rails.' },
-      { title: 'WeManage: Asset Management', desc: 'تطبيق جوال يتيح لوكلاء العقارات في اليابان إدارة معلومات العقارات بأمان وعرض توقعات الدخل، مبني باستخدام Ruby on Rails.' },
-      { title: 'COVID-19 Case Management', desc: 'مخططات تتبع رسمية لمؤسسة تعليمية باستخدام JavaScript وواجهة Google Sheets API v4، لخدمة قيادة الجامعة.' },
+      { title: 'Caregivers Monitoring System', desc: 'أتمتة متكاملة عبر n8n لعمليات الرعاية الليلية: رسائل تحقق مجدولة، وتصعيد بمكالمات صوتية، وتقييم أداء مع لوحة صدارة مباشرة، وتقارير صباحية بالذكاء الاصطناعي.' },
+      { title: 'AI Email Digest Automation for Zoho Mail', desc: 'أتمتة n8n مبنية على واجهة Zoho Mail API تصفّي كل بريد وارد وتصنّفه بالذكاء الاصطناعي، ثم ترسل تقارير موجزة يومية وأسبوعية بصيغة HTML عبر Zoho SMTP — كل بريد مُرتّب ومُلخّص تلقائيًا.' },
       { title: 'Regression Property Analysis', desc: 'تحليل لسوق العقارات الياباني وتوقع الأسعار باستخدام الانحدار المتعدد وOLS، بالاعتماد على Python وPandas وScikit-Learn.' },
       { title: 'Programs of Study', desc: 'مكوّن مخصص لمنصة قائمة على نظام إدارة محتوى، بُني باستخدام Java وHandlebars وLESS، يساعد الطلاب على إيجاد تخصصاتهم.' },
       { title: 'Transfer Evaluation Matrix', desc: 'مولّد جداول CSV تفاعلي بُني باستخدام Java وHandlebars وLESS، يساعد الطلاب المحوّلين على تحديد الساعات المعتمدة بسرعة.' }

@@ -169,9 +169,9 @@
    keeps the chips aligned across a row even when descriptions differ in length. */
 .project .project-stack {
     display: flex;
-    /* nowrap + the +N chip is what guarantees a single row, so the card height
-       is fixed no matter how long a project's stack is */
-    flex-wrap: nowrap;
+    /* Chips wrap to a second row rather than truncate: a half name with an
+       ellipsis reads worse than a slightly taller card. */
+    flex-wrap: wrap;
     gap: 6px;
     margin-top: auto;
     padding-top: 14px;
@@ -184,13 +184,9 @@
         font-size: 11px;
         line-height: 1.45;
         color: #c6ccd4;
-        /* Safety valve for the narrowest 3-column width (~227px inside the
-           card): a long name gives up a character instead of spilling out of
-           the card or wrapping to a second row. */
-        min-width: 0;
+        /* nowrap keeps a name on one line inside its chip; the row wraps
+           between chips instead, so every name stays complete. */
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
         transition: background-color .2s ease, color .2s ease, border-color .2s ease;
     }
 

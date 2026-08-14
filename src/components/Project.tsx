@@ -4,13 +4,13 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 /* Filename is idle-, not idol- — matches the file as it sits on disk. */
 import idolfluence from '../assets/images/idlefluence.jpeg';
 import publisha from '../assets/images/publisha.jpeg';
+import sayVi from '../assets/images/say-vi.png';
 import aiInbox from '../assets/images/ai-inbox-management-system.png';
 import caregivers from '../assets/images/caregivers-monitoring-system.png';
+import zohoDigest from '../assets/images/zoho-ai-workflows-thumbnail.png';
 import mock02 from '../assets/images/mock02.png';
 import mock03 from '../assets/images/mock03.png';
 import mock04 from '../assets/images/mock04.png';
-import mock05 from '../assets/images/mock05.png';
-import mock06 from '../assets/images/mock06.png';
 import mock07 from '../assets/images/mock07.png';
 import mock09 from '../assets/images/mock09.png';
 import { useLanguage } from '../context/LanguageContext';
@@ -25,9 +25,11 @@ const projectMeta = [
         stack: ['Django', 'PostgreSQL', 'Celery', 'LangChain', 'LangGraph']
     },
     {
-        image: caregivers,
-        link: '#projects',
-        stack: ['n8n', 'Twilio', 'OpenAI', 'GoTo SMS', 'Google Sheets', 'Gmail', 'SwyftOps']
+        image: sayVi,
+        link: 'https://say-vi.com/',
+        /* Order matters: the first MAX_CHIPS entries are the visible chips,
+           everything after lands in the +N hover. */
+        stack: ['Frontend', 'Full Stack', 'ElevenLabs', 'HeyGen', 'TikTok API', 'Graph API', 'YouTube API', 'X API v2', 'OAuth 2.0']
     },
     {
         image: idolfluence,
@@ -36,19 +38,18 @@ const projectMeta = [
     },
     {
         image: aiInbox,
-        /* Placeholder until the project details arrive */
         link: '#projects',
-        stack: ['AI', 'Automation']
+        stack: ['n8n', 'Recruit CRM', 'Whapi Cloud', 'OpenAI']
     },
     {
-        image: mock06,
-        link: 'http://www.wemanage.jp/',
-        stack: ['Ruby on Rails']
+        image: caregivers,
+        link: '#projects',
+        stack: ['n8n', 'Twilio', 'OpenAI', 'GoTo SMS', 'Google Sheets', 'Gmail', 'SwyftOps']
     },
     {
-        image: mock05,
-        link: 'https://www.byuh.edu/covid-19-case-management',
-        stack: ['JavaScript', 'Google Sheets API']
+        image: zohoDigest,
+        link: '#projects',
+        stack: ['n8n', 'Zoho CRM', 'Zoho Mail', 'OpenAI', 'Zoho SMTP']
     },
     {
         image: mock04,
@@ -67,9 +68,9 @@ const projectMeta = [
     }
 ];
 
-/* Four chips is what fits on one line at the narrowest card width, and one line
-   is what keeps every card the same height. Anything past that collapses into a
-   +N chip that names the rest on hover, so nothing is actually lost. */
+/* Chips show their full names and wrap onto a second row when needed; the cap
+   just keeps the row from dominating the card. Anything past it collapses into
+   a +N chip that names the rest on hover, so nothing is actually lost. */
 const MAX_CHIPS = 4;
 
 function ProjectStack({ stack }: { stack: string[] }) {
