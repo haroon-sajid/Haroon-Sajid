@@ -10,7 +10,6 @@ import {
   Contact,
   Navigation,
   Footer,
-  WelcomePopup,
   ChatWidget,
 } from "./components";
 import FadeIn from './components/FadeIn';
@@ -38,7 +37,6 @@ function AppShell() {
         className={`main-container ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`}
         dir={isRtl ? 'rtl' : 'ltr'}
     >
-        <WelcomePopup/>
         <Navigation parentToChild={{mode}} modeChange={handleModeChange}/>
         <FadeIn transitionDuration={700}>
             <Main/>
