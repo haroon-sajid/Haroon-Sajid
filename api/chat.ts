@@ -296,6 +296,12 @@ export default async function handler(req: any, res: any) {
       return;
     }
     console.error(error);
-    res.status(502).json({ error: 'AI service unavailable' });
+    /* `detail` surfaces the upstream failure reason (bad key, wrong model, …)
+       so it can be diagnosed without digging into the Vercel logs. It never
+       contains the API key — only Gemini's error description. */
+    res.status(502).json({
+      error: 'AI service unavailable',
+      detail: String(error instanceof Error ? error.message : error).slice(0, 300)
+    });
   }
 }
