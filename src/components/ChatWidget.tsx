@@ -37,8 +37,8 @@ function BotFace() {
 type Message = {
   from: 'bot' | 'user';
   text: string;
-  /* Demo replies carry a WhatsApp handoff button until the AI backend lands */
-  cta?: boolean;
+  /* Optional WhatsApp handoff link (booking confirmations, error fallbacks) */
+  link?: string;
 };
 
 function ChatWidget() {
@@ -49,7 +49,6 @@ function ChatWidget() {
   const [draft, setDraft] = useState('');
   const [typing, setTyping] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
-  const replyTimer = useRef<number>();
 
   /* Seed the welcome message the first time the chat view opens */
   const openChat = () => {
@@ -57,17 +56,28 @@ function ChatWidget() {
     setMessages((prev) => (prev.length ? prev : [{ from: 'bot', text: t.chat.welcome }]));
   };
 
-  const send = () => {
+  const send = async () => {
     const text = draft.trim();
     if (!text || typing) return;
     setDraft('');
-    setMessages((prev) => [...prev, { from: 'user', text }]);
-    /* Placeholder reply until the real AI backend is wired up */
+    const next: Message[] = [...messages, { from: 'user', text }];
+    setMessages(next);
     setTyping(true);
-    replyTimer.current = window.setTimeout(() => {
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        /* Only role + text go over the wire — links are presentation-only */
+        body: JSON.stringify({ messages: next.map(({ from, text: body }) => ({ from, text: body })) })
+      });
+      if (!response.ok) throw new Error(`chat api ${response.status}`);
+      const data = await response.json();
+      setMessages((prev) => [...prev, { from: 'bot', text: data.reply, link: data.bookingLink }]);
+    } catch {
+      setMessages((prev) => [...prev, { from: 'bot', text: t.chat.errorReply, link: WHATSAPP_URL }]);
+    } finally {
       setTyping(false);
-      setMessages((prev) => [...prev, { from: 'bot', text: t.chat.demoReply, cta: true }]);
-    }, 1100);
+    }
   };
 
   /* Keep the newest message in view */
@@ -75,8 +85,6 @@ function ChatWidget() {
     const body = bodyRef.current;
     if (body) body.scrollTop = body.scrollHeight;
   }, [messages, typing, view, open]);
-
-  useEffect(() => () => window.clearTimeout(replyTimer.current), []);
 
   return (
     <div className="chat-widget">
@@ -136,8 +144,8 @@ function ChatWidget() {
                 {messages.map((message, index) => (
                   <div className={`chat-msg ${message.from === 'user' ? 'from-user' : 'from-bot'}`} key={index}>
                     <span className="chat-bubble">{message.text}</span>
-                    {message.cta && (
-                      <a className="chat-msg-cta" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
+                    {message.link && (
+                      <a className="chat-msg-cta" href={message.link} target="_blank" rel="noreferrer">
                         <WhatsAppIcon fontSize="small" />
                         {t.chat.demoCta}
                       </a>

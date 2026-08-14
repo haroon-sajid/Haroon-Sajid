@@ -250,7 +250,7 @@ const en = {
     welcome: "Hi! 👋 I'm Haroon's AI assistant. Ask me anything about his skills, projects, or experience.",
     placeholder: 'Type your message...',
     send: 'Send',
-    demoReply: "Thanks for your message! I'm still being connected. Meanwhile, you can reach Haroon directly on WhatsApp below.",
+    errorReply: "Sorry — I couldn't reply just now. Please try again in a moment, or reach Haroon directly on WhatsApp below.",
     demoCta: 'Open WhatsApp'
   },
 
@@ -517,7 +517,7 @@ const ar: typeof en = {
     welcome: 'أهلاً! 👋 أنا مساعد هارون الذكي. اسألني ما تشاء عن مهاراته ومشاريعه وخبراته.',
     placeholder: 'اكتب رسالتك...',
     send: 'إرسال',
-    demoReply: 'شكرًا لرسالتك! ما زلت قيد الربط حاليًا. يمكنك التواصل مع هارون مباشرة عبر واتساب أدناه.',
+    errorReply: 'عذرًا — تعذّر عليّ الرد الآن. حاول مرة أخرى بعد قليل، أو تواصل مع هارون مباشرة عبر واتساب أدناه.',
     demoCta: 'افتح واتساب'
   },
 
