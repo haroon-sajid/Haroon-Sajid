@@ -111,7 +111,7 @@ function Main() {
           <div className="hero-actions">
             <a
               className="hero-btn hero-btn-primary"
-              href={`${import.meta.env.BASE_URL}Haroon_Sajid_CV.pdf`}
+              href={`${import.meta.env.BASE_URL}Haroon-Sajid-CV.pdf`}
               download="Muhammad_Haroon_Sajid_CV.pdf"
             >
               <DownloadIcon/>{t.hero.downloadCv}

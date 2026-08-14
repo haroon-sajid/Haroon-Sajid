@@ -70,9 +70,14 @@ function ChatWidget() {
         /* Only role + text go over the wire — links are presentation-only */
         body: JSON.stringify({ messages: next.map(({ from, text: body }) => ({ from, text: body })) })
       });
-      if (!response.ok) throw new Error(`chat api ${response.status}`);
-      const data = await response.json();
-      setMessages((prev) => [...prev, { from: 'bot', text: data.reply, link: data.bookingLink }]);
+      if (response.ok) {
+        const data = await response.json();
+        setMessages((prev) => [...prev, { from: 'bot', text: data.reply, link: data.bookingLink }]);
+      } else {
+        /* 429 = free AI quota exhausted for now; anything else is a real failure */
+        const text = response.status === 429 ? t.chat.busyReply : t.chat.errorReply;
+        setMessages((prev) => [...prev, { from: 'bot', text, link: WHATSAPP_URL }]);
+      }
     } catch {
       setMessages((prev) => [...prev, { from: 'bot', text: t.chat.errorReply, link: WHATSAPP_URL }]);
     } finally {

@@ -251,6 +251,7 @@ const en = {
     placeholder: 'Type your message...',
     send: 'Send',
     errorReply: "Sorry — I couldn't reply just now. Please try again in a moment, or reach Haroon directly on WhatsApp below.",
+    busyReply: "I'm handling a lot of conversations right now. Please try again in a few minutes — or reach Haroon directly on WhatsApp below.",
     demoCta: 'Open WhatsApp'
   },
 
@@ -518,6 +519,7 @@ const ar: typeof en = {
     placeholder: 'اكتب رسالتك...',
     send: 'إرسال',
     errorReply: 'عذرًا — تعذّر عليّ الرد الآن. حاول مرة أخرى بعد قليل، أو تواصل مع هارون مباشرة عبر واتساب أدناه.',
+    busyReply: 'أستقبل عددًا كبيرًا من المحادثات حاليًا. حاول مرة أخرى بعد بضع دقائق — أو تواصل مع هارون مباشرة عبر واتساب أدناه.',
     demoCta: 'افتح واتساب'
   },
 
