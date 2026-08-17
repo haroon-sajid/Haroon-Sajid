@@ -116,10 +116,10 @@ const en = {
       { title: 'Publisha.io', desc: 'Multi-tenant platform automating content and marketing campaigns, with AI-drafted posts routed through human approval before publishing.' },
       { title: 'Say-Vi: AI Avatar Videos', desc: 'Platform that turns one selfie into a reusable talking AI avatar: drafts the script with AI, renders a studio-quality vertical video, and publishes it straight to TikTok, Instagram, Facebook, YouTube and X in one tap.' },
       { title: 'Idolfluence', desc: 'AI-powered platform that turns a chosen niche and persona into finished marketing videos, then publishes them straight to TikTok on autopilot.' },
-      { title: 'AI Inbox Management System', desc: 'An online educational platform offering data science learning resources in Japanese, built entirely from scratch with Ruby on Rails.' },
+      { title: 'AI Inbox Management System', desc: 'n8n automation that runs a recruitment inbox end to end: leads are matched against Recruit CRM, AI drafts the reply, a human approves, and the system sends it.' },
       { title: 'Caregivers Monitoring System', desc: 'End-to-end n8n automation for overnight caregiver operations: scheduled SMS check-ins, voice-call escalation, streak scoring with a live leaderboard, and AI morning reports.' },
       { title: 'AI Email Digest Automation for Zoho Mail', desc: 'n8n automation on the Zoho Mail API that filters and AI-classifies every email, then delivers daily and weekly HTML digest reports via Zoho SMTP — every email sorted, prioritised and summarised automatically.' },
-      { title: 'Regression Property Analysis', desc: 'Analysis of the Japanese real estate market, predicting property prices with OLS and multi-regression models.' },
+      { title: 'Color Form Automation System', desc: 'Four n8n workflows for a US painting company: scheduled jobs auto-email prefilled color forms, signed PDFs flow back into PaintScout and Google Drive, non-responders get reminders every 10 days, and every failure alerts instantly.' },
       { title: 'Programs of Study', desc: 'A custom component for a CMS-based platform built with Java, Handlebars, and LESS, helping students find their majors of interest.' },
       { title: 'Transfer Evaluation Matrix', desc: 'An interactive CSV table generator built with Java, Handlebars, and LESS, helping transfer students quickly identify eligible credits.' }
     ]
@@ -253,11 +253,7 @@ const en = {
     errorReply: "Sorry — I couldn't reply just now. Please try again in a moment, or reach Haroon directly on WhatsApp below.",
     busyReply: "I'm handling a lot of conversations right now. Please try again in a few minutes — or reach Haroon directly on WhatsApp below.",
     demoCta: 'Open WhatsApp',
-    bookCta: 'Book a meeting',
-    mic: 'Speak your message',
-    micStop: 'Stop listening',
-    listening: 'Listening...',
-    listen: 'Listen'
+    bookCta: 'Book a meeting'
   },
 
   footer: {
@@ -389,10 +385,10 @@ const ar: typeof en = {
       { title: 'Publisha.io', desc: 'منصة متعددة المستأجرين لأتمتة المحتوى والحملات التسويقية: يكتب الذكاء الاصطناعي المسودات، ثم تُعتمد بشريًا قبل النشر.' },
       { title: 'Say-Vi: AI Avatar Videos', desc: 'منصة تحوّل صورة سيلفي واحدة إلى أفاتار ناطق قابل لإعادة الاستخدام: يكتب الذكاء الاصطناعي النص، ثم يُنتَج فيديو عمودي بجودة الاستوديو ويُنشر مباشرة على TikTok وInstagram وFacebook وYouTube وX بضغطة واحدة.' },
       { title: 'Idolfluence', desc: 'منصة تحوّل المجال والشخصية المختارة إلى فيديوهات تسويقية جاهزة بالذكاء الاصطناعي، ثم تنشرها مباشرة على TikTok بشكل تلقائي.' },
-      { title: 'AI Inbox Management System', desc: 'منصة تعليمية إلكترونية تقدم موارد تعلّم علوم البيانات باللغة اليابانية، بُنيت بالكامل من الصفر باستخدام Ruby on Rails.' },
+      { title: 'AI Inbox Management System', desc: 'أتمتة n8n تدير بريد التوظيف من البداية إلى النهاية: تُطابق العملاء مع Recruit CRM، ويصيغ الذكاء الاصطناعي الرد، ويوافق عليه إنسان، ثم يُرسل تلقائيًا.' },
       { title: 'Caregivers Monitoring System', desc: 'أتمتة متكاملة عبر n8n لعمليات الرعاية الليلية: رسائل تحقق مجدولة، وتصعيد بمكالمات صوتية، وتقييم أداء مع لوحة صدارة مباشرة، وتقارير صباحية بالذكاء الاصطناعي.' },
       { title: 'AI Email Digest Automation for Zoho Mail', desc: 'أتمتة n8n مبنية على واجهة Zoho Mail API تصفّي كل بريد وارد وتصنّفه بالذكاء الاصطناعي، ثم ترسل تقارير موجزة يومية وأسبوعية بصيغة HTML عبر Zoho SMTP — كل بريد مُرتّب ومُلخّص تلقائيًا.' },
-      { title: 'Regression Property Analysis', desc: 'تحليل لسوق العقارات الياباني وتوقع الأسعار باستخدام الانحدار المتعدد وOLS، بالاعتماد على Python وPandas وScikit-Learn.' },
+      { title: 'Color Form Automation System', desc: 'أربعة workflows على n8n لشركة دهانات أمريكية: المشاريع المجدولة ترسل نماذج ألوان معبأة مسبقًا تلقائيًا، وملفات PDF الموقعة تعود إلى PaintScout وGoogle Drive، ومن لا يستجيب يُذكَّر كل 10 أيام، وكل فشل ينبّه فورًا.' },
       { title: 'Programs of Study', desc: 'مكوّن مخصص لمنصة قائمة على نظام إدارة محتوى، بُني باستخدام Java وHandlebars وLESS، يساعد الطلاب على إيجاد تخصصاتهم.' },
       { title: 'Transfer Evaluation Matrix', desc: 'مولّد جداول CSV تفاعلي بُني باستخدام Java وHandlebars وLESS، يساعد الطلاب المحوّلين على تحديد الساعات المعتمدة بسرعة.' }
     ]
@@ -526,11 +522,7 @@ const ar: typeof en = {
     errorReply: 'عذرًا — تعذّر عليّ الرد الآن. حاول مرة أخرى بعد قليل، أو تواصل مع هارون مباشرة عبر واتساب أدناه.',
     busyReply: 'أستقبل عددًا كبيرًا من المحادثات حاليًا. حاول مرة أخرى بعد بضع دقائق — أو تواصل مع هارون مباشرة عبر واتساب أدناه.',
     demoCta: 'افتح واتساب',
-    bookCta: 'احجز موعدًا',
-    mic: 'تحدث برسالتك',
-    micStop: 'إيقاف الاستماع',
-    listening: 'أستمع إليك...',
-    listen: 'استمع'
+    bookCta: 'احجز موعدًا'
   },
 
   footer: {

@@ -8,9 +8,9 @@ import sayVi from '../assets/images/say-vi.png';
 import aiInbox from '../assets/images/ai-inbox-management-system.png';
 import caregivers from '../assets/images/caregivers-monitoring-system.png';
 import zohoDigest from '../assets/images/zoho-ai-workflows-thumbnail.png';
+import funkyPainting from '../assets/images/funky-painting-thumbnail.png';
 import mock02 from '../assets/images/mock02.png';
 import mock03 from '../assets/images/mock03.png';
-import mock04 from '../assets/images/mock04.png';
 import mock07 from '../assets/images/mock07.png';
 import mock09 from '../assets/images/mock09.png';
 import { useLanguage } from '../context/LanguageContext';
@@ -18,7 +18,16 @@ import '../assets/styles/Project.scss';
 
 /* Stacks live here rather than in translations.ts — tool names are the same in
    every language, so translating them would just duplicate the list. */
-const projectMeta = [
+type ProjectMeta = {
+    image: string;
+    stack: string[];
+    /* external URL... */
+    link?: string;
+    /* ...or internal detail page route — exactly one of the two is set */
+    page?: string;
+};
+
+const projectMeta: ProjectMeta[] = [
     {
         image: publisha,
         link: 'https://publisha.io',
@@ -38,23 +47,24 @@ const projectMeta = [
     },
     {
         image: aiInbox,
-        link: '#projects',
-        stack: ['n8n', 'Recruit CRM', 'Whapi Cloud', 'OpenAI']
+        /* `page` routes to an internal detail page instead of an external link */
+        page: '/projects/ai-inbox-management',
+        stack: ['n8n', 'Claude AI', 'Recruit CRM', 'Gmail API', 'Whapi Cloud', 'Slack']
     },
     {
         image: caregivers,
-        link: '#projects',
+        page: '/projects/caregivers-monitoring',
         stack: ['n8n', 'Twilio', 'OpenAI', 'GoTo SMS', 'Google Sheets', 'Gmail', 'SwyftOps']
     },
     {
         image: zohoDigest,
-        link: '#projects',
-        stack: ['n8n', 'Zoho CRM', 'Zoho Mail', 'OpenAI', 'Zoho SMTP']
+        page: '/projects/zoho-ai-workflows',
+        stack: ['n8n', 'Zoho Mail', 'OpenAI', 'OCR', 'WERS API', 'Zoho SMTP']
     },
     {
-        image: mock04,
-        link: 'https://github.com/yujisatojr/multi-reg-analysis',
-        stack: ['Python', 'Pandas', 'Scikit-Learn']
+        image: funkyPainting,
+        page: '/projects/color-form-automation',
+        stack: ['n8n', 'PaintScout API', 'Gmail', 'Google Drive', 'Webhooks']
     },
     {
         image: mock03,
@@ -119,18 +129,23 @@ function Project() {
             <p className="projects-intro">{t.projects.intro}</p>
         </div>
         <div className="projects-grid">
-            {visibleProjects.map((project, index) => (
-                <div className="project" key={index}>
-                    <a className="project-thumb" href={projectMeta[index].link} target="_blank" rel="noreferrer">
-                        <img src={projectMeta[index].image} className="zoom" alt={project.title} />
-                    </a>
-                    <a className="project-link" href={projectMeta[index].link} target="_blank" rel="noreferrer">
-                        <h2>{project.title}</h2>
-                    </a>
-                    <p>{project.desc}</p>
-                    <ProjectStack stack={projectMeta[index].stack} />
-                </div>
-            ))}
+            {visibleProjects.map((project, index) => {
+                const meta = projectMeta[index];
+                return (
+                    <div className="project" key={index}>
+                        {/* Internal detail pages open in a new tab too, matching the
+                            external project links — the URL shows in the address bar */}
+                        <a className="project-thumb" href={meta.page ?? meta.link} target="_blank" rel="noreferrer">
+                            <img src={meta.image} className="zoom" alt={project.title} />
+                        </a>
+                        <a className="project-link" href={meta.page ?? meta.link} target="_blank" rel="noreferrer">
+                            <h2>{project.title}</h2>
+                        </a>
+                        <p>{project.desc}</p>
+                        <ProjectStack stack={meta.stack} />
+                    </div>
+                );
+            })}
         </div>
         {t.projects.items.length > INITIAL_COUNT && (
             <div className="projects-more">

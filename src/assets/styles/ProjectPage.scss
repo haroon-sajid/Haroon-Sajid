@@ -1,0 +1,156 @@
+/* Standalone project detail pages (/projects/...). They live outside the
+   one-page portfolio shell, so they carry their own light, self-contained
+   look that matches the site's typography and chip styling. */
+
+.project-page {
+    min-height: 100vh;
+    background-color: #f8f9fb;
+    color: #0d1116;
+    font-family: 'Inter', sans-serif;
+}
+
+.project-page-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+}
+
+/* The site's global stylesheet forces h1-h5 to white (for the dark portfolio
+   shell), so this standalone light page must set its heading colors explicitly
+   with higher specificity. */
+.project-page .project-page-title {
+    margin: 0 0 10px;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    color: #0d1116;
+}
+
+.project-page-tagline {
+    margin: 0 0 22px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #3f4750;
+    text-align: justify;
+}
+
+.project-page-stack {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 26px;
+}
+
+.project-page-stack-label {
+    margin-inline-end: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #8b95a1;
+}
+
+.project-page-chip {
+    padding: 4px 10px;
+    border: 1px solid rgba(13, 17, 22, 0.25);
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: #3f4750;
+    white-space: nowrap;
+}
+
+.project-page-hero {
+    position: relative;
+    margin-bottom: 36px;
+}
+
+.project-page-image {
+    display: block;
+    width: 100%;
+    /* The thumbnails carry a big title in their upper half, which would
+       duplicate the page's own heading — crop to the diagram at the bottom */
+    aspect-ratio: 3 / 1;
+    object-fit: cover;
+    object-position: center bottom;
+    border-radius: 14px;
+    box-shadow: 0 18px 44px rgba(13, 17, 22, 0.16);
+}
+
+/* The small mono tag the thumbnails carry at their top, redrawn as real text
+   pinned to the banner's top corner. The dark pill behind it keeps the text
+   readable no matter what part of the image sits underneath */
+.project-page-hero-label {
+    position: absolute;
+    top: 14px;
+    inset-inline-start: 16px;
+    z-index: 1;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(13, 17, 22, 0.62);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(9px, 1.5vw, 12.5px);
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: #f43f5e;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    /* Banners with their own artwork in the top corner (e.g. the Zoho page)
+       opt out of the overlay and keep the label on its own line above */
+    &.is-above {
+        position: static;
+        display: block;
+        margin-bottom: 10px;
+        padding: 0;
+        border-radius: 0;
+        background: none;
+    }
+}
+
+.project-page-section-image {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(13, 17, 22, 0.12);
+}
+
+/* Reserved space for a screenshot that has not been added yet */
+.project-page-image-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 180px;
+    margin-top: 10px;
+    border: 2px dashed rgba(13, 17, 22, 0.18);
+    border-radius: 12px;
+    background-color: #ffffff;
+    color: #8b95a1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.project-page .project-page-section {
+    margin-bottom: 30px;
+
+    h2 {
+        margin: 0 0 10px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #0d1116;
+    }
+
+    p {
+        margin: 0 0 12px;
+        font-size: 15px;
+        line-height: 1.8;
+        color: #3f4750;
+        text-align: justify;
+    }
+}
