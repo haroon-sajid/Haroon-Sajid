@@ -467,6 +467,74 @@
     cursor: default;
 }
 
+/* Push-to-talk mic beside the send button */
+.chat-widget .chat-mic {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    background-color: var(--surface);
+    cursor: pointer;
+    transition: border-color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+
+    svg {
+        color: #8b95a1;
+    }
+
+    &:hover:not(:disabled) {
+        border-color: var(--accent);
+    }
+
+    &:disabled {
+        opacity: 0.45;
+        cursor: default;
+    }
+
+    &.is-listening {
+        border-color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.12);
+        animation: chat-mic-pulse 1.2s ease-in-out infinite;
+
+        svg {
+            color: #ef4444;
+        }
+    }
+}
+
+@keyframes chat-mic-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35); }
+    50% { box-shadow: 0 0 0 7px rgba(239, 68, 68, 0); }
+}
+
+/* Small "listen" control under each bot bubble (text-to-speech) */
+.chat-widget .chat-listen {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    padding: 2px 6px;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    color: #8b95a1;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+
+    svg {
+        font-size: 15px;
+    }
+
+    &:hover {
+        color: var(--accent);
+    }
+}
+
 [dir="rtl"] .chat-widget .chat-send svg {
     transform: scaleX(-1);
 }
@@ -658,8 +726,10 @@
 
     .chat-widget .chat-fab,
     .chat-widget .chat-option,
-    .chat-widget .chat-send {
+    .chat-widget .chat-send,
+    .chat-widget .chat-mic {
         transition: none;
+        animation: none;
     }
 
     .chat-widget .chat-fab:hover,

@@ -7,6 +7,9 @@
      Vercel → Storage; its URL/token env vars are injected automatically and
      the assistant's notes are stored there, readable at /api/admin. Without
      it, notes only appear in the Vercel function logs.
+   - CALENDLY_URL     (optional) your Calendly booking page, e.g.
+     https://calendly.com/your-name/30min — when set, "book a meeting"
+     requests get a calendar button; otherwise they get the WhatsApp button.
 
    This file lives outside src/ on purpose — the site's `tsc --noEmit` step
    only checks src/, and Vercel compiles api/ functions independently. */
@@ -74,9 +77,9 @@ shift your tone and goals accordingly:
 
 - POTENTIAL CLIENT / LEAD: be consultative and business-minded. Ask about their
   problem, connect it to Haroon's services and the most similar past projects,
-  answer questions about process and availability, and guide them toward booking
-  a call (book_appointment tool). If they describe a project but aren't ready to
-  book, call save_note so Haroon can follow up.
+  answer questions about process and availability, and offer the booking button
+  (share_link) when they're ready. If they describe a project but aren't ready
+  to book, call save_note so Haroon can follow up.
 
 - RECRUITER / HR: be professional but still simple and human. Ask directly,
   for example "Are you hiring for a role right now?" or "What position is it?".
@@ -129,30 +132,38 @@ Final-year project: JARVIS desktop assistant.
 ## Contact
 Email: haroonsajid.ai@gmail.com · WhatsApp: +92 311 6566318
 
-## Booking appointments
-When a visitor wants to hire Haroon, book a call, or discuss a project, collect
-(conversationally, not as a form): their name, a contact (email or phone),
-a preferred day/time, and briefly what the meeting is about. Once you have at
-least a name and contact, call the book_appointment tool. After the tool call,
-tell them their request is ready and they just need to tap the WhatsApp button
-that appears to send it to Haroon.
+## When someone wants to talk to Haroon or book a meeting
+- If a visitor wants to talk to Haroon, contact him, or reach him: call
+  share_link with kind "whatsapp" right away. Do not ask for their name or any
+  details first — just say something short like "Sure! You can talk to him
+  directly on WhatsApp, tap the button below."
+- If a visitor wants to book a meeting or a call: call share_link with kind
+  "booking" right away and tell them to pick a time that works for them.
+- Ask follow-up questions only if the visitor themselves asks for help or
+  advice — never as a condition before giving the button.
+- If someone asks about his experience, answer directly and simply: he has
+  2+ years of hands-on experience and has delivered 20+ projects.
+
+## Private things you must never share
+Only share what is public on this website: his work, skills, projects, email,
+WhatsApp number, city, and education. Never share or guess anything private —
+family details, exact home address, ID or passport numbers, bank or salary
+details, passwords, API keys, or anything about how his systems are secured.
+If asked, say kindly and briefly that you can't share that.
 `.trim();
 
 const TOOLS = {
   functionDeclarations: [
     {
-      name: 'book_appointment',
+      name: 'share_link',
       description:
-        "Prepare an appointment request for Haroon once the visitor has shared their details. Call it as soon as you have at least the visitor's name and a contact.",
+        'Attach a contact button under your reply. Use kind "whatsapp" when the visitor wants to talk to or contact Haroon directly. Use kind "booking" when they want to book a meeting or call. Call it immediately — never ask for details first.',
       parameters: {
         type: 'object',
         properties: {
-          name: { type: 'string', description: "Visitor's name" },
-          contact: { type: 'string', description: 'Email address or phone number' },
-          preferred_time: { type: 'string', description: 'Preferred day/time, in their own words' },
-          topic: { type: 'string', description: 'What the meeting is about' }
+          kind: { type: 'string', enum: ['whatsapp', 'booking'], description: 'Which button to show' }
         },
-        required: ['name', 'contact']
+        required: ['kind']
       }
     },
     {
@@ -187,21 +198,26 @@ type GeminiPart = {
    overloaded (503) — the widget shows a dedicated "try again soon" message. */
 class QuotaError extends Error {}
 
-async function callGemini(apiKey: string, contents: unknown[]): Promise<GeminiPart[]> {
+async function callGemini(apiKey: string, contents: unknown[], systemText: string): Promise<GeminiPart[]> {
   let lastError = '';
+  let sawQuota = false;
   for (let i = activeModelIndex; i < GEMINI_MODELS.length; i++) {
     const response = await fetch(geminiUrl(GEMINI_MODELS[i]), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        systemInstruction: { parts: [{ text: systemText }] },
         contents,
         tools: [TOOLS],
         generationConfig: { maxOutputTokens: 600, temperature: 0.7 }
       })
     });
     if (response.status === 429 || response.status === 503) {
-      throw new QuotaError(`Gemini busy: ${response.status}`);
+      /* This model's free quota is exhausted (each model has its own pool) —
+         try the next model without remembering the switch, since quotas reset */
+      sawQuota = true;
+      lastError = `Gemini busy ${response.status} on ${GEMINI_MODELS[i]}`;
+      continue;
     }
     if (response.status === 404) {
       /* Model retired/unknown for this key — remember and try the next one */
@@ -212,22 +228,11 @@ async function callGemini(apiKey: string, contents: unknown[]): Promise<GeminiPa
     if (!response.ok) {
       throw new Error(`Gemini API error ${response.status}: ${await response.text()}`);
     }
-    activeModelIndex = i;
     const data = await response.json();
     return data?.candidates?.[0]?.content?.parts ?? [];
   }
+  if (sawQuota) throw new QuotaError(lastError);
   throw new Error(lastError || 'No Gemini model available');
-}
-
-function buildWhatsAppLink(args: Record<string, string>): string {
-  const lines = [
-    "Hi Haroon! I'd like to book an appointment.",
-    `Name: ${args.name ?? '-'}`,
-    `Contact: ${args.contact ?? '-'}`,
-    `Preferred time: ${args.preferred_time ?? '-'}`,
-    `Topic: ${args.topic ?? '-'}`
-  ];
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
 }
 
 /* Stores the assistant's note in the site's Redis database (Upstash), where
@@ -297,8 +302,17 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
+  /* The widget sends which language the site is being browsed in, so short or
+     ambiguous messages ("hlo", "hi") get answered in the visitor's language. */
+  const siteLanguage = req.body?.lang === 'ar' ? 'Arabic' : 'English';
+  const systemText =
+    SYSTEM_PROMPT +
+    `\n\n## Site language\nThe visitor is browsing this site in ${siteLanguage}. ` +
+    `When their message is too short or unclear to tell its language, reply in ${siteLanguage}. ` +
+    `Once they clearly write in some language, always follow their language.`;
+
   try {
-    const parts = await callGemini(apiKey, contents);
+    const parts = await callGemini(apiKey, contents, systemText);
     const call = parts.find((p) => p.functionCall)?.functionCall;
 
     if (!call) {
@@ -308,17 +322,30 @@ export default async function handler(req: any, res: any) {
     }
 
     /* Execute the tool, then let the model turn the result into a reply. */
-    let bookingLink: string | undefined;
+    let link: string | undefined;
+    let linkKind: 'whatsapp' | 'calendly' | undefined;
     let toolResult: Record<string, string>;
     let fallbackReply: string;
 
-    if (call.name === 'book_appointment') {
-      bookingLink = buildWhatsAppLink(call.args ?? {});
-      toolResult = {
-        status: 'ready',
-        note: 'Request prepared. Tell the visitor to tap the WhatsApp button below this message to send it to Haroon.'
-      };
-      fallbackReply = 'Your appointment request is ready — tap the WhatsApp button below to send it to Haroon!';
+    if (call.name === 'share_link') {
+      const calendly = process.env.CALENDLY_URL;
+      if (call.args?.kind === 'booking' && calendly) {
+        link = calendly;
+        linkKind = 'calendly';
+        toolResult = {
+          status: 'attached',
+          note: "A booking button with Haroon's calendar now appears under your reply. Briefly tell the visitor to tap it and pick a time."
+        };
+        fallbackReply = 'You can book a meeting with Haroon here — tap the button below and pick a time that suits you!';
+      } else {
+        link = `https://wa.me/${WHATSAPP_NUMBER}`;
+        linkKind = 'whatsapp';
+        toolResult = {
+          status: 'attached',
+          note: 'A WhatsApp button now appears under your reply. Briefly tell the visitor to tap it to talk to Haroon directly.'
+        };
+        fallbackReply = 'You can talk to Haroon directly on WhatsApp — just tap the button below!';
+      }
     } else {
       toolResult = {
         status: await saveNote(call.args ?? {}),
@@ -333,12 +360,12 @@ export default async function handler(req: any, res: any) {
         ...contents,
         { role: 'model', parts: [{ functionCall: call }] },
         { role: 'user', parts: [{ functionResponse: { name: call.name, response: toolResult } }] }
-      ]);
+      ], systemText);
       reply = followUp.map((p) => p.text ?? '').join('').trim();
     } catch {
       /* The canned confirmation below still carries the outcome. */
     }
-    res.status(200).json({ reply: reply || fallbackReply, bookingLink });
+    res.status(200).json({ reply: reply || fallbackReply, link, linkKind });
   } catch (error) {
     if (error instanceof QuotaError) {
       res.status(429).json({ error: 'quota' });
