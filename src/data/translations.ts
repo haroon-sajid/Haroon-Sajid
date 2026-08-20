@@ -14,6 +14,17 @@ export type NavItem = {
   children?: { label: string; section: string }[];
 };
 
+/* Achievement card. Setting `path` turns the card into a link to its own
+   detail page (certificate, project write-up, team) — see the routes in
+   App.tsx. Entries without a path render as plain cards. */
+export type AchievementItem = {
+  title: string;
+  org: string;
+  date: string;
+  desc: string;
+  path?: string;
+};
+
 const en = {
   dir: 'ltr',
 
@@ -152,12 +163,14 @@ const en = {
     titleMain: 'My',
     titleOutline: 'Achievements',
     intro: 'Awards, certifications, and milestones beyond the job description — the extra mile in numbers and paper.',
+    moreHint: 'View certificate & project',
     items: [
       {
-        title: 'Scholarship / Academic Award',
-        org: 'Institution name',
-        date: '20XX',
-        desc: 'Sample entry — replace with a real award: what you earned, who granted it, and why it mattered.'
+        title: 'Band of Agents Hackathon',
+        org: 'lablab.ai · NativelyAI',
+        date: 'Jun 2026',
+        desc: 'Certificate of completion for building HomzDoctor with a three person team. An AI healthcare platform where specialized agents read medical reports and scans, and a licensed doctor approves every finding before it reaches a patient.',
+        path: '/achievements/band-of-agents-hackathon'
       },
       {
         title: 'Professional Certification',
@@ -171,7 +184,7 @@ const en = {
         date: '20XX',
         desc: 'Sample entry — hackathons, top-performer awards, or community contributions that show initiative.'
       }
-    ]
+    ] as AchievementItem[]
   },
 
   blog: {
@@ -491,12 +504,14 @@ const ar: typeof en = {
     titleMain: 'إنجازاتي',
     titleOutline: 'وجوائزي',
     intro: 'جوائز وشهادات ومحطات تتجاوز الوصف الوظيفي — الجهد الإضافي بالأرقام والوثائق.',
+    moreHint: 'عرض الشهادة والمشروع',
     items: [
       {
-        title: 'منحة دراسية / جائزة أكاديمية',
-        org: 'اسم المؤسسة',
-        date: '20XX',
-        desc: 'نموذج مؤقت — استبدله بجائزة حقيقية: ماذا نلت، ومن منحها، ولماذا كانت مهمة.'
+        title: 'هاكاثون Band of Agents',
+        org: 'lablab.ai · NativelyAI',
+        date: 'يونيو 2026',
+        desc: 'شهادة إتمام عن بناء HomzDoctor مع فريق من ثلاثة أعضاء. منصة رعاية صحية بالذكاء الاصطناعي، فيها وكلاء متخصصون يقرأون التقارير والصور الطبية، وطبيب مرخّص يعتمد كل نتيجة قبل وصولها إلى المريض.',
+        path: '/achievements/band-of-agents-hackathon'
       },
       {
         title: 'شهادة مهنية',
@@ -510,7 +525,7 @@ const ar: typeof en = {
         date: '20XX',
         desc: 'نموذج مؤقت — هاكاثونات أو جوائز تميز أو مساهمات مجتمعية تُظهر المبادرة.'
       }
-    ]
+    ] as AchievementItem[]
   },
 
   blog: {

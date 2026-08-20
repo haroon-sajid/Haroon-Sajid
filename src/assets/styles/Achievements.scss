@@ -161,12 +161,17 @@
     color: var(--accent-text);
 }
 
+/* Card titles are kept short enough to sit on one line; shrink rather than
+   wrap if a longer one ever lands here */
 .achievements-container .ach-card h3 {
     margin: 0 0 8px 0;
-    font-size: 19px;
+    font-size: clamp(16px, 1.35vw, 19px);
     font-weight: 700;
     letter-spacing: -0.01em;
     line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: #ffffff;
 }
 
@@ -184,7 +189,47 @@
     margin: 0;
     font-size: 14px;
     line-height: 1.7;
+    text-align: justify;
     color: #9aa4b2;
+}
+
+/* Cards that link to their own detail page */
+.achievements-container .ach-card.is-linked {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* "View certificate & project" hint pinned to the card bottom */
+.achievements-container .ach-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent-text);
+
+    svg {
+        width: 11px;
+        height: 11px;
+        transition: transform .3s ease;
+    }
+}
+
+/* The arrow nudges forward with the card lift */
+.achievements-container .ach-card:hover .ach-more svg {
+    transform: translateX(4px);
+}
+
+[dir='rtl'] .achievements-container .ach-more svg {
+    transform: scaleX(-1);
+}
+
+[dir='rtl'] .achievements-container .ach-card:hover .ach-more svg {
+    transform: scaleX(-1) translateX(4px);
 }
 
 /* ---------------- Light mode ---------------- */
@@ -230,6 +275,7 @@
     .achievements-container .ach-card p {
         color: #4d5661;
     }
+
 }
 
 @media (prefers-reduced-motion: reduce) {

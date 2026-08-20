@@ -1,0 +1,421 @@
+/* Credential + project page for the lablab.ai hackathon. Builds on the shared
+   .project-page shell (light standalone page) and adds the certificate panel,
+   the numbered flow, the agent grid and the team blocks. */
+
+.hackathon-page .project-page-inner {
+    max-width: 980px;
+}
+
+/* The shared project styles justify body copy, which stretches word spacing
+   badly at this page's wider measure — keep it ragged-right instead */
+.hackathon-page .project-page-tagline,
+.hackathon-page .project-page-section p {
+    text-align: start;
+}
+
+/* ---------------- Header ---------------- */
+
+.hackathon-page .hack-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 26px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    color: #6b7480;
+    transition: color .25s ease;
+
+    svg {
+        width: 11px;
+        height: 11px;
+    }
+
+    &:hover {
+        color: #0d1116;
+    }
+}
+
+/* Mirror the back arrow when the page is in Arabic */
+[dir='rtl'] .hackathon-page .hack-back svg {
+    transform: scaleX(-1);
+}
+
+.hackathon-page .hack-eyebrow {
+    display: block;
+    margin-bottom: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #f43f5e;
+}
+
+.hackathon-page .hack-event {
+    margin: 0 0 18px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #6b7480;
+}
+
+/* ---------------- Certificate panel ---------------- */
+
+.hackathon-page .hack-cert {
+    display: grid;
+    grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+    gap: 34px;
+    align-items: start;
+    margin: 10px 0 44px;
+    padding: 30px;
+    border: 1px solid rgba(13, 17, 22, 0.1);
+    border-radius: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 18px 44px rgba(13, 17, 22, 0.07);
+}
+
+/* The certificate itself — clicking it opens the lablab verification page */
+.hackathon-page .hack-cert-frame {
+    display: block;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(13, 17, 22, 0.22);
+    transition: transform .3s cubic-bezier(.22, .61, .36, 1), box-shadow .3s ease;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 18px 42px rgba(13, 17, 22, 0.3);
+    }
+}
+
+.hackathon-page .hack-cert-side h2 {
+    margin: 0 0 18px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #0d1116;
+}
+
+/* Credential facts, label above value */
+.hackathon-page .hack-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 22px;
+    margin: 0 0 22px;
+}
+
+.hackathon-page .hack-fact {
+    min-width: 0;
+
+    dt {
+        margin-bottom: 4px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #8b95a1;
+    }
+
+    dd {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.5;
+        color: #0d1116;
+        overflow-wrap: anywhere;
+    }
+}
+
+.hackathon-page .hack-citation {
+    position: relative;
+    margin: 0 0 24px;
+    padding: 16px 18px;
+    border-inline-start: 3px solid #f43f5e;
+    border-radius: 0 10px 10px 0;
+    background-color: #f8f9fb;
+    font-size: 13.5px;
+    font-style: italic;
+    line-height: 1.75;
+    color: #3f4750;
+}
+
+[dir='rtl'] .hackathon-page .hack-citation {
+    border-radius: 10px 0 0 10px;
+}
+
+.hackathon-page .hack-citation-label {
+    display: block;
+    margin-bottom: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 700;
+    font-style: normal;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8b95a1;
+}
+
+.hackathon-page .hack-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.hackathon-page .hack-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 20px;
+    border: 1px solid rgba(13, 17, 22, 0.2);
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    color: #0d1116;
+    transition: transform .25s ease, border-color .25s ease, background-color .25s ease;
+
+    svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        border-color: #0d1116;
+    }
+
+    &.is-primary {
+        border-color: #f43f5e;
+        background-color: #f43f5e;
+        color: #ffffff;
+
+        &:hover {
+            background-color: #e11d48;
+            border-color: #e11d48;
+        }
+    }
+}
+
+/* ---------------- Numbered flow ---------------- */
+
+.hackathon-page .hack-flow {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+}
+
+.hackathon-page .hack-flow-step {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+    padding: 18px 20px;
+    border: 1px solid rgba(13, 17, 22, 0.1);
+    border-radius: 12px;
+    background-color: #ffffff;
+
+    h3 {
+        margin: 0 0 6px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #0d1116;
+    }
+
+    p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.75;
+        color: #3f4750;
+        text-align: start;
+    }
+}
+
+.hackathon-page .hack-flow-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background-color: #f8f9fb;
+    border: 1px solid rgba(13, 17, 22, 0.08);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: #f43f5e;
+}
+
+/* ---------------- Doctor-approval callout ---------------- */
+
+.hackathon-page .hack-callout {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0 0 34px;
+    padding: 20px 24px;
+    border: 1px solid rgba(244, 63, 94, 0.28);
+    border-radius: 12px;
+    background-color: rgba(244, 63, 94, 0.06);
+
+    > svg {
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+        color: #f43f5e;
+    }
+
+    p {
+        margin: 0;
+        font-size: 14.5px;
+        font-weight: 600;
+        line-height: 1.7;
+        color: #0d1116;
+    }
+}
+
+/* ---------------- Card grids (agents, contributions) ---------------- */
+
+.hackathon-page .hack-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+
+    &.is-two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.hackathon-page .hack-card {
+    padding: 20px;
+    border: 1px solid rgba(13, 17, 22, 0.1);
+    border-radius: 12px;
+    background-color: #ffffff;
+    transition: transform .3s cubic-bezier(.22, .61, .36, 1), border-color .3s ease;
+
+    h3 {
+        margin: 0 0 7px;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.4;
+        color: #0d1116;
+    }
+
+    p {
+        margin: 0;
+        font-size: 13.5px;
+        line-height: 1.7;
+        color: #3f4750;
+        text-align: start;
+    }
+
+    &:hover {
+        transform: translateY(-3px);
+        border-color: rgba(244, 63, 94, 0.5);
+    }
+}
+
+.hackathon-page .hack-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 14px;
+    border-radius: 11px;
+    background-color: rgba(244, 63, 94, 0.09);
+
+    svg {
+        width: 17px;
+        height: 17px;
+        color: #f43f5e;
+    }
+}
+
+/* ---------------- Problem tags ---------------- */
+
+.hackathon-page .hack-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        padding: 9px 16px;
+        border: 1px solid rgba(13, 17, 22, 0.12);
+        border-radius: 999px;
+        background-color: #ffffff;
+        font-size: 13.5px;
+        color: #3f4750;
+    }
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 860px) {
+    .hackathon-page .hack-cert {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 26px;
+        padding: 22px;
+    }
+
+    .hackathon-page .hack-cert-frame {
+        max-width: 340px;
+        margin-inline: auto;
+    }
+
+    .hackathon-page .hack-grid,
+    .hackathon-page .hack-grid.is-two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 560px) {
+    .hackathon-page .hack-facts {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hackathon-page .hack-grid,
+    .hackathon-page .hack-grid.is-two {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hackathon-page .hack-flow-step {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .hackathon-page .hack-cta,
+    .hackathon-page .hack-cta.is-primary {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hackathon-page .hack-cert-frame,
+    .hackathon-page .hack-card,
+    .hackathon-page .hack-cta {
+        transition: none;
+    }
+
+    .hackathon-page .hack-cert-frame:hover,
+    .hackathon-page .hack-card:hover,
+    .hackathon-page .hack-cta:hover {
+        transform: none;
+    }
+}

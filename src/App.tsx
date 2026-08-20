@@ -20,6 +20,7 @@ import CaregiversMonitoring from './pages/CaregiversMonitoring';
 import ZohoAiWorkflows from './pages/ZohoAiWorkflows';
 import ColorFormAutomation from './pages/ColorFormAutomation';
 import BlogPage from './pages/BlogPage';
+import BandOfAgentsHackathon from './pages/BandOfAgentsHackathon';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import './index.scss';
 
@@ -103,6 +104,7 @@ function App() {
                     <Route path="/projects/caregivers-monitoring" element={<CaregiversMonitoring />} />
                     <Route path="/projects/zoho-ai-workflows" element={<ZohoAiWorkflows />} />
                     <Route path="/projects/color-form-automation" element={<ColorFormAutomation />} />
+                    <Route path="/achievements/band-of-agents-hackathon" element={<BandOfAgentsHackathon />} />
                     <Route path="/blog" element={<BlogPage mode={mode} onModeChange={handleModeChange} />} />
                     {/* Everything else shows the one-page portfolio */}
                     <Route path="*" element={<AppShell mode={mode} onModeChange={handleModeChange} />} />

@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrophy, faCertificate, faMedal } from '@fortawesome/free-solid-svg-icons';
+import { faTrophy, faCertificate, faMedal, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from '../context/LanguageContext';
 import '../assets/styles/Achievements.scss';
 
@@ -22,19 +23,38 @@ function Achievements() {
             </div>
 
             <div className="achievements-grid">
-                {t.achievements.items.map((item, index) => (
-                    <div className="ach-card" key={index}>
-                        <div className="ach-card-top">
-                            <span className="ach-icon-tile">
-                                <FontAwesomeIcon icon={achievementIcons[index % achievementIcons.length]} />
-                            </span>
-                            <span className="ach-date">{item.date}</span>
+                {t.achievements.items.map((item, index) => {
+                    const body = (
+                        <>
+                            <div className="ach-card-top">
+                                <span className="ach-icon-tile">
+                                    <FontAwesomeIcon icon={achievementIcons[index % achievementIcons.length]} />
+                                </span>
+                                <span className="ach-date">{item.date}</span>
+                            </div>
+                            <h3>{item.title}</h3>
+                            <span className="ach-org">{item.org}</span>
+                            <p>{item.desc}</p>
+                            {item.path && (
+                                <span className="ach-more">
+                                    {t.achievements.moreHint}
+                                    <FontAwesomeIcon icon={faArrowRight} />
+                                </span>
+                            )}
+                        </>
+                    );
+
+                    /* Entries with a `path` open their own detail page */
+                    return item.path ? (
+                        <Link className="ach-card is-linked" to={item.path} key={index}>
+                            {body}
+                        </Link>
+                    ) : (
+                        <div className="ach-card" key={index}>
+                            {body}
                         </div>
-                        <h3>{item.title}</h3>
-                        <span className="ach-org">{item.org}</span>
-                        <p>{item.desc}</p>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
         </div>
