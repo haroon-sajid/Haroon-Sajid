@@ -326,6 +326,9 @@ p, a, h1, h2, h3, h4, h5, label, button {
 [dir="rtl"] .projects-eyebrow,
 [dir="rtl"] .history-eyebrow,
 [dir="rtl"] .education-eyebrow,
+[dir="rtl"] .achievements-eyebrow,
+[dir="rtl"] .blog-eyebrow,
+[dir="rtl"] .blog-soon,
 [dir="rtl"] .contact-eyebrow,
 [dir="rtl"] .area-stack-label,
 [dir="rtl"] .stat-label,
@@ -335,6 +338,7 @@ p, a, h1, h2, h3, h4, h5, label, button {
 [dir="rtl"] .hx-loc,
 [dir="rtl"] .hx-date,
 [dir="rtl"] .edu-date,
+[dir="rtl"] .ach-date,
 [dir="rtl"] .contact-label,
 [dir="rtl"] .footer-col h4,
 [dir="rtl"] .footer-top,
@@ -346,6 +350,8 @@ p, a, h1, h2, h3, h4, h5, label, button {
 [dir="rtl"] .projects-head h1,
 [dir="rtl"] .history-head h1,
 [dir="rtl"] .education-head h1,
+[dir="rtl"] .achievements-head h1,
+[dir="rtl"] .blog-head h1,
 [dir="rtl"] .contact-head h1 {
   letter-spacing: 0 !important;
   text-transform: none !important;
@@ -358,6 +364,8 @@ p, a, h1, h2, h3, h4, h5, label, button {
 [dir="rtl"] .projects-outline,
 [dir="rtl"] .history-outline,
 [dir="rtl"] .education-outline,
+[dir="rtl"] .achievements-outline,
+[dir="rtl"] .blog-outline,
 [dir="rtl"] .contact-outline,
 [dir="rtl"] .hx-role-outline {
   color: var(--accent-text) !important;
@@ -377,6 +385,8 @@ p, a, h1, h2, h3, h4, h5, label, button {
 [dir="rtl"] .expertise-container,
 [dir="rtl"] .projects-container,
 [dir="rtl"] .education-container,
+[dir="rtl"] .achievements-container,
+[dir="rtl"] .blog-container,
 [dir="rtl"] .items-container {
   text-align: right;
 }

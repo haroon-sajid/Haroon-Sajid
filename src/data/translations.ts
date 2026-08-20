@@ -4,11 +4,30 @@
 
 export type Lang = 'en' | 'ar';
 
+/* Top-level menu entry; `children` turns it into a dropdown (desktop) /
+   collapsible group (mobile drawer). Sections are anchor ids on the one-page
+   portfolio; `path` instead makes the item open a separate route (e.g. /blog). */
+export type NavItem = {
+  label: string;
+  section?: string;
+  path?: string;
+  children?: { label: string; section: string }[];
+};
+
 const en = {
   dir: 'ltr',
 
   nav: {
-    items: ['Home', 'About', 'Expertise', 'Projects', 'History', 'Education', 'Contact'],
+    items: [
+      { label: 'Home', section: 'home' },
+      { label: 'About', section: 'about' },
+      { label: 'Expertise', section: 'expertise' },
+      { label: 'Projects', section: 'projects' },
+      { label: 'History', section: 'history' },
+      { label: 'Education', section: 'education' },
+      { label: 'Blogs', path: '/blog' },
+      { label: 'Contact', section: 'contact' }
+    ] as NavItem[],
     menu: 'Menu',
     langLabel: 'En',
     langSwitchTo: 'العربية'
@@ -122,6 +141,70 @@ const en = {
       { title: 'Color Form Automation System', desc: 'Four n8n workflows for a US painting company: scheduled jobs auto-email prefilled color forms, signed PDFs flow back into PaintScout and Google Drive, non-responders get reminders every 10 days, and every failure alerts instantly.' },
       { title: 'Programs of Study', desc: 'A custom component for a CMS-based platform built with Java, Handlebars, and LESS, helping students find their majors of interest.' },
       { title: 'Transfer Evaluation Matrix', desc: 'An interactive CSV table generator built with Java, Handlebars, and LESS, helping transfer students quickly identify eligible credits.' }
+    ]
+  },
+
+  /* Sample entries — replace title/org/date/desc with real awards,
+     certifications, and milestones. Icons are matched by index in
+     Achievements.tsx. */
+  achievements: {
+    eyebrow: 'Recognition',
+    titleMain: 'My',
+    titleOutline: 'Achievements',
+    intro: 'Awards, certifications, and milestones beyond the job description — the extra mile in numbers and paper.',
+    items: [
+      {
+        title: 'Scholarship / Academic Award',
+        org: 'Institution name',
+        date: '20XX',
+        desc: 'Sample entry — replace with a real award: what you earned, who granted it, and why it mattered.'
+      },
+      {
+        title: 'Professional Certification',
+        org: 'Issuing organization',
+        date: '20XX',
+        desc: 'Sample entry — an AI, cloud, or automation credential: add the certificate name and what it covers.'
+      },
+      {
+        title: 'Competition / Recognition',
+        org: 'Event or employer',
+        date: '20XX',
+        desc: 'Sample entry — hackathons, top-performer awards, or community contributions that show initiative.'
+      }
+    ]
+  },
+
+  blog: {
+    eyebrow: 'What I Write',
+    titleMain: 'From the',
+    titleOutline: 'Blog',
+    intro: 'Practical write-ups from real client work: how production AI automations are designed, what breaks, and the patterns that keep systems reliable.',
+    comingSoon: 'Coming soon',
+    items: [
+      {
+        title: 'Designing Fail-Safe n8n Architectures for Real Clients',
+        desc: 'How tag-based state, duplicate-send guards, and error watchdogs keep client automations from ever failing silently.'
+      },
+      {
+        title: 'Human-in-the-Loop AI: Where Automation Should Stop',
+        desc: 'Lessons from production systems where a phone call or an approval click stays deliberately human.'
+      },
+      {
+        title: 'From Client Spec to Production Workflow',
+        desc: 'A practical playbook: day-one diagnosis, one config block per workflow, and a test plan that makes handoffs painless.'
+      },
+      {
+        title: 'A Recruitment Inbox That Answers Itself',
+        desc: 'How AI drafts the replies, a human approves them, and n8n sends — the pattern behind a production inbox automation.'
+      },
+      {
+        title: 'State Without a Database: Webhooks and Tags',
+        desc: 'Why CRM tags can carry an entire automation\'s state, and when you actually need a real database.'
+      },
+      {
+        title: 'n8n vs Make vs Zapier for Client Work',
+        desc: 'A practical comparison from real projects: cost, flexibility, and where each platform hits its limits.'
+      }
     ]
   },
 
@@ -276,7 +359,16 @@ const ar: typeof en = {
   dir: 'rtl',
 
   nav: {
-    items: ['الرئيسية', 'نبذة عني', 'خبراتي', 'أعمالي', 'مسيرتي', 'دراستي', 'تواصل معي'],
+    items: [
+      { label: 'الرئيسية', section: 'home' },
+      { label: 'نبذة عني', section: 'about' },
+      { label: 'خبراتي', section: 'expertise' },
+      { label: 'أعمالي', section: 'projects' },
+      { label: 'مسيرتي', section: 'history' },
+      { label: 'دراستي', section: 'education' },
+      { label: 'المدونات', path: '/blog' },
+      { label: 'تواصل معي', section: 'contact' }
+    ],
     menu: 'القائمة',
     langLabel: 'ع',
     langSwitchTo: 'English'
@@ -391,6 +483,67 @@ const ar: typeof en = {
       { title: 'Color Form Automation System', desc: 'أربعة workflows على n8n لشركة دهانات أمريكية: المشاريع المجدولة ترسل نماذج ألوان معبأة مسبقًا تلقائيًا، وملفات PDF الموقعة تعود إلى PaintScout وGoogle Drive، ومن لا يستجيب يُذكَّر كل 10 أيام، وكل فشل ينبّه فورًا.' },
       { title: 'Programs of Study', desc: 'مكوّن مخصص لمنصة قائمة على نظام إدارة محتوى، بُني باستخدام Java وHandlebars وLESS، يساعد الطلاب على إيجاد تخصصاتهم.' },
       { title: 'Transfer Evaluation Matrix', desc: 'مولّد جداول CSV تفاعلي بُني باستخدام Java وHandlebars وLESS، يساعد الطلاب المحوّلين على تحديد الساعات المعتمدة بسرعة.' }
+    ]
+  },
+
+  achievements: {
+    eyebrow: 'تقدير',
+    titleMain: 'إنجازاتي',
+    titleOutline: 'وجوائزي',
+    intro: 'جوائز وشهادات ومحطات تتجاوز الوصف الوظيفي — الجهد الإضافي بالأرقام والوثائق.',
+    items: [
+      {
+        title: 'منحة دراسية / جائزة أكاديمية',
+        org: 'اسم المؤسسة',
+        date: '20XX',
+        desc: 'نموذج مؤقت — استبدله بجائزة حقيقية: ماذا نلت، ومن منحها، ولماذا كانت مهمة.'
+      },
+      {
+        title: 'شهادة مهنية',
+        org: 'الجهة المانحة',
+        date: '20XX',
+        desc: 'نموذج مؤقت — شهادة في الذكاء الاصطناعي أو السحابة أو الأتمتة: أضف اسمها وما تغطيه.'
+      },
+      {
+        title: 'مسابقة / تكريم',
+        org: 'الفعالية أو جهة العمل',
+        date: '20XX',
+        desc: 'نموذج مؤقت — هاكاثونات أو جوائز تميز أو مساهمات مجتمعية تُظهر المبادرة.'
+      }
+    ]
+  },
+
+  blog: {
+    eyebrow: 'ماذا أكتب',
+    titleMain: 'من',
+    titleOutline: 'المدونة',
+    intro: 'مقالات عملية من مشاريع حقيقية: كيف تُصمم أتمتة الذكاء الاصطناعي في بيئة الإنتاج، وما الذي يتعطل، والأنماط التي تحافظ على موثوقية الأنظمة.',
+    comingSoon: 'قريبًا',
+    items: [
+      {
+        title: 'تصميم بنى n8n آمنة من الفشل لعملاء حقيقيين',
+        desc: 'كيف تمنع الحالة المبنية على الوسوم وحواجز الإرسال المزدوج وحراس الأخطاء أي فشل صامت في أتمتة العملاء.'
+      },
+      {
+        title: 'الإنسان في الحلقة: أين يجب أن تتوقف الأتمتة',
+        desc: 'دروس من أنظمة إنتاج بقيت فيها المكالمة الهاتفية أو نقرة الموافقة قرارًا بشريًا عن قصد.'
+      },
+      {
+        title: 'من مواصفات العميل إلى workflow في الإنتاج',
+        desc: 'دليل عملي: تشخيص اليوم الأول، وكتلة إعدادات واحدة لكل workflow، وخطة اختبار تجعل التسليم سلسًا.'
+      },
+      {
+        title: 'صندوق توظيف يرد على نفسه',
+        desc: 'كيف يصيغ الذكاء الاصطناعي الردود، ويوافق عليها إنسان، ويرسلها n8n — النمط وراء أتمتة بريد في بيئة الإنتاج.'
+      },
+      {
+        title: 'حالة بلا قاعدة بيانات: Webhooks ووسوم',
+        desc: 'لماذا تستطيع وسوم CRM حمل حالة الأتمتة بأكملها، ومتى تحتاج فعلًا إلى قاعدة بيانات حقيقية.'
+      },
+      {
+        title: 'n8n أم Make أم Zapier لمشاريع العملاء؟',
+        desc: 'مقارنة عملية من مشاريع حقيقية: التكلفة والمرونة وأين تصل كل منصة إلى حدودها.'
+      }
     ]
   },
 

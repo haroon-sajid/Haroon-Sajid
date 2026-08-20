@@ -6,6 +6,8 @@ export { default as Stats } from "./Stats";
 export { default as Expertise } from "./Expertise";
 export { default as Timeline } from "./Timeline";
 export { default as Education } from "./Education";
+export { default as Achievements } from "./Achievements";
+export { default as Blog } from "./Blog";
 export { default as Project } from "./Project";
 export { default as Contact } from "./Contact";
 export { default as ChatWidget } from "./ChatWidget";

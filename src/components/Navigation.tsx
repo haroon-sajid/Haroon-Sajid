@@ -3,33 +3,50 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
+import Collapse from '@mui/material/Collapse';
 import CssBaseline from '@mui/material/CssBaseline';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import '../assets/styles/Navigation.scss';
-
-const sections = ['home', 'about', 'expertise', 'projects', 'history', 'education', 'contact'];
 
 function Navigation({parentToChild, modeChange}: any) {
 
   const {mode} = parentToChild;
   const { t, lang, toggleLang, isRtl } = useLanguage();
-  const navItems = t.nav.items.map((label, i) => [label, sections[i]]);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  /* Labels and section ids travel together now — see NavItem in translations */
+  const navItems = t.nav.items;
 
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
+  /* Desktop dropdown: which parent item is open, and the button it hangs from */
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  /* Mobile drawer: which parent group is expanded */
+  const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+  };
+
+  const closeDesktopMenu = () => {
+    setMenuAnchor(null);
+    setOpenMenu(null);
   };
 
   useEffect(() => {
@@ -48,7 +65,15 @@ function Navigation({parentToChild, modeChange}: any) {
     };
   }, []);
 
+  /* Section links belong to the one-page portfolio. From another route
+     (e.g. /blog) they first go home, handing the target section over in the
+     router state — AppShell picks it up and finishes the scroll. */
   const scrollToSection = (section: string) => {
+    if (pathname !== '/') {
+      navigate('/', { state: { scrollTo: section } });
+      return;
+    }
+
     if (section === 'home') {
       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       return;
@@ -57,6 +82,17 @@ function Navigation({parentToChild, modeChange}: any) {
     const sectionElement = document.getElementById(section);
     if (sectionElement) {
       sectionElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  /* Route items (path) open their page; section items scroll */
+  const openNavItem = (item: { section?: string; path?: string }) => {
+    if (item.path) {
+      navigate(item.path);
+      return;
+    }
+    if (item.section) {
+      scrollToSection(item.section);
     }
   };
 
@@ -74,16 +110,46 @@ function Navigation({parentToChild, modeChange}: any) {
       </div>
       <List className="nav-drawer-list">
         {navItems.map((item) => (
-          <ListItem key={item[0]} disablePadding>
-            <ListItemButton
-              onClick={() => {
-                handleDrawerToggle();
-                scrollToSection(item[1]);
-              }}
-            >
-              <ListItemText primary={item[0]} />
-            </ListItemButton>
-          </ListItem>
+          item.children ? (
+            <React.Fragment key={item.label}>
+              <ListItem disablePadding>
+                <ListItemButton
+                  onClick={() => setExpandedGroup((prev) => prev === item.label ? null : item.label)}
+                  aria-expanded={expandedGroup === item.label}
+                >
+                  <ListItemText primary={item.label} />
+                  {expandedGroup === item.label ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+                </ListItemButton>
+              </ListItem>
+              <Collapse in={expandedGroup === item.label} timeout="auto" unmountOnExit>
+                <List className="nav-drawer-sublist" disablePadding>
+                  {item.children.map((child) => (
+                    <ListItem key={child.label} disablePadding>
+                      <ListItemButton
+                        onClick={() => {
+                          handleDrawerToggle();
+                          scrollToSection(child.section);
+                        }}
+                      >
+                        <ListItemText primary={child.label} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
+            </React.Fragment>
+          ) : (
+            <ListItem key={item.label} disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  handleDrawerToggle();
+                  openNavItem(item);
+                }}
+              >
+                <ListItemText primary={item.label} />
+              </ListItemButton>
+            </ListItem>
+          )
         ))}
       </List>
     </Box>
@@ -100,9 +166,51 @@ function Navigation({parentToChild, modeChange}: any) {
 
           <Box className="nav-links" sx={{ display: { xs: 'none', md: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item[0]} onClick={() => scrollToSection(item[1])}>
-                {item[0]}
-              </Button>
+              item.children ? (
+                <React.Fragment key={item.label}>
+                  <Button
+                    onClick={(event) => {
+                      setMenuAnchor(event.currentTarget);
+                      setOpenMenu(item.label);
+                    }}
+                    aria-haspopup="true"
+                    aria-expanded={openMenu === item.label}
+                  >
+                    {item.label}
+                    <KeyboardArrowDownIcon className={`nav-caret${openMenu === item.label ? ' open' : ''}`} />
+                  </Button>
+                  <Menu
+                    anchorEl={menuAnchor}
+                    open={openMenu === item.label}
+                    onClose={closeDesktopMenu}
+                    disableScrollLock
+                    /* Centered under the button, so it reads the same in RTL */
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    /* Portalled on <body> like the drawer — hand it the theme
+                       class so the palette variables stay in scope */
+                    PaperProps={{
+                      className: `nav-dropdown ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`
+                    }}
+                  >
+                    {item.children.map((child) => (
+                      <MenuItem
+                        key={child.label}
+                        onClick={() => {
+                          closeDesktopMenu();
+                          scrollToSection(child.section);
+                        }}
+                      >
+                        {child.label}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </React.Fragment>
+              ) : (
+                <Button key={item.label} onClick={() => openNavItem(item)}>
+                  {item.label}
+                </Button>
+              )
             ))}
           </Box>
 

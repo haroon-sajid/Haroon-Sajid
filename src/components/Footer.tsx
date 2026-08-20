@@ -7,6 +7,7 @@ import XIcon from '@mui/icons-material/X';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import '../assets/styles/Footer.scss'
 
@@ -17,8 +18,17 @@ const navSections = ['about', 'expertise', 'projects', 'history', 'education', '
 function Footer() {
 
   const { t } = useLanguage();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
+  /* On the one-page portfolio the sections are right here; from another
+     route (e.g. /blog) go home first and let AppShell finish the scroll */
   const scrollToSection = (section: string) => {
+    if (pathname !== '/') {
+      navigate('/', { state: { scrollTo: section } });
+      return;
+    }
+
     const sectionElement = document.getElementById(section);
     if (sectionElement) {
       sectionElement.scrollIntoView({ behavior: 'smooth' });

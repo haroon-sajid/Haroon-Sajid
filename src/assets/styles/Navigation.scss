@@ -88,6 +88,52 @@
     background-color: transparent;
 }
 
+/* Caret on nav items that open a dropdown */
+.navigation-bar .nav-links .MuiButton-root .nav-caret {
+    font-size: 19px;
+    margin-inline-start: 2px;
+    transition: transform .2s ease;
+}
+
+.navigation-bar .nav-links .MuiButton-root .nav-caret.open {
+    transform: rotate(180deg);
+}
+
+/* Desktop dropdown — portalled on <body> like the drawer, so it's styled
+   against the palette variables via the theme class handed to the paper */
+.nav-dropdown.MuiPaper-root {
+    margin-top: 8px;
+    min-width: 200px;
+    border: 1px solid var(--accent-line);
+    border-radius: 12px;
+    background-color: var(--bg);
+    background-image: none;
+    color: #ffffff;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.38);
+
+    .MuiMenuItem-root {
+        padding: 11px 20px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        border-inline-start: 2px solid transparent;
+        transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+    }
+
+    .MuiMenuItem-root:hover,
+    .MuiMenuItem-root.Mui-focusVisible {
+        background-color: var(--surface-hover);
+        border-inline-start-color: var(--accent);
+        color: var(--accent-text);
+    }
+}
+
+.nav-dropdown.light-mode.MuiPaper-root {
+    color: #0d1116;
+    box-shadow: 0 16px 38px rgba(17, 17, 17, 0.14);
+}
+
 /* EN / ع switch — active side reads full strength, the other recedes.
    Inter rather than mono: this is UI chrome, not metadata, and mono's
    fixed advance widths make a two-letter label look loose. Each side
@@ -237,6 +283,24 @@
         font-weight: 600;
         letter-spacing: 0.01em;
     }
+
+    /* Chevron on collapsible groups */
+    .MuiListItemButton-root svg {
+        font-size: 20px;
+        color: #8b95a1;
+    }
+}
+
+/* Sub-items inside an expanded group: indented and slightly lighter, so the
+   hierarchy reads at a glance */
+.nav-drawer .nav-drawer-sublist .MuiListItemButton-root {
+    min-height: 46px;
+    padding-inline-start: 38px;
+}
+
+.nav-drawer .nav-drawer-sublist .MuiListItemText-primary {
+    font-size: 0.95rem;
+    font-weight: 500;
 }
 
 .nav-drawer.light-mode.MuiDrawer-paper {
