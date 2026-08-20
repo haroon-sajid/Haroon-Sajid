@@ -4,8 +4,10 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // Relative base so the build works from any path (local file, GitHub Pages, etc.)
-  base: './',
+  // Absolute base: assets must load from the domain root on deep links
+  // like /projects/ai-inbox-management (a relative base would resolve to
+  // /projects/assets/... and break the page on Vercel).
+  base: '/',
   server: {
     port: 3000,
     open: true,
