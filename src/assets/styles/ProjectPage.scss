@@ -80,6 +80,13 @@
     box-shadow: 0 18px 44px rgba(13, 17, 22, 0.16);
 }
 
+/* Animated hero banner (e.g. the AI Inbox flow animation) — same frame
+   treatment as the static hero images */
+.project-page-hero-anim {
+    border-radius: 14px;
+    box-shadow: 0 18px 44px rgba(13, 17, 22, 0.16);
+}
+
 /* The small mono tag the thumbnails carry at their top, redrawn as real text
    pinned to the banner's top corner. The dark pill behind it keeps the text
    readable no matter what part of the image sits underneath */

@@ -24,6 +24,9 @@ export type ProjectPageContent = {
 
 type Props = {
   image: string;
+  /* Optional animated (or otherwise custom) banner rendered in place of the
+     static hero image — the image prop still feeds og/fallback uses */
+  hero?: React.ReactNode;
   stack: string[];
   /* Small mono label drawn over the cropped hero image (e.g. "N8N × CLAUDE AI ·
      AUTOMATION") — rendered as text so it stays crisp after the crop */
@@ -34,7 +37,7 @@ type Props = {
   content: { en: ProjectPageContent; ar: ProjectPageContent };
 };
 
-function ProjectLayout({ image, stack, heroLabel, heroLabelAbove, content }: Props) {
+function ProjectLayout({ image, hero, stack, heroLabel, heroLabelAbove, content }: Props) {
   const { lang } = useLanguage();
   const c = content[lang];
   const stackLabel = lang === 'ar' ? 'التقنيات المستخدمة' : 'Tech Stack';
@@ -57,7 +60,7 @@ function ProjectLayout({ image, stack, heroLabel, heroLabelAbove, content }: Pro
           {heroLabel && (
             <span className={`project-page-hero-label${heroLabelAbove ? ' is-above' : ''}`} dir="ltr">{heroLabel}</span>
           )}
-          <img className="project-page-image" src={image} alt={c.title} />
+          {hero ?? <img className="project-page-image" src={image} alt={c.title} />}
         </div>
 
         {c.sections.map((section) => (

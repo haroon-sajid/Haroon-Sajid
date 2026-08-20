@@ -1,5 +1,6 @@
 import React from 'react';
 import ProjectLayout, { ProjectPageContent } from './ProjectLayout';
+import InboxFlowHero from '../components/InboxFlowHero';
 import image from '../assets/images/ai-inbox-management-system.png';
 import wf1 from '../assets/images/wf1-gmail-assistant.jpg';
 import wf2 from '../assets/images/wf2-whatsapp-inbound.jpg';
@@ -104,6 +105,7 @@ function AiInboxManagement() {
   return (
     <ProjectLayout
       image={image}
+      hero={<InboxFlowHero className="project-page-hero-anim" />}
       heroLabel="N8N × CLAUDE AI · AUTOMATION"
       stack={['n8n', 'Claude AI', 'Recruit CRM', 'Gmail API', 'Whapi Cloud', 'Slack']}
       content={{ en, ar }}
