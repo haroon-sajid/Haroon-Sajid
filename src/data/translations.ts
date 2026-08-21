@@ -22,7 +22,10 @@ export type AchievementItem = {
   org: string;
   date: string;
   desc: string;
+  /* Internal detail page for the card... */
   path?: string;
+  /* ...or a certificate PDF in public/, opened in a new tab. One or neither. */
+  file?: string;
 };
 
 const en = {
@@ -143,9 +146,9 @@ const en = {
     seeMore: 'See More Projects',
     seeLess: 'Show Less',
     items: [
-      { title: 'Publisha.io', desc: 'Multi-tenant platform automating content and marketing campaigns, with AI-drafted posts routed through human approval before publishing.' },
+      { title: 'Publisha.io', desc: 'Multi-tenant SaaS that runs a whole content strategy in one place: AI drafts blog posts, social updates and SEO copy from competitor research and real-time trends, campaigns are scheduled across every channel, and each piece is routed through human approval before it goes live.' },
       { title: 'Say-Vi: AI Avatar Videos', desc: 'Platform that turns one selfie into a reusable talking AI avatar: drafts the script with AI, renders a studio-quality vertical video, and publishes it straight to TikTok, Instagram, Facebook, YouTube and X in one tap.' },
-      { title: 'Idolfluence', desc: 'AI-powered platform that turns a chosen niche and persona into finished marketing videos, then publishes them straight to TikTok on autopilot.' },
+      { title: 'Idolfluence', desc: 'AI platform for social commerce creators: pick a niche and a persona, and it researches what is trending, writes the hook and script, assembles a finished marketing video, and publishes it straight to TikTok on a schedule, so a full content channel runs on autopilot with no filming or editing.' },
       { title: 'AI Inbox Management System', desc: 'n8n automation that runs a recruitment inbox end to end: leads are matched against Recruit CRM, AI drafts the reply, a human approves, and the system sends it.' },
       { title: 'Caregivers Monitoring System', desc: 'End-to-end n8n automation for overnight caregiver operations: scheduled SMS check-ins, voice-call escalation, streak scoring with a live leaderboard, and AI morning reports.' },
       { title: 'AI Email Digest Automation for Zoho Mail', desc: 'n8n automation on the Zoho Mail API that filters and AI-classifies every email, then delivers daily and weekly HTML digest reports via Zoho SMTP — every email sorted, prioritised and summarised automatically.' },
@@ -164,6 +167,7 @@ const en = {
     titleOutline: 'Achievements',
     intro: 'Awards, certifications, and milestones beyond the job description — the extra mile in numbers and paper.',
     moreHint: 'View certificate & project',
+    certHint: 'View certificate',
     items: [
       {
         title: 'Band of Agents Hackathon',
@@ -173,16 +177,18 @@ const en = {
         path: '/achievements/band-of-agents-hackathon'
       },
       {
-        title: 'Professional Certification',
-        org: 'Issuing organization',
-        date: '20XX',
-        desc: 'Sample entry — an AI, cloud, or automation credential: add the certificate name and what it covers.'
+        title: 'Generative AI Mastery',
+        org: 'Udemy',
+        date: 'Aug 2025',
+        desc: 'Certification earned across 15+ real-time projects, covering large language models, prompting, retrieval, and taking generative AI features from an idea to a working application.',
+        file: '/Generative-AI-Mastery-Certificate.pdf'
       },
       {
-        title: 'Competition / Recognition',
-        org: 'Event or employer',
-        date: '20XX',
-        desc: 'Sample entry — hackathons, top-performer awards, or community contributions that show initiative.'
+        title: 'Python Programming',
+        org: 'Coursera',
+        date: 'Jun 2024',
+        desc: 'Verified Python certification covering the language fundamentals, data structures, and clean reusable code that the backend services and automations are built on.',
+        file: '/Python-Coursera-Certificate.pdf'
       }
     ] as AchievementItem[]
   },
@@ -288,6 +294,10 @@ const en = {
     titleMain: 'Edu',
     titleOutline: 'cation',
     intro: 'A formal grounding in machine learning, NLP, and generative AI, alongside the self-directed project work that turned it into production experience.',
+    viewPhoto: 'View photo',
+    closePhoto: 'Close',
+    /* Describes the picture itself, not the card it sits on */
+    photoCaption: 'Graduation day, 2024',
     items: [
       {
         degree: 'Bachelor of Science in Artificial Intelligence',
@@ -349,7 +359,8 @@ const en = {
     errorReply: "Sorry — I couldn't reply just now. Please try again in a moment, or reach Haroon directly on WhatsApp below.",
     busyReply: "I'm handling a lot of conversations right now. Please try again in a few minutes — or reach Haroon directly on WhatsApp below.",
     demoCta: 'Open WhatsApp',
-    bookCta: 'Book a meeting'
+    bookCta: 'Book a meeting',
+    cvCta: 'Download CV'
   },
 
   footer: {
@@ -487,9 +498,9 @@ const ar: typeof en = {
     seeMore: 'عرض المزيد من المشاريع',
     seeLess: 'عرض أقل',
     items: [
-      { title: 'Publisha.io', desc: 'منصة متعددة المستأجرين لأتمتة المحتوى والحملات التسويقية: يكتب الذكاء الاصطناعي المسودات، ثم تُعتمد بشريًا قبل النشر.' },
+      { title: 'Publisha.io', desc: 'منصة SaaS متعددة المستأجرين تدير استراتيجية المحتوى بالكامل من مكان واحد: يكتب الذكاء الاصطناعي مقالات المدونة ومنشورات التواصل الاجتماعي ونصوص تحسين محركات البحث اعتمادًا على تحليل المنافسين والاتجاهات اللحظية، وتُجدول الحملات على كل القنوات، ويمر كل منشور باعتماد بشري قبل النشر.' },
       { title: 'Say-Vi: AI Avatar Videos', desc: 'منصة تحوّل صورة سيلفي واحدة إلى أفاتار ناطق قابل لإعادة الاستخدام: يكتب الذكاء الاصطناعي النص، ثم يُنتَج فيديو عمودي بجودة الاستوديو ويُنشر مباشرة على TikTok وInstagram وFacebook وYouTube وX بضغطة واحدة.' },
-      { title: 'Idolfluence', desc: 'منصة تحوّل المجال والشخصية المختارة إلى فيديوهات تسويقية جاهزة بالذكاء الاصطناعي، ثم تنشرها مباشرة على TikTok بشكل تلقائي.' },
+      { title: 'Idolfluence', desc: 'منصة ذكاء اصطناعي لصنّاع محتوى التجارة الاجتماعية: تختار المجال والشخصية، فتبحث المنصة عن الأكثر رواجًا، وتكتب الجملة الافتتاحية والنص، وتُركّب فيديو تسويقيًا جاهزًا، ثم تنشره مباشرة على TikTok وفق جدول زمني، فتعمل قناة محتوى كاملة تلقائيًا دون تصوير أو مونتاج.' },
       { title: 'AI Inbox Management System', desc: 'أتمتة n8n تدير بريد التوظيف من البداية إلى النهاية: تُطابق العملاء مع Recruit CRM، ويصيغ الذكاء الاصطناعي الرد، ويوافق عليه إنسان، ثم يُرسل تلقائيًا.' },
       { title: 'Caregivers Monitoring System', desc: 'أتمتة متكاملة عبر n8n لعمليات الرعاية الليلية: رسائل تحقق مجدولة، وتصعيد بمكالمات صوتية، وتقييم أداء مع لوحة صدارة مباشرة، وتقارير صباحية بالذكاء الاصطناعي.' },
       { title: 'AI Email Digest Automation for Zoho Mail', desc: 'أتمتة n8n مبنية على واجهة Zoho Mail API تصفّي كل بريد وارد وتصنّفه بالذكاء الاصطناعي، ثم ترسل تقارير موجزة يومية وأسبوعية بصيغة HTML عبر Zoho SMTP — كل بريد مُرتّب ومُلخّص تلقائيًا.' },
@@ -505,6 +516,7 @@ const ar: typeof en = {
     titleOutline: 'وجوائزي',
     intro: 'جوائز وشهادات ومحطات تتجاوز الوصف الوظيفي — الجهد الإضافي بالأرقام والوثائق.',
     moreHint: 'عرض الشهادة والمشروع',
+    certHint: 'عرض الشهادة',
     items: [
       {
         title: 'هاكاثون Band of Agents',
@@ -514,16 +526,18 @@ const ar: typeof en = {
         path: '/achievements/band-of-agents-hackathon'
       },
       {
-        title: 'شهادة مهنية',
-        org: 'الجهة المانحة',
-        date: '20XX',
-        desc: 'نموذج مؤقت — شهادة في الذكاء الاصطناعي أو السحابة أو الأتمتة: أضف اسمها وما تغطيه.'
+        title: 'إتقان الذكاء الاصطناعي التوليدي',
+        org: 'Udemy',
+        date: 'أغسطس 2025',
+        desc: 'شهادة مبنية على أكثر من 15 مشروعًا تطبيقيًا، تغطي نماذج اللغة الكبيرة وهندسة التوجيه والاسترجاع، وتحويل ميزات الذكاء الاصطناعي التوليدي من فكرة إلى تطبيق يعمل فعليًا.',
+        file: '/Generative-AI-Mastery-Certificate.pdf'
       },
       {
-        title: 'مسابقة / تكريم',
-        org: 'الفعالية أو جهة العمل',
-        date: '20XX',
-        desc: 'نموذج مؤقت — هاكاثونات أو جوائز تميز أو مساهمات مجتمعية تُظهر المبادرة.'
+        title: 'البرمجة بلغة Python',
+        org: 'Coursera',
+        date: 'يونيو 2024',
+        desc: 'شهادة موثقة في Python تغطي أساسيات اللغة وهياكل البيانات وكتابة كود نظيف قابل لإعادة الاستخدام، وهي الأساس الذي تقوم عليه الخدمات الخلفية وأعمال الأتمتة.',
+        file: '/Python-Coursera-Certificate.pdf'
       }
     ] as AchievementItem[]
   },
@@ -629,6 +643,9 @@ const ar: typeof en = {
     titleMain: 'الدرا',
     titleOutline: 'سة',
     intro: 'أساس أكاديمي في تعلّم الآلة ومعالجة اللغة الطبيعية والذكاء الاصطناعي التوليدي، إلى جانب مشاريع ذاتية حوّلت هذا الأساس إلى خبرة إنتاجية.',
+    viewPhoto: 'عرض الصورة',
+    closePhoto: 'إغلاق',
+    photoCaption: 'يوم التخرج، 2024',
     items: [
       {
         degree: 'بكالوريوس العلوم في الذكاء الاصطناعي',
@@ -690,7 +707,8 @@ const ar: typeof en = {
     errorReply: 'عذرًا — تعذّر عليّ الرد الآن. حاول مرة أخرى بعد قليل، أو تواصل مع هارون مباشرة عبر واتساب أدناه.',
     busyReply: 'أستقبل عددًا كبيرًا من المحادثات حاليًا. حاول مرة أخرى بعد بضع دقائق — أو تواصل مع هارون مباشرة عبر واتساب أدناه.',
     demoCta: 'افتح واتساب',
-    bookCta: 'احجز موعدًا'
+    bookCta: 'احجز موعدًا',
+    cvCta: 'تحميل السيرة الذاتية'
   },
 
   footer: {

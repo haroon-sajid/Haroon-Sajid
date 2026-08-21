@@ -96,6 +96,161 @@
     background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
 }
 
+/* ---- Graduation photo ----
+   A panel on the card's trailing edge, absolutely positioned so the card
+   keeps exactly the height and text width of its sibling. It fades top to
+   bottom, strongest at the corner and gone by the base of the card, so it
+   reads as part of the card rather than a pasted-in picture. Held at a
+   visible strength, not a ghost, but under the ink so every line still
+   reads across it. */
+.education-container .edu-card .edu-photo {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: 58%;
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(0.45) contrast(1.04);
+    opacity: 0.34;
+    /* A radial falloff anchored in the top corner, not a linear one: it
+       dissolves outward in every direction at once, so the picture has no
+       straight edge anywhere and simply becomes the card. */
+    mask-image: radial-gradient(135% 118% at 100% 0%, #000 0%, #000 34%, rgba(0, 0, 0, 0.45) 66%, transparent 100%);
+    -webkit-mask-image: radial-gradient(135% 118% at 100% 0%, #000 0%, #000 34%, rgba(0, 0, 0, 0.45) 66%, transparent 100%);
+    transition: opacity .35s ease, filter .35s ease;
+    pointer-events: none;
+}
+
+[dir='rtl'] .education-container .edu-card .edu-photo {
+    mask-image: radial-gradient(135% 118% at 0% 0%, #000 0%, #000 34%, rgba(0, 0, 0, 0.45) 66%, transparent 100%);
+    -webkit-mask-image: radial-gradient(135% 118% at 0% 0%, #000 0%, #000 34%, rgba(0, 0, 0, 0.45) 66%, transparent 100%);
+}
+
+.education-container .edu-card.has-photo:hover .edu-photo {
+    filter: grayscale(0.1) contrast(1.04);
+    opacity: 0.46;
+}
+
+/* ---- Open the photo full size ----
+   Sits in the trailing bottom corner, the one part of the card no text
+   reaches, and borrows the icon tile's shape so it reads as part of the
+   same set rather than a control dropped on top. */
+.education-container .edu-card .edu-photo-open {
+    position: absolute;
+    z-index: 2;
+    inset-block-end: 16px;
+    inset-inline-end: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--accent-line);
+    border-radius: 10px;
+    background-color: var(--accent-bg);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity .25s ease, border-color .25s ease, background-color .25s ease, transform .25s ease;
+
+    svg {
+        width: 14px;
+        height: 14px;
+        color: var(--accent-text);
+    }
+}
+
+.education-container .edu-card:hover .edu-photo-open,
+.education-container .edu-card .edu-photo-open:focus-visible {
+    opacity: 1;
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+/* ---- Full-size view ---- */
+
+.edu-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5vh 5vw;
+    background-color: rgba(8, 10, 13, 0.88);
+    backdrop-filter: blur(4px);
+    animation: edu-lightbox-in .22s ease-out;
+}
+
+@keyframes edu-lightbox-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.edu-lightbox .edu-lightbox-figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: 100%;
+    max-height: 100%;
+
+    img {
+        display: block;
+        max-width: 100%;
+        /* Leaves room for the caption under it at any viewport height */
+        max-height: 76vh;
+        border-radius: 12px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+    }
+
+    figcaption {
+        text-align: center;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        color: #9aa4b2;
+    }
+}
+
+.edu-lightbox .edu-lightbox-close {
+    position: absolute;
+    top: 22px;
+    inset-inline-end: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease;
+
+    svg {
+        width: 17px;
+        height: 17px;
+        color: #ffffff;
+    }
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.5);
+        background-color: rgba(255, 255, 255, 0.16);
+    }
+}
+
+/* Everything written stays above the photo layer. The two absolutely
+   positioned layers are excluded, or this would reset them to relative. */
+.education-container .edu-card > *:not(.edu-photo):not(.edu-photo-open) {
+    position: relative;
+    z-index: 1;
+}
+
 .education-container .edu-card-top {
     display: flex;
     align-items: flex-start;
@@ -272,12 +427,34 @@
     .education-container .edu-card p {
         color: #4d5661;
     }
+
+    /* Dark ink on a white card, so the photo comes back a step */
+    .education-container .edu-card .edu-photo {
+        filter: grayscale(0.45) contrast(1.02) brightness(1.04);
+        opacity: 0.26;
+    }
+
+    .education-container .edu-card .edu-photo-open {
+        border-color: rgba(13, 17, 22, 0.16);
+        background-color: rgba(255, 255, 255, 0.72);
+    }
+
+    .education-container .edu-card.has-photo:hover .edu-photo {
+        filter: grayscale(0.1) contrast(1.02) brightness(1.02);
+        opacity: 0.36;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .education-container .edu-card,
-    .education-container .edu-card::after {
+    .education-container .edu-card::after,
+    .education-container .edu-card .edu-photo,
+    .education-container .edu-card .edu-photo-open {
         transition: none;
+    }
+
+    .edu-lightbox {
+        animation: none;
     }
 
     .education-container .edu-card:hover {
@@ -297,6 +474,13 @@
 
         .education-container .education-grid {
             grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    /* On a phone the card is narrower, so the panel comes in with it */
+    @media (max-width: 600px) {
+        .education-container .edu-card .edu-photo {
+            width: 40%;
         }
     }
 }

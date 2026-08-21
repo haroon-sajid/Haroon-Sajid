@@ -5,6 +5,7 @@ import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import { useLanguage } from '../context/LanguageContext';
 import '../assets/styles/ChatWidget.scss';
 
@@ -38,10 +39,73 @@ function BotFace() {
 type Message = {
   from: 'bot' | 'user';
   text: string;
-  /* Optional handoff button under the bubble (WhatsApp chat or Calendly booking) */
+  /* Optional handoff button under the bubble (WhatsApp, Calendly booking, CV) */
   link?: string;
-  linkKind?: 'whatsapp' | 'calendly';
+  linkKind?: 'whatsapp' | 'calendly' | 'cv';
 };
+
+/* Inline markers inside one line: **strong** for the words that carry the
+   answer (companies, roles, project names) and ~quiet~ for dates and asides.
+   Split on both at once so the two never swallow each other. */
+function renderInline(text: string, keyPrefix: string) {
+  return text.split(/(\*\*[^*]+\*\*|~[^~]+~)/g).filter(Boolean).map((chunk, index) => {
+    const key = `${keyPrefix}-${index}`;
+    if (chunk.startsWith('**') && chunk.endsWith('**') && chunk.length > 4)
+      return <strong className="chat-strong" key={key}>{chunk.slice(2, -2)}</strong>;
+    if (chunk.startsWith('~') && chunk.endsWith('~') && chunk.length > 2)
+      return <span className="chat-quiet" key={key}>{chunk.slice(1, -1)}</span>;
+    return <React.Fragment key={key}>{chunk}</React.Fragment>;
+  });
+}
+
+/* The assistant answers in a deliberately tiny markdown subset (see the
+   system prompt in api/chat.ts): "## " headings, "- " bullets, blank-line
+   blocks. Anything else renders as an ordinary paragraph, so a plain reply
+   is unaffected and no untrusted HTML is ever injected. */
+function RichText({ text }: { text: string }) {
+  const lines = text.split('\n');
+  const blocks: React.ReactNode[] = [];
+  let bullets: string[] = [];
+
+  const flushBullets = () => {
+    if (!bullets.length) return;
+    const items = bullets;
+    bullets = [];
+    blocks.push(
+      <ul className="chat-list" key={`ul-${blocks.length}`}>
+        {items.map((item, index) => (
+          <li key={index}>{renderInline(item, `li-${blocks.length}-${index}`)}</li>
+        ))}
+      </ul>
+    );
+  };
+
+  lines.forEach((raw) => {
+    const line = raw.trim();
+    if (line.startsWith('- ')) {
+      bullets.push(line.slice(2));
+      return;
+    }
+    flushBullets();
+    if (!line) return;
+    if (line.startsWith('## ')) {
+      blocks.push(
+        <p className="chat-heading" key={`h-${blocks.length}`}>
+          {line.slice(3)}
+        </p>
+      );
+      return;
+    }
+    blocks.push(
+      <p className="chat-para" key={`p-${blocks.length}`}>
+        {renderInline(line, `p-${blocks.length}`)}
+      </p>
+    );
+  });
+  flushBullets();
+
+  return <>{blocks}</>;
+}
 
 function ChatWidget() {
   const { t, lang } = useLanguage();
@@ -162,13 +226,27 @@ function ChatWidget() {
               <div className="chat-body" ref={bodyRef}>
                 {messages.map((message, index) => (
                   <div className={`chat-msg ${message.from === 'user' ? 'from-user' : 'from-bot'}`} key={index}>
-                    <span className="chat-bubble">{message.text}</span>
+                    <span className="chat-bubble">
+                      {message.from === 'bot' ? <RichText text={message.text} /> : message.text}
+                    </span>
                     {message.link && (
-                      <a className="chat-msg-cta" href={message.link} target="_blank" rel="noreferrer">
+                      <a
+                        className={`chat-msg-cta ${message.linkKind === 'cv' ? 'is-cv' : ''}`}
+                        href={message.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        {...(message.linkKind === 'cv'
+                          ? { download: 'Muhammad_Haroon_Sajid_CV.pdf' }
+                          : {})}
+                      >
+                        {message.linkKind === 'calendly' && <CalendarMonthRoundedIcon fontSize="small" />}
+                        {message.linkKind === 'cv' && <DownloadRoundedIcon fontSize="small" />}
+                        {(!message.linkKind || message.linkKind === 'whatsapp') && <WhatsAppIcon fontSize="small" />}
                         {message.linkKind === 'calendly'
-                          ? <CalendarMonthRoundedIcon fontSize="small" />
-                          : <WhatsAppIcon fontSize="small" />}
-                        {message.linkKind === 'calendly' ? t.chat.bookCta : t.chat.demoCta}
+                          ? t.chat.bookCta
+                          : message.linkKind === 'cv'
+                            ? t.chat.cvCta
+                            : t.chat.demoCta}
                       </a>
                     )}
                   </div>
