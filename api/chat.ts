@@ -382,39 +382,91 @@ async function callGemini(apiKey: string, contents: unknown[], systemText: strin
   throw new Error(lastError || 'No Gemini model available');
 }
 
-/* Stores the assistant's note in the site's Redis database (Upstash), where
-   the hidden /api/admin page reads it. Falls back to the function logs so a
-   missing/failing database never breaks the chat. The same "notes" hash is
-   read and mutated by api/notes.ts — keep the two files' schema in sync. */
-async function saveNote(args: Record<string, string>): Promise<string> {
+/* ---------------- Conversation storage ----------------
+   Every visit is stored whole, as one record in the Redis "chats" hash keyed
+   by the session id the widget sends. The transcript is rewritten on each
+   turn, and anything the assistant chose to flag (who the visitor is, their
+   name and contact, its own summary) is merged onto the same record, so the
+   admin page can show a short card and open the full conversation behind it.
+   api/notes.ts reads and mutates this hash — keep the two schemas in sync. */
+
+type StoredChat = {
+  id: string;
+  ts: string;
+  updated: string;
+  read: boolean;
+  lang: string;
+  visitor_type: string;
+  name: string;
+  contact: string;
+  note: string;
+  messages: { from: string; text: string }[];
+};
+
+function redisConfig() {
   const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+  return url && token ? { url, token } : null;
+}
 
-  const note = {
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    ts: new Date().toISOString(),
-    visitor_type: args.visitor_type ?? 'other',
-    name: args.name ?? '',
-    contact: args.contact ?? '',
-    note: (args.note ?? '').slice(0, 4000),
-    read: false
-  };
+async function redis(command: (string | number)[]): Promise<any> {
+  const config = redisConfig();
+  if (!config) throw new Error('storage-not-configured');
+  const response = await fetch(config.url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${config.token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(command)
+  });
+  if (!response.ok) throw new Error(`redis ${response.status}`);
+  return (await response.json()).result;
+}
 
-  if (!url || !token) {
-    console.log('[AI note — connect Upstash Redis in Vercel Storage to persist these]', note);
-    return 'saved';
+/* Never throws: a storage problem must never cost the visitor their reply,
+   so failures fall back to the function log and the chat carries on. */
+async function saveChat(
+  sid: string,
+  lang: string,
+  messages: { from: string; text: string }[],
+  noteArgs: Record<string, string> | null
+): Promise<void> {
+  const now = new Date().toISOString();
+  const trimmed = messages
+    .filter((m) => m.text)
+    .slice(-60)
+    .map((m) => ({ from: m.from === 'user' ? 'user' : 'bot', text: m.text.slice(0, 2000) }));
+
+  if (!redisConfig()) {
+    console.log('[chat — connect Upstash Redis in Vercel Storage to persist these]', { sid, noteArgs, turns: trimmed.length });
+    return;
   }
+
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(['HSET', 'notes', note.id, JSON.stringify(note)])
-    });
-    if (!response.ok) throw new Error(`redis ${response.status}`);
-    return 'saved';
+    /* Read first so a returning turn keeps its original time, its read flag,
+       and any details the assistant flagged earlier in the same visit. */
+    let existing: Partial<StoredChat> = {};
+    try {
+      const raw = await redis(['HGET', 'chats', sid]);
+      if (raw) existing = JSON.parse(raw);
+    } catch {
+      /* A corrupt or missing record just starts fresh */
+    }
+
+    const chat: StoredChat = {
+      id: sid,
+      ts: existing.ts || now,
+      updated: now,
+      /* Any new message makes the conversation unread again */
+      read: false,
+      lang,
+      visitor_type: noteArgs?.visitor_type || existing.visitor_type || '',
+      name: noteArgs?.name || existing.name || '',
+      contact: noteArgs?.contact || existing.contact || '',
+      note: noteArgs?.note ? String(noteArgs.note).slice(0, 4000) : existing.note || '',
+      messages: trimmed
+    };
+    await redis(['HSET', 'chats', sid, JSON.stringify(chat)]);
   } catch (error) {
-    console.error('Note storage failed, logging instead:', error, note);
-    return 'saved';
+    console.error('Chat storage failed, logging instead:', error, { sid, noteArgs });
   }
 }
 
@@ -431,6 +483,13 @@ export default async function handler(req: any, res: any) {
   }
 
   const incoming: ChatMessage[] = Array.isArray(req.body?.messages) ? req.body.messages : [];
+
+  /* One id per visit, from the widget. Anything unexpected is replaced rather
+     than trusted, since it becomes a Redis key. */
+  const rawSid = typeof req.body?.sid === 'string' ? req.body.sid : '';
+  const sessionId = /^[A-Za-z0-9-]{6,64}$/.test(rawSid)
+    ? rawSid
+    : `anon-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
   /* Keep requests small and abuse-resistant: last 12 turns, 1500 chars each.
      Leading bot messages (the seeded welcome) are dropped because Gemini
@@ -470,6 +529,9 @@ export default async function handler(req: any, res: any) {
     let reply = '';
     let fallbackReply = 'Sorry, I could not come up with a reply, please try again.';
     const alreadyCalled = new Set<string>();
+    /* Whatever the assistant chose to flag about this visitor, merged onto
+       the stored conversation once the turn is done */
+    let noteArgs: Record<string, string> | null = null;
 
     for (let round = 0; round < 4; round++) {
       const parts = await callGemini(apiKey, history, systemText);
@@ -491,11 +553,12 @@ export default async function handler(req: any, res: any) {
       alreadyCalled.add(signature);
 
       const outcome = runTool(call);
-      const toolResult = { ...outcome.toolResult, status: await outcome.status };
+      const toolResult = { ...outcome.toolResult, status: outcome.status };
       if (outcome.link) {
         link = outcome.link;
         linkKind = outcome.linkKind;
       }
+      if (outcome.noteArgs) noteArgs = { ...(noteArgs ?? {}), ...outcome.noteArgs };
       fallbackReply = outcome.fallbackReply;
 
       history.push({ role: 'model', parts: [{ functionCall: call }] });
@@ -509,7 +572,16 @@ export default async function handler(req: any, res: any) {
       }
     }
 
-    res.status(200).json({ reply: reply || fallbackReply, link, linkKind });
+    const finalReply = reply || fallbackReply;
+    res.status(200).json({ reply: finalReply, link, linkKind });
+
+    /* After the response, so storage latency never delays the visitor. The
+       transcript sent up plus the answer just given is the whole visit. */
+    const transcript = incoming
+      .filter((m) => (m.from === 'user' || m.from === 'bot') && typeof m.text === 'string')
+      .map((m) => ({ from: String(m.from), text: String(m.text) }));
+    transcript.push({ from: 'bot', text: finalReply });
+    await saveChat(sessionId, siteLanguage, transcript, noteArgs);
   } catch (error) {
     if (error instanceof QuotaError) {
       res.status(429).json({ error: 'quota' });
@@ -530,11 +602,14 @@ export default async function handler(req: any, res: any) {
    back, which button to hang under the reply, and the line to send if the
    model somehow never writes one itself. */
 type ToolOutcome = {
-  status: string | Promise<string>;
+  status: string;
   toolResult: Record<string, string>;
   fallbackReply: string;
   link?: string;
   linkKind?: 'whatsapp' | 'calendly' | 'cv';
+  /* What save_note flagged, merged onto the conversation record at the end
+     of the turn so the whole visit is written once rather than piecemeal */
+  noteArgs?: Record<string, string>;
 };
 
 function runTool(call: { name: string; args: Record<string, string> }): ToolOutcome {
@@ -597,5 +672,5 @@ function runTool(call: { name: string; args: Record<string, string> }): ToolOutc
     /* Deliberately says nothing about roles or emails: this line has to be
        safe whoever the visitor is and whatever they last said. */
     fallbackReply = 'Thank you, I have passed that on to Haroon and he will get back to you soon!';
-    return { status: saveNote(call.args ?? {}), toolResult, fallbackReply };
+    return { status: 'saved', toolResult, fallbackReply, noteArgs: call.args ?? {} };
 }

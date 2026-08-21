@@ -11,6 +11,26 @@ import '../assets/styles/ChatWidget.scss';
 
 const WHATSAPP_URL = 'https://wa.me/923116566318';
 
+/* One id per browser tab, sent with every message so the backend can file a
+   whole visit as a single conversation instead of loose notes. Kept in
+   sessionStorage so a page reload continues the same thread, and generated
+   defensively because sessionStorage throws in some privacy modes. */
+const SESSION_ID = (() => {
+  const fresh = () =>
+    (typeof crypto !== 'undefined' && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  try {
+    const saved = sessionStorage.getItem('chat-sid');
+    if (saved) return saved;
+    const created = fresh();
+    sessionStorage.setItem('chat-sid', created);
+    return created;
+  } catch {
+    return fresh();
+  }
+})();
+
 /* Hand-drawn robot face. Sized like an MUI icon (1em) so the existing
    svg font-size rules apply; everything draws in currentColor so it
    inherits each context's ink. The eyes blink and the antenna wiggles
@@ -145,6 +165,7 @@ function ChatWidget() {
            lang tells the backend which language the site is being browsed in. */
         body: JSON.stringify({
           lang,
+          sid: SESSION_ID,
           messages: next.map(({ from, text: body }) => ({ from, text: body }))
         })
       });

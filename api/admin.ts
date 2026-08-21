@@ -78,38 +78,118 @@ const PAGE = `<!doctype html>
   }
 
   /* Dashboard */
-  .bar { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-  .bar h1 { font-size: 20px; margin-right: auto; }
-  .count { color: #8b949e; font-size: 13px; }
+  .wrap { max-width: 1180px; }
+  .bar { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .bar h1 { font-size: 26px; letter-spacing: -.02em; margin-right: auto; }
+  .count { color: #8b949e; font-size: 13px; margin-bottom: 22px; }
   .btn {
-    padding: 7px 12px; border-radius: 8px; border: 1px solid #30363d;
+    padding: 7px 13px; border-radius: 8px; border: 1px solid #30363d;
     background: #161b22; color: #e6edf3; font-size: 13px; cursor: pointer;
+    transition: border-color .15s ease, background-color .15s ease;
   }
-  .btn:hover { border-color: #4f8ff7; }
-  .card {
-    background: #161b22; border: 1px solid #30363d; border-radius: 12px;
-    padding: 16px; margin-bottom: 12px;
-  }
-  .card.unread { border-left: 3px solid #4f8ff7; }
-  .card .top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-  .badge {
-    font-size: 11px; padding: 2px 9px; border-radius: 999px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: .4px;
-  }
-  .badge.lead { background: #1f3524; color: #56d364; }
-  .badge.recruiter { background: #341f3e; color: #d2a8ff; }
-  .badge.visitor { background: #1c2f45; color: #79c0ff; }
-  .badge.other { background: #2d2a1f; color: #e3b341; }
-  .when { color: #8b949e; font-size: 12px; }
-  .who { color: #8b949e; font-size: 13px; margin-bottom: 8px; }
-  .who b { color: #e6edf3; font-weight: 600; }
-  .note { font-size: 14px; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
-  .actions { display: flex; gap: 8px; margin-top: 12px; }
-  .actions .btn { font-size: 12px; padding: 5px 10px; }
+  .btn:hover { border-color: #4f8ff7; background: #1b2029; }
   .btn.danger { color: #f85149; }
   .btn.danger:hover { border-color: #f85149; }
-  .empty { color: #8b949e; text-align: center; padding: 60px 0; font-size: 14px; }
+
+  /* Filter chips */
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+  .chip {
+    padding: 6px 13px; border-radius: 999px; border: 1px solid #2b323d;
+    background: transparent; color: #8b949e; font-size: 12.5px; cursor: pointer;
+    transition: all .15s ease;
+  }
+  .chip:hover { color: #e6edf3; border-color: #3d4650; }
+  .chip.on { background: #e6edf3; border-color: #e6edf3; color: #0d1116; font-weight: 600; }
+
+  /* Sticky note grid */
+  .grid {
+    display: grid; gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+  }
+  .note-card {
+    position: relative; display: flex; flex-direction: column;
+    min-height: 208px; padding: 18px 16px 14px; border: none; text-align: left;
+    border-radius: 3px 3px 2px 2px; cursor: pointer; color: #1a1a1a;
+    font-family: inherit; font-size: 14px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .note-card:hover { transform: translateY(-4px) rotate(-.5deg); box-shadow: 0 16px 30px rgba(0, 0, 0, .45); }
+  /* The paper curls very slightly, which is what sells it as a sticky note */
+  .note-card::after {
+    content: ''; position: absolute; right: 0; bottom: 0;
+    border-width: 0 0 20px 20px; border-style: solid;
+    border-color: transparent transparent rgba(0, 0, 0, .13) transparent;
+  }
+  .n-lead      { background: linear-gradient(160deg, #b8e6a0 0%, #a5dd8c 100%); }
+  .n-recruiter { background: linear-gradient(160deg, #d9c2f0 0%, #cbb0e8 100%); }
+  .n-visitor   { background: linear-gradient(160deg, #a9dcf0 0%, #93d1ea 100%); }
+  .n-other     { background: linear-gradient(160deg, #ffd79a 0%, #ffc978 100%); }
+  .n-none      { background: linear-gradient(160deg, #f2ede2 0%, #e6dfd0 100%); }
+
+  .n-top { display: flex; align-items: center; gap: 8px; margin-bottom: 11px; }
+  .n-badge {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px;
+    padding: 3px 8px; border-radius: 4px; background: rgba(0, 0, 0, .14); color: #1a1a1a;
+  }
+  .n-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: #e5484d; margin-left: auto;
+    box-shadow: 0 0 0 3px rgba(229, 72, 77, .22);
+  }
+  .n-who { font-weight: 700; font-size: 14px; margin-bottom: 5px; word-break: break-word; }
+  .n-body {
+    font-size: 13px; line-height: 1.5; color: #2b2b2b; word-break: break-word;
+    /* Only the gist belongs on the paper; the rest is in the modal */
+    display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .n-foot {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    margin-top: auto; padding-top: 12px; font-size: 11px; color: rgba(0, 0, 0, .55);
+  }
+  .n-turns { font-weight: 600; }
+
+  /* Conversation modal */
+  .modal {
+    position: fixed; inset: 0; z-index: 50; display: flex; align-items: center;
+    justify-content: center; padding: 4vh 16px;
+    background: rgba(5, 7, 10, .78);
+  }
+  .sheet {
+    display: flex; flex-direction: column; width: 100%; max-width: 680px; max-height: 92vh;
+    background: #12171e; border: 1px solid #262d38; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .6);
+  }
+  .sheet-head { padding: 20px 22px 16px; border-bottom: 1px solid #222932; }
+  .sheet-head .row { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; }
+  .sheet-head h2 { font-size: 17px; margin-right: auto; }
+  .x {
+    border: none; background: transparent; color: #8b949e; font-size: 22px;
+    line-height: 1; cursor: pointer; padding: 0 4px;
+  }
+  .x:hover { color: #e6edf3; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 12.5px; color: #8b949e; }
+  .meta b { color: #e6edf3; font-weight: 600; }
+  .summary {
+    margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+    background: rgba(79, 143, 247, .08); border: 1px solid rgba(79, 143, 247, .22);
+    font-size: 13px; line-height: 1.55; color: #cdd9e5;
+  }
+  .summary span { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .7px; color: #6f9fe8; margin-bottom: 5px; font-weight: 700; }
+
+  .thread { padding: 18px 22px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 82%; padding: 10px 13px; border-radius: 13px; font-size: 13.5px; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+  .msg.user { align-self: flex-end; background: #e6edf3; color: #0d1116; border-bottom-right-radius: 4px; }
+  .msg.bot { align-self: flex-start; background: #1c232c; color: #cdd9e5; border: 1px solid #262d38; border-bottom-left-radius: 4px; }
+  .msg-who { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .6px; opacity: .55; margin-bottom: 4px; font-weight: 700; }
+  .no-thread { color: #6e7681; font-size: 13px; text-align: center; padding: 26px 0; }
+  .sheet-foot { display: flex; gap: 8px; padding: 14px 22px; border-top: 1px solid #222932; }
+
+  .empty { color: #8b949e; text-align: center; padding: 70px 0; font-size: 14px; }
   [hidden] { display: none !important; }
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+    .note-card { min-height: 176px; }
+  }
 </style>
 </head>
 <body>
@@ -144,12 +224,32 @@ const PAGE = `<!doctype html>
 
 <div id="app" class="wrap" hidden>
   <div class="bar">
-    <h1>&#128221; Notes</h1>
-    <span class="count" id="count"></span>
+    <h1>Notes</h1>
     <button class="btn" onclick="load()">Refresh</button>
     <button class="btn" onclick="logout()">Log out</button>
   </div>
-  <div id="list"></div>
+  <p class="count" id="count"></p>
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="list"></div>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="sheet" id="sheet">
+    <div class="sheet-head">
+      <div class="row">
+        <span class="n-badge" id="mBadge"></span>
+        <h2 id="mTitle"></h2>
+        <button class="x" onclick="closeModal()" aria-label="Close">&times;</button>
+      </div>
+      <div class="meta" id="mMeta"></div>
+      <div class="summary" id="mSummary" hidden></div>
+    </div>
+    <div class="thread" id="mThread"></div>
+    <div class="sheet-foot">
+      <button class="btn" id="mRead"></button>
+      <button class="btn danger" id="mDel">Delete</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -206,32 +306,156 @@ const PAGE = `<!doctype html>
     return div.innerHTML;
   }
 
-  function render(notes) {
-    const unread = notes.filter((n) => !n.read).length;
-    $('count').textContent = notes.length + ' notes · ' + unread + ' unread';
-    if (!notes.length) {
-      $('list').innerHTML = '<div class="empty">No notes yet — they will appear here when visitors talk to your AI assistant.</div>';
+  let chats = [];
+  let filter = 'all';
+  let openId = null;
+
+  const TYPES = ['lead', 'recruiter', 'visitor', 'other'];
+  const typeOf = (c) => (TYPES.indexOf(c.visitor_type) >= 0 ? c.visitor_type : '');
+
+  /* The assistant answers in a small markdown subset for the chat bubbles.
+     Those markers are noise here, so they come off before display. */
+  function plain(text) {
+    return String(text == null ? '' : text)
+      .replace(/\\*\\*(.+?)\\*\\*/g, '$1')
+      .replace(/~(.+?)~/g, '$1')
+      .replace(/^##\\s*/gm, '')
+      .trim();
+  }
+
+  const firstAsk = (c) => {
+    const said = (c.messages || []).filter((m) => m.from === 'user');
+    return said.length ? said[0].text : '';
+  };
+
+  /* What goes on the paper: the assistant's own summary if it wrote one,
+     otherwise what the visitor opened with. */
+  const gist = (c) => plain(c.note) || plain(firstAsk(c)) || 'Opened the chat but did not say anything yet.';
+
+  function shortDate(value) {
+    const date = new Date(value);
+    const today = new Date();
+    const sameDay = date.toDateString() === today.toDateString();
+    return sameDay
+      ? date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+      : date.toLocaleDateString([], { day: 'numeric', month: 'short' });
+  }
+
+  function renderFilters() {
+    const counts = { all: chats.length, unread: chats.filter((c) => !c.read).length };
+    TYPES.forEach((t) => { counts[t] = chats.filter((c) => typeOf(c) === t).length; });
+    const keys = ['all', 'unread'].concat(TYPES.filter((t) => counts[t] > 0));
+    $('filters').innerHTML = keys.map((key) =>
+      '<button class="chip ' + (filter === key ? 'on' : '') + '" data-f="' + key + '">' +
+        key.charAt(0).toUpperCase() + key.slice(1) + ' ' + counts[key] +
+      '</button>'
+    ).join('');
+    Array.prototype.forEach.call($('filters').querySelectorAll('.chip'), (chip) => {
+      chip.onclick = () => { filter = chip.getAttribute('data-f'); renderFilters(); renderCards(); };
+    });
+  }
+
+  function visible() {
+    if (filter === 'all') return chats;
+    if (filter === 'unread') return chats.filter((c) => !c.read);
+    return chats.filter((c) => typeOf(c) === filter);
+  }
+
+  function renderCards() {
+    const rows = visible();
+    if (!rows.length) {
+      $('list').innerHTML = '<div class="empty">Nothing here yet. Conversations appear as soon as someone talks to your assistant.</div>';
       return;
     }
-    $('list').innerHTML = notes.map((n) => {
-      const type = ['lead', 'recruiter', 'visitor'].includes(n.visitor_type) ? n.visitor_type : 'other';
-      const who = [n.name, n.contact].filter(Boolean).map(escapeHtml).join(' · ');
+    $('list').innerHTML = rows.map((c) => {
+      const type = typeOf(c);
+      const who = c.name || c.contact || 'Anonymous visitor';
+      const turns = (c.messages || []).filter((m) => m.from === 'user').length;
       return (
-        '<div class="card ' + (n.read ? '' : 'unread') + '">' +
-          '<div class="top">' +
-            '<span class="badge ' + type + '">' + escapeHtml(type) + '</span>' +
-            '<span class="when">' + new Date(n.ts).toLocaleString() + '</span>' +
+        '<button class="note-card n-' + (type || 'none') + '" data-id="' + escapeHtml(c.id) + '">' +
+          '<div class="n-top">' +
+            (type ? '<span class="n-badge">' + type + '</span>' : '') +
+            (c.read ? '' : '<span class="n-dot" title="Unread"></span>') +
           '</div>' +
-          (who ? '<div class="who">From: <b>' + who + '</b></div>' : '') +
-          '<div class="note">' + escapeHtml(n.note) + '</div>' +
-          '<div class="actions">' +
-            '<button class="btn" onclick="toggleRead(\\'' + n.id + '\\')">' + (n.read ? 'Mark unread' : 'Mark read') + '</button>' +
-            '<button class="btn danger" onclick="del(\\'' + n.id + '\\')">Delete</button>' +
+          '<div class="n-who">' + escapeHtml(who) + '</div>' +
+          '<div class="n-body">' + escapeHtml(gist(c)) + '</div>' +
+          '<div class="n-foot">' +
+            '<span>' + escapeHtml(shortDate(c.updated || c.ts)) + '</span>' +
+            (turns ? '<span class="n-turns">' + turns + ' message' + (turns === 1 ? '' : 's') + '</span>' : '') +
           '</div>' +
-        '</div>'
+        '</button>'
       );
     }).join('');
+    Array.prototype.forEach.call($('list').querySelectorAll('.note-card'), (card) => {
+      card.onclick = () => openModal(card.getAttribute('data-id'));
+    });
   }
+
+  function render() {
+    const unread = chats.filter((c) => !c.read).length;
+    $('count').textContent = chats.length + ' conversation' + (chats.length === 1 ? '' : 's') +
+      (unread ? ' · ' + unread + ' unread' : '');
+    renderFilters();
+    renderCards();
+  }
+
+  /* ---- Conversation modal ---- */
+
+  function openModal(id) {
+    const chat = chats.filter((c) => c.id === id)[0];
+    if (!chat) return;
+    openId = id;
+
+    const type = typeOf(chat);
+    $('mBadge').textContent = type || 'chat';
+    $('mBadge').style.background = 'rgba(255,255,255,.09)';
+    $('mBadge').style.color = '#cdd9e5';
+    $('mTitle').textContent = chat.name || chat.contact || 'Anonymous visitor';
+
+    const bits = ['<span>' + escapeHtml(new Date(chat.ts).toLocaleString()) + '</span>'];
+    if (chat.contact) bits.push('<span>Contact: <b>' + escapeHtml(chat.contact) + '</b></span>');
+    if (chat.lang) bits.push('<span>Language: <b>' + escapeHtml(chat.lang) + '</b></span>');
+    $('mMeta').innerHTML = bits.join('');
+
+    if (chat.note) {
+      $('mSummary').innerHTML = '<span>What the assistant flagged</span>' + escapeHtml(plain(chat.note));
+      $('mSummary').hidden = false;
+    } else {
+      $('mSummary').hidden = true;
+    }
+
+    const messages = chat.messages || [];
+    $('mThread').innerHTML = messages.length
+      ? messages.map((m) => {
+          const mine = m.from === 'user';
+          return '<div class="msg ' + (mine ? 'user' : 'bot') + '">' +
+            '<span class="msg-who">' + (mine ? 'Visitor' : 'Assistant') + '</span>' +
+            escapeHtml(plain(m.text)) +
+          '</div>';
+        }).join('')
+      : '<div class="no-thread">This one was saved before full conversations were kept, so only the summary above survives.</div>';
+
+    $('mRead').textContent = chat.read ? 'Mark unread' : 'Mark read';
+    $('mRead').onclick = () => { toggleRead(id); closeModal(); };
+    $('mDel').onclick = () => { del(id); };
+
+    $('modal').hidden = false;
+    $('mThread').scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    openId = null;
+    $('modal').hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  $('modal').addEventListener('click', (event) => {
+    if (event.target === $('modal')) closeModal();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !$('modal').hidden) closeModal();
+  });
 
   async function load() {
     const response = await fetch('/api/notes', { headers: { Authorization: authHeader() } });
@@ -243,9 +467,10 @@ const PAGE = `<!doctype html>
       return;
     }
     const data = await response.json();
+    chats = data.chats || [];
     $('lock').hidden = true;
     $('app').hidden = false;
-    render(data.notes);
+    render();
   }
 
   async function act(action, id) {
@@ -257,7 +482,11 @@ const PAGE = `<!doctype html>
     load();
   }
   function toggleRead(id) { act('toggle_read', id); }
-  function del(id) { if (confirm('Delete this note permanently?')) act('delete', id); }
+  function del(id) {
+    if (!confirm('Delete this conversation permanently?')) return;
+    closeModal();
+    act('delete', id);
+  }
 
   $('loginForm').addEventListener('submit', (event) => {
     event.preventDefault();

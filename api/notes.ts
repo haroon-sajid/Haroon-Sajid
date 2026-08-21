@@ -1,22 +1,27 @@
 /* Vercel serverless function: /api/notes — private API behind the admin login.
    Used only by the hidden admin page (api/admin.ts).
 
-   GET  /api/notes                          → list all notes, newest first
-   POST /api/notes {action, id}             → action: "toggle_read" | "delete"
+   GET  /api/notes                → every conversation, newest activity first
+   POST /api/notes {action, id}   → action: "toggle_read" | "delete"
 
    Auth: HTTP Basic against ADMIN_USER / ADMIN_PASS env vars (set them in
    Vercel → Project → Settings → Environment Variables — your choice of
-   username and password). Storage: same Upstash Redis "notes" hash that
-   api/chat.ts writes into — keep the schema in sync across the two files. */
+   username and password). Storage: the Upstash Redis "chats" hash that
+   api/chat.ts writes into — keep the schema in sync across the two files.
+   The older "notes" hash is still read so anything saved before
+   conversations existed is not stranded. */
 
-type Note = {
+type Chat = {
   id: string;
   ts: string;
+  updated: string;
+  read: boolean;
+  lang: string;
   visitor_type: string;
   name: string;
   contact: string;
   note: string;
-  read: boolean;
+  messages: { from: string; text: string }[];
 };
 
 function redisConfig() {
@@ -69,43 +74,69 @@ export default async function handler(req: any, res: any) {
   try {
     if (req.method === 'GET') {
       /* HGETALL over REST returns a flat [field, value, field, value] array */
-      const flat: string[] = (await redis(['HGETALL', 'notes'])) ?? [];
-      const notes: Note[] = [];
-      for (let i = 1; i < flat.length; i += 2) {
-        try {
-          notes.push(JSON.parse(flat[i]));
-        } catch {
-          /* skip malformed entries rather than breaking the whole page */
+      const parseHash = async (key: string): Promise<any[]> => {
+        const flat: string[] = (await redis(['HGETALL', key])) ?? [];
+        const rows: any[] = [];
+        for (let i = 1; i < flat.length; i += 2) {
+          try {
+            rows.push(JSON.parse(flat[i]));
+          } catch {
+            /* skip malformed entries rather than breaking the whole page */
+          }
         }
-      }
-      notes.sort((a, b) => (a.ts < b.ts ? 1 : -1));
-      res.status(200).json({ notes });
+        return rows;
+      };
+
+      const chats: Chat[] = await parseHash('chats');
+
+      /* Notes written before conversations existed have no transcript, so
+         they are shown as single-message cards rather than dropped. */
+      const legacy: Chat[] = (await parseHash('notes')).map((n) => ({
+        id: n.id,
+        ts: n.ts,
+        updated: n.ts,
+        read: !!n.read,
+        lang: '',
+        visitor_type: n.visitor_type ?? '',
+        name: n.name ?? '',
+        contact: n.contact ?? '',
+        note: n.note ?? '',
+        messages: []
+      }));
+
+      const all = [...chats, ...legacy].sort((a, b) =>
+        (a.updated || a.ts) < (b.updated || b.ts) ? 1 : -1
+      );
+      res.status(200).json({ chats: all });
       return;
     }
 
     if (req.method === 'POST') {
       const { action, id } = req.body ?? {};
       if (typeof id !== 'string' || !id) {
-        res.status(400).json({ error: 'Missing note id' });
+        res.status(400).json({ error: 'Missing conversation id' });
         return;
       }
 
+      /* An id can live in either hash, so both are addressed */
       if (action === 'delete') {
+        await redis(['HDEL', 'chats', id]);
         await redis(['HDEL', 'notes', id]);
         res.status(200).json({ ok: true });
         return;
       }
 
       if (action === 'toggle_read') {
-        const raw = await redis(['HGET', 'notes', id]);
-        if (!raw) {
-          res.status(404).json({ error: 'Note not found' });
+        for (const key of ['chats', 'notes']) {
+          const raw = await redis(['HGET', key, id]);
+          if (!raw) continue;
+          const row = JSON.parse(raw);
+          row.read = !row.read;
+          await redis(['HSET', key, id, JSON.stringify(row)]);
+          res.status(200).json({ ok: true, read: row.read });
           return;
         }
-        const note: Note = JSON.parse(raw);
-        note.read = !note.read;
-        await redis(['HSET', 'notes', id, JSON.stringify(note)]);
-        res.status(200).json({ ok: true, read: note.read });
+        res.status(404).json({ error: 'Conversation not found' });
         return;
       }
 
