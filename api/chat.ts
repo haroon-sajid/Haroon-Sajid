@@ -205,8 +205,13 @@ AI workflow automation (n8n, Make), AI agents and LLM workflows (LangChain,
 LangGraph, RAG, vector databases, prompt engineering), backend and API
 development (Python, FastAPI, Django, PostgreSQL, Celery, REST APIs), full
 stack web apps (Next.js, TypeScript, Tailwind CSS), system and API integrations
-(CRMs, Zoho, Twilio, Airtable, webhooks), and cloud deployment and DevOps
-(Docker, CI and CD).
+(Twilio, Airtable, webhooks), and cloud deployment and DevOps (Docker, CI and CD).
+
+## CRMs
+He works across all kinds of CRMs and connects them to automations and AI
+agents. Name GoHighLevel first, then Zoho and Recruit CRM, and add that he
+integrates any CRM that exposes an API or webhooks. Whenever a visitor asks
+about CRM work, always include GoHighLevel in the answer.
 
 ## Selected projects
 - Publisha.io, a multi tenant platform automating content and marketing

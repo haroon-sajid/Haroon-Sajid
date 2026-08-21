@@ -23,21 +23,59 @@ const PAGE = `<!doctype html>
 
   /* Lock screen */
   .lock {
-    max-width: 360px; margin: 14vh auto 0; background: #161b22;
-    border: 1px solid #30363d; border-radius: 14px; padding: 28px;
+    max-width: 380px; margin: 12vh auto 0;
+    background: linear-gradient(180deg, #171d26 0%, #12171e 100%);
+    border: 1px solid #262d38; border-radius: 18px; padding: 30px 28px 26px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .55);
   }
-  .lock h1 { font-size: 20px; margin-bottom: 4px; }
-  .lock p { color: #8b949e; font-size: 13px; margin-bottom: 18px; }
-  .lock input {
-    width: 100%; margin-bottom: 10px; padding: 10px 12px; border-radius: 8px;
-    border: 1px solid #30363d; background: #0d1116; color: #e6edf3; font-size: 14px;
+  .lock-badge {
+    display: flex; align-items: center; justify-content: center;
+    width: 46px; height: 46px; margin-bottom: 16px; border-radius: 14px;
+    background: rgba(79, 143, 247, .13); border: 1px solid rgba(79, 143, 247, .32);
+    font-size: 20px;
   }
-  .lock input:focus { outline: none; border-color: #4f8ff7; }
-  .lock button {
-    width: 100%; padding: 10px; border: none; border-radius: 8px;
-    background: #4f8ff7; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer;
+  .lock h1 { font-size: 19px; letter-spacing: -.01em; margin-bottom: 6px; }
+  .lock .sub { color: #8b949e; font-size: 13px; line-height: 1.5; margin-bottom: 22px; }
+
+  /* Each input owns its row, so the reveal button can sit inside it */
+  .field { position: relative; margin-bottom: 11px; }
+  .field input {
+    width: 100%; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid #2b323d; background: #0b0f14; color: #e6edf3; font-size: 14px;
+    transition: border-color .15s ease, box-shadow .15s ease;
   }
-  .lock .err { color: #f85149; font-size: 13px; margin: 10px 0 0; min-height: 16px; }
+  .field.has-peek input { padding-right: 46px; }
+  .field input::placeholder { color: #6b7683; }
+  .field input:focus {
+    outline: none; border-color: #4f8ff7; box-shadow: 0 0 0 3px rgba(79, 143, 247, .16);
+  }
+  .peek {
+    position: absolute; top: 50%; right: 7px; transform: translateY(-50%);
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; padding: 0; border: none; border-radius: 8px;
+    background: transparent; color: #7d8792; cursor: pointer;
+    transition: color .15s ease, background-color .15s ease;
+  }
+  .peek:hover { color: #e6edf3; background: #1b2029; }
+  .peek svg { width: 17px; height: 17px; }
+
+  .remember {
+    display: flex; align-items: center; gap: 9px; margin: 14px 0 18px;
+    color: #8b949e; font-size: 13px; cursor: pointer; user-select: none;
+  }
+  .remember input { width: 15px; height: 15px; accent-color: #4f8ff7; cursor: pointer; }
+
+  .lock button[type=submit] {
+    width: 100%; padding: 11px; border: none; border-radius: 10px;
+    background: linear-gradient(180deg, #5b97f8 0%, #3f7fe4 100%);
+    color: #fff; font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: filter .15s ease, transform .1s ease;
+  }
+  .lock button[type=submit]:hover { filter: brightness(1.08); }
+  .lock button[type=submit]:active { transform: translateY(1px); }
+  .lock .err {
+    color: #f85149; font-size: 13px; margin: 12px 0 0; min-height: 16px; text-align: center;
+  }
 
   /* Dashboard */
   .bar { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -77,11 +115,28 @@ const PAGE = `<!doctype html>
 <body>
 
 <div id="lock" class="lock">
-  <h1>&#128274; Private notes</h1>
-  <p>Sign in to view your AI assistant's notes.</p>
+  <div class="lock-badge">&#128274;</div>
+  <h1>Private notes</h1>
+  <p class="sub">Sign in to read what your AI assistant saved from visitors.</p>
   <form id="loginForm">
-    <input id="user" placeholder="Username" autocomplete="username">
-    <input id="pass" type="password" placeholder="Password" autocomplete="current-password">
+    <div class="field">
+      <input id="user" name="username" placeholder="Username" autocomplete="username" autocapitalize="off" spellcheck="false">
+    </div>
+    <div class="field has-peek">
+      <input id="pass" name="password" type="password" placeholder="Password" autocomplete="current-password">
+      <button type="button" class="peek" id="peek" aria-label="Show password" title="Show password">
+        <svg id="eyeOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3.2"/>
+        </svg>
+        <svg id="eyeShut" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden>
+          <path d="M9.9 5.2A9.6 9.6 0 0 1 12 5c7 0 10.5 7 10.5 7a17 17 0 0 1-3.5 4.3M6.3 6.9A17 17 0 0 0 1.5 12S5 19 12 19a9.9 9.9 0 0 0 4.2-.9"/>
+          <path d="m3 3 18 18"/>
+        </svg>
+      </button>
+    </div>
+    <label class="remember">
+      <input type="checkbox" id="remember"> Keep me signed in on this device
+    </label>
     <button type="submit">Unlock</button>
     <p class="err" id="loginErr"></p>
   </form>
@@ -99,8 +154,27 @@ const PAGE = `<!doctype html>
 
 <script>
   const $ = (id) => document.getElementById(id);
-  const authHeader = () =>
-    'Basic ' + btoa(sessionStorage.getItem('nu') + ':' + sessionStorage.getItem('np'));
+
+  /* Credentials live in sessionStorage by default, so they die with the tab.
+     Ticking "keep me signed in" moves them to localStorage instead, which
+     survives closing the browser. Reads check both. */
+  const readCred = (key) => localStorage.getItem(key) || sessionStorage.getItem(key);
+  const authHeader = () => 'Basic ' + btoa(readCred('nu') + ':' + readCred('np'));
+
+  function saveCreds(user, pass, remember) {
+    clearCreds();
+    const store = remember ? localStorage : sessionStorage;
+    store.setItem('nu', user);
+    store.setItem('np', pass);
+    if (remember) localStorage.setItem('nr', '1');
+  }
+
+  function clearCreds() {
+    ['nu', 'np', 'nr'].forEach((key) => {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
+    });
+  }
 
   function showLock(message) {
     $('app').hidden = true;
@@ -109,10 +183,22 @@ const PAGE = `<!doctype html>
   }
 
   function logout() {
-    sessionStorage.removeItem('nu');
-    sessionStorage.removeItem('np');
+    clearCreds();
+    $('pass').value = '';
     showLock('');
   }
+
+  /* Reveal the password, so a typo in a field you cannot read is fixable */
+  $('peek').addEventListener('click', () => {
+    const showing = $('pass').type === 'text';
+    $('pass').type = showing ? 'password' : 'text';
+    $('eyeOpen').hidden = !showing;
+    $('eyeShut').hidden = showing;
+    const label = showing ? 'Show password' : 'Hide password';
+    $('peek').setAttribute('aria-label', label);
+    $('peek').setAttribute('title', label);
+    $('pass').focus();
+  });
 
   function escapeHtml(value) {
     const div = document.createElement('div');
@@ -175,14 +261,18 @@ const PAGE = `<!doctype html>
 
   $('loginForm').addEventListener('submit', (event) => {
     event.preventDefault();
-    sessionStorage.setItem('nu', $('user').value.trim());
-    sessionStorage.setItem('np', $('pass').value);
+    saveCreds($('user').value.trim(), $('pass').value, $('remember').checked);
     $('loginErr').textContent = '';
     load();
   });
 
-  /* Already unlocked in this tab — go straight to the notes */
-  if (sessionStorage.getItem('nu')) load();
+  /* Prefill from a remembered sign-in, then go straight to the notes */
+  if (localStorage.getItem('nr')) {
+    $('remember').checked = true;
+    $('user').value = readCred('nu') || '';
+    $('pass').value = readCred('np') || '';
+  }
+  if (readCred('nu')) load();
 </script>
 </body>
 </html>`;
