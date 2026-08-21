@@ -15,7 +15,7 @@
    "notes" hash is still read so anything saved before conversations existed
    is not stranded. */
 
-import { redis, redisConfig, StoredChat } from './_lib/redis';
+import { redis, redisConfig, StoredChat } from './_lib/redis.js';
 
 /* The record shape is defined once in _lib/redis.ts and imported by both
    endpoints, so the writer (api/chat.ts) and this reader cannot drift out

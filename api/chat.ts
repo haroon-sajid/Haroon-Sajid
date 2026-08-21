@@ -23,8 +23,8 @@
    infrastructure — a missing Origin header or an unreachable Redis lets the
    request through rather than breaking the widget. */
 
-import { SYSTEM_PROMPT, TOOLS } from './_lib/prompt';
-import { clientIp, saveChat, withinRateLimit } from './_lib/redis';
+import { SYSTEM_PROMPT, TOOLS } from './_lib/prompt.js';
+import { clientIp, saveChat, withinRateLimit } from './_lib/redis.js';
 
 /* Model names tried in order. Google retires dated model names for new
    accounts (gemini-2.5-flash already 404s on new keys), so the "-latest"
