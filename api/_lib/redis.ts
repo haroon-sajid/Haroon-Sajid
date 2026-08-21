@@ -36,7 +36,14 @@ export async function redis(command: (string | number)[]): Promise<any> {
    two endpoints cannot drift apart. Changing a field here changes both. */
 
 export type StoredChat = {
+  /* One visit. A new browser session starts a new one, so a returning
+     visitor is filed as a separate conversation rather than overwriting
+     yesterday's. */
   id: string;
+  /* The person behind the visit, stable across visits, so the admin page can
+     link several conversations back to the same visitor. Empty on records
+     written before visitor ids existed. */
+  visitor_id: string;
   ts: string;
   updated: string;
   read: boolean;
@@ -130,13 +137,17 @@ export async function pruneOldChats(force = false): Promise<number> {
 
 export async function saveChat(
   sid: string,
+  vid: string,
   lang: string,
   messages: { from: string; text: string }[],
   noteArgs: Record<string, string> | null
 ): Promise<void> {
   const now = new Date().toISOString();
-  const trimmed = messages
-    .filter((m) => m.text)
+  /* Defensive: this runs after the visitor's reply has already been sent, so
+     a throw here would surface as a second response attempt rather than a
+     clean failure. Bad input becomes an empty transcript instead. */
+  const trimmed = (Array.isArray(messages) ? messages : [])
+    .filter((m) => m && typeof m.text === 'string' && m.text)
     .slice(-60)
     .map((m) => ({ from: m.from === 'user' ? 'user' : 'bot', text: m.text.slice(0, 2000) }));
 
@@ -158,6 +169,8 @@ export async function saveChat(
 
     const chat: StoredChat = {
       id: sid,
+      /* Never let a later turn blank out an id the visit already had */
+      visitor_id: vid || existing.visitor_id || '',
       ts: existing.ts || now,
       updated: now,
       /* Any new message makes the conversation unread again */

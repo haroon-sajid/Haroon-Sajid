@@ -60,38 +60,70 @@ class QuotaError extends Error {}
 
 async function callGemini(apiKey: string, contents: unknown[], systemText: string): Promise<GeminiPart[]> {
   let lastError = '';
-  let sawQuota = false;
+  /* True when every failure so far was the kind that usually clears on its
+     own (busy, upstream blip, dropped socket) rather than a real fault in
+     the request. It decides whether the visitor is told "try again in a
+     moment" or gets a hard error. */
+  let allTransient = true;
+
   for (let i = activeModelIndex; i < GEMINI_MODELS.length; i++) {
-    const response = await fetch(geminiUrl(GEMINI_MODELS[i]), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: systemText }] },
-        contents,
-        tools: [TOOLS],
-        generationConfig: { maxOutputTokens: 1000, temperature: 0.7 }
-      })
-    });
-    if (response.status === 429 || response.status === 503) {
-      /* This model's free quota is exhausted (each model has its own pool) —
-         try the next model without remembering the switch, since quotas reset */
-      sawQuota = true;
-      lastError = `Gemini busy ${response.status} on ${GEMINI_MODELS[i]}`;
+    const model = GEMINI_MODELS[i];
+    let response: Response;
+
+    try {
+      response = await fetch(geminiUrl(model), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: systemText }] },
+          contents,
+          tools: [TOOLS],
+          generationConfig: { maxOutputTokens: 1000, temperature: 0.7 }
+        })
+      });
+    } catch (error) {
+      /* The request never completed: DNS hiccup, dropped socket, timeout.
+         Previously this escaped and killed the turn; now it just means this
+         model did not answer, so move on to the next one. */
+      lastError = `Gemini unreachable on ${model}: ${error instanceof Error ? error.message : error}`;
       continue;
     }
+
     if (response.status === 404) {
       /* Model retired/unknown for this key — remember and try the next one */
-      lastError = `Gemini API error 404 on ${GEMINI_MODELS[i]}: ${await response.text()}`;
+      lastError = `Gemini API error 404 on ${model}: ${await response.text()}`;
       activeModelIndex = Math.min(i + 1, GEMINI_MODELS.length - 1);
       continue;
     }
-    if (!response.ok) {
-      throw new Error(`Gemini API error ${response.status}: ${await response.text()}`);
+
+    /* 429 is an exhausted quota (each model has its own pool) and any 5xx is
+       Google having a moment. Both are worth retrying on the next model, and
+       neither is remembered, since they clear by themselves.
+
+       This used to cover only 429 and 503, so a single transient 500 from
+       the first model aborted the whole request and the widget showed its
+       generic error. That is what made the chat die every few messages. */
+    if (response.status === 429 || response.status >= 500) {
+      lastError = `Gemini busy ${response.status} on ${model}`;
+      continue;
     }
+
+    if (!response.ok) {
+      /* A 4xx is a genuine problem with the request or the key. Retrying
+         other models would fail identically, so stop and surface it. */
+      allTransient = false;
+      lastError = `Gemini API error ${response.status} on ${model}: ${await response.text()}`;
+      break;
+    }
+
     const data = await response.json();
     return data?.candidates?.[0]?.content?.parts ?? [];
   }
-  if (sawQuota) throw new QuotaError(lastError);
+
+  /* Every model was busy or unreachable: treat it as a quota problem so the
+     widget shows its friendly "try again in a moment" message rather than an
+     error, which is what actually happened. */
+  if (allTransient) throw new QuotaError(lastError);
   throw new Error(lastError || 'No Gemini model available');
 }
 
@@ -145,10 +177,17 @@ export default async function handler(req: any, res: any) {
 
   /* One id per visit, from the widget. Anything unexpected is replaced rather
      than trusted, since it becomes a Redis key. */
+  const idShape = /^[A-Za-z0-9-]{6,64}$/;
   const rawSid = typeof req.body?.sid === 'string' ? req.body.sid : '';
-  const sessionId = /^[A-Za-z0-9-]{6,64}$/.test(rawSid)
+  const sessionId = idShape.test(rawSid)
     ? rawSid
     : `anon-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+  /* The person behind the visit, stable across visits. Unlike the session id
+     this is never invented server side: an unusable value just means the
+     conversation is not linked to any other, which is the safe default. */
+  const rawVid = typeof req.body?.vid === 'string' ? req.body.vid : '';
+  const visitorId = idShape.test(rawVid) ? rawVid : '';
 
   /* Keep requests small and abuse-resistant: last 12 turns, 1500 chars each.
      Leading bot messages (the seeded welcome) are dropped because Gemini
@@ -240,7 +279,14 @@ export default async function handler(req: any, res: any) {
       .filter((m) => (m.from === 'user' || m.from === 'bot') && typeof m.text === 'string')
       .map((m) => ({ from: String(m.from), text: String(m.text) }));
     transcript.push({ from: 'bot', text: finalReply });
-    await saveChat(sessionId, siteLanguage, transcript, noteArgs);
+    /* Isolated from the try below: the visitor already has their reply, so a
+       storage problem must not reach the catch and attempt a second
+       response on an already-sent request. */
+    try {
+      await saveChat(sessionId, visitorId, siteLanguage, transcript, noteArgs);
+    } catch (storageError) {
+      console.error('Chat storage failed after reply was sent:', storageError);
+    }
   } catch (error) {
     if (error instanceof QuotaError) {
       res.status(429).json({ error: 'quota' });

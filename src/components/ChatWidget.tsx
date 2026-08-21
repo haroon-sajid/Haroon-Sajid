@@ -11,25 +11,40 @@ import '../assets/styles/ChatWidget.scss';
 
 const WHATSAPP_URL = 'https://wa.me/923116566318';
 
-/* One id per browser tab, sent with every message so the backend can file a
-   whole visit as a single conversation instead of loose notes. Kept in
-   sessionStorage so a page reload continues the same thread, and generated
-   defensively because sessionStorage throws in some privacy modes. */
-const SESSION_ID = (() => {
-  const fresh = () =>
-    (typeof crypto !== 'undefined' && crypto.randomUUID)
-      ? crypto.randomUUID()
-      : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+const freshId = () =>
+  (typeof crypto !== 'undefined' && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+/* Two ids, doing two different jobs.
+
+   SESSION_ID identifies one visit. It lives in sessionStorage, so a reload
+   continues the same conversation but closing the tab and coming back
+   tomorrow starts a fresh one, which is filed as its own note.
+
+   VISITOR_ID identifies the person across visits. It lives in localStorage,
+   so it survives closing the browser, and it is what lets the notes page say
+   "this is the same person's third conversation" instead of showing three
+   unrelated strangers.
+
+   Both are random and anonymous: no name, no fingerprint, nothing that
+   identifies anyone until they choose to tell the assistant who they are.
+   Storage throws in some privacy modes, hence the fallbacks. */
+function persistedId(store: 'session' | 'local', key: string): string {
   try {
-    const saved = sessionStorage.getItem('chat-sid');
+    const box = store === 'session' ? sessionStorage : localStorage;
+    const saved = box.getItem(key);
     if (saved) return saved;
-    const created = fresh();
-    sessionStorage.setItem('chat-sid', created);
+    const created = freshId();
+    box.setItem(key, created);
     return created;
   } catch {
-    return fresh();
+    return freshId();
   }
-})();
+}
+
+const SESSION_ID = persistedId('session', 'chat-sid');
+const VISITOR_ID = persistedId('local', 'chat-vid');
 
 /* Hand-drawn robot face. Sized like an MUI icon (1em) so the existing
    svg font-size rules apply; everything draws in currentColor so it
@@ -166,6 +181,7 @@ function ChatWidget() {
         body: JSON.stringify({
           lang,
           sid: SESSION_ID,
+          vid: VISITOR_ID,
           messages: next.map(({ from, text: body }) => ({ from, text: body }))
         })
       });

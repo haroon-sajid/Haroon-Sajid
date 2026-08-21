@@ -37,6 +37,10 @@ const PAGE = `<!doctype html>
     --chip-on-bg: #e6edf3;
     --chip-on-ink: #0d1116;
     --curl: rgba(0, 0, 0, .13);
+    --turf: #1f4a22;
+    --blade-a: rgba(255, 255, 255, .05);
+    --blade-b: rgba(0, 0, 0, .16);
+    --blade-c: rgba(120, 200, 110, .07);
   }
   @media (prefers-color-scheme: light) {
     :root:not([data-theme="dark"]) {
@@ -59,6 +63,10 @@ const PAGE = `<!doctype html>
       --chip-on-bg: #10151c;
       --chip-on-ink: #ffffff;
       --curl: rgba(0, 0, 0, .10);
+      --turf: #2f7a33;
+      --blade-a: rgba(255, 255, 255, .09);
+      --blade-b: rgba(0, 0, 0, .13);
+      --blade-c: rgba(170, 230, 150, .10);
     }
   }
   :root[data-theme="light"] {
@@ -81,13 +89,34 @@ const PAGE = `<!doctype html>
     --chip-on-bg: #10151c;
     --chip-on-ink: #ffffff;
     --curl: rgba(0, 0, 0, .10);
+    --turf: #2f7a33;
+    --blade-a: rgba(255, 255, 255, .09);
+    --blade-b: rgba(0, 0, 0, .13);
+    --blade-c: rgba(170, 230, 150, .10);
   }
 
   * { box-sizing: border-box; margin: 0; }
+
+  /* ---- The board ----
+     Artificial turf, built entirely from gradients so the page stays one
+     self-contained file with no image requests. Three layers do the work:
+     fine near-vertical strokes in two directions for the blades, a coarser
+     set for clumping, and an SVG turbulence speckle for the organic noise
+     that keeps repeating gradients from looking like wallpaper. A vignette
+     sits on top so the middle reads as lit. */
   body {
-    background: var(--bg); color: var(--ink); min-height: 100vh;
+    background-color: var(--turf);
+    background-image:
+      radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, .10), transparent 60%),
+      radial-gradient(ellipse at 50% 120%, rgba(0, 0, 0, .38), transparent 65%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85 0.35' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.30'/%3E%3C/svg%3E"),
+      repeating-linear-gradient(84deg, var(--blade-a) 0 1px, transparent 1px 5px),
+      repeating-linear-gradient(96deg, var(--blade-b) 0 1px, transparent 1px 6px),
+      repeating-linear-gradient(88deg, var(--blade-c) 0 2px, transparent 2px 11px);
+    background-attachment: fixed, fixed, scroll, scroll, scroll, scroll;
+    color: var(--ink);
+    min-height: 100vh;
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    transition: background-color .2s ease, color .2s ease;
   }
   .wrap { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
 
@@ -187,15 +216,59 @@ const PAGE = `<!doctype html>
     display: grid; gap: 18px;
     grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
   }
+  .grid { padding-top: 10px; }
   .note-card {
     position: relative; display: flex; flex-direction: column;
-    min-height: 208px; padding: 18px 16px 14px; border: none; text-align: left;
-    border-radius: 3px 3px 2px 2px; cursor: pointer; color: #1a1a1a;
+    /* Top padding clears the pin that sits over the paper */
+    min-height: 208px; padding: 30px 16px 14px; border: none; text-align: left;
+    border-radius: 2px; cursor: pointer; color: #1a1a1a;
     font-family: inherit; font-size: 14px;
-    box-shadow: 0 8px 18px var(--shadow-card);
+    /* Two shadows: a tight one where the paper meets the board, and a soft
+       wide one so the note reads as lifted off it */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 22px rgba(0, 0, 0, .35);
     transition: transform .18s ease, box-shadow .18s ease;
   }
-  .note-card:hover { transform: translateY(-4px) rotate(-.5deg); box-shadow: 0 16px 30px var(--shadow); }
+  /* Pinned paper never hangs perfectly straight. Cycling four small angles
+     keeps the wall from looking like a spreadsheet, and the rotation origin
+     is the pin itself so each note appears to hang from it. */
+  .note-card { transform-origin: 50% 6px; }
+  .note-card:nth-child(4n+1) { transform: rotate(-1.1deg); }
+  .note-card:nth-child(4n+2) { transform: rotate(.8deg); }
+  .note-card:nth-child(4n+3) { transform: rotate(-.5deg); }
+  .note-card:nth-child(4n+4) { transform: rotate(1.3deg); }
+  .note-card:hover {
+    transform: rotate(0deg) translateY(-5px) scale(1.02);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .3), 0 20px 38px rgba(0, 0, 0, .45);
+    z-index: 3;
+  }
+
+  /* ---- Pushpin ----
+     Drawn rather than an image: a metal needle behind a domed head, with a
+     specular highlight offset to the top left so every pin on the board is
+     lit from the same direction. */
+  .pin {
+    position: absolute; top: -7px; left: 50%; margin-left: -9px;
+    width: 18px; height: 18px; z-index: 2;
+  }
+  .pin::before {
+    content: ''; position: absolute; left: 50%; top: 10px;
+    width: 3px; height: 10px; margin-left: -1.5px; border-radius: 0 0 1px 1px;
+    background: linear-gradient(90deg, #6e7681, #c9ccd1 45%, #6e7681);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .4);
+  }
+  .pin::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    background:
+      radial-gradient(circle at 33% 28%, rgba(255, 255, 255, .95), rgba(255, 255, 255, 0) 42%),
+      radial-gradient(circle at 60% 68%, var(--pin-dark), var(--pin) 70%);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .45), inset 0 -1px 2px rgba(0, 0, 0, .3);
+  }
+  /* Pin colour keys to the visitor type, like the paper does */
+  .n-lead      { --pin: #e0453f; --pin-dark: #a81f1a; }
+  .n-recruiter { --pin: #8b5cf6; --pin-dark: #5b2fb8; }
+  .n-visitor   { --pin: #2f7fd8; --pin-dark: #1a4f8f; }
+  .n-other     { --pin: #f0a020; --pin-dark: #b06f00; }
+  .n-none      { --pin: #e05a8a; --pin-dark: #a82458; }
   /* The paper curls very slightly, which is what sells it as a sticky note */
   .note-card::after {
     content: ''; position: absolute; right: 0; bottom: 0;
@@ -217,6 +290,13 @@ const PAGE = `<!doctype html>
     width: 8px; height: 8px; border-radius: 50%; background: #e5484d; margin-left: auto;
     box-shadow: 0 0 0 3px rgba(229, 72, 77, .22);
   }
+  /* Marks a note as one of several from the same person */
+  .n-visit {
+    font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+    padding: 3px 7px; border-radius: 4px; white-space: nowrap;
+    background: rgba(0, 0, 0, .55); color: #f4f4f4;
+  }
+  .n-visit + .n-dot { margin-left: 0; }
   .n-who { font-weight: 700; font-size: 14px; margin-bottom: 3px; word-break: break-word; }
   /* A real email or phone number is the most valuable thing on the card, so
      it gets its own line rather than being buried in the body text */
@@ -266,6 +346,25 @@ const PAGE = `<!doctype html>
     font-size: 13px; line-height: 1.55; color: var(--ink-2);
   }
   .summary span { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .7px; color: var(--blue); margin-bottom: 5px; font-weight: 700; }
+
+  /* Every conversation this same person has had, so a returning lead reads
+     as one relationship instead of several unrelated notes */
+  .visits { margin-top: 12px; }
+  .visits > span {
+    display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .7px;
+    color: var(--muted); margin-bottom: 7px; font-weight: 700;
+  }
+  .visit-link {
+    display: block; width: 100%; text-align: left; margin-bottom: 5px;
+    padding: 8px 11px; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--sunk); color: var(--ink-2); font-size: 12.5px;
+    font-family: inherit; cursor: pointer;
+    transition: border-color .15s ease, background-color .15s ease;
+  }
+  .visit-link:hover { border-color: var(--blue); background: var(--hover); }
+  .visit-link.current {
+    cursor: default; color: var(--muted); border-style: dashed; background: transparent;
+  }
 
   .thread { padding: 18px 22px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
   .msg { max-width: 82%; padding: 10px 13px; border-radius: 13px; font-size: 13.5px; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
@@ -336,6 +435,7 @@ const PAGE = `<!doctype html>
       </div>
       <div class="meta" id="mMeta"></div>
       <div class="summary" id="mSummary" hidden></div>
+      <div class="visits" id="mVisits" hidden></div>
     </div>
     <div class="thread" id="mThread"></div>
     <div class="sheet-foot">
@@ -454,6 +554,25 @@ const PAGE = `<!doctype html>
   const TYPES = ['lead', 'recruiter', 'visitor', 'other'];
   const typeOf = (c) => (TYPES.indexOf(c.visitor_type) >= 0 ? c.visitor_type : '');
 
+  /* Visits by the same person, oldest first. A visitor id only groups
+     conversations when it is actually present, so older records and
+     privacy-mode visitors stay independent instead of all collapsing
+     together under one empty key. */
+  function visitsOf(chat) {
+    if (!chat.visitor_id) return [chat];
+    return chats
+      .filter((c) => c.visitor_id === chat.visitor_id)
+      .sort((a, b) => ((a.ts || '') < (b.ts || '') ? -1 : 1));
+  }
+
+  /* "Visit 2 of 3" for a returning visitor, empty for a first timer */
+  function visitLabel(chat) {
+    const group = visitsOf(chat);
+    if (group.length < 2) return '';
+    const index = group.findIndex((c) => c.id === chat.id);
+    return 'Visit ' + (index + 1) + ' of ' + group.length;
+  }
+
   /* The assistant answers in a small markdown subset for the chat bubbles.
      Those markers are noise here, so they come off before display. */
   function plain(text) {
@@ -560,10 +679,13 @@ const PAGE = `<!doctype html>
       /* Only a second line when it adds something the title does not */
       const sub = contact && contact !== who ? contact : '';
       const turns = (c.messages || []).filter((m) => m.from === 'user').length;
+      const visit = visitLabel(c);
       return (
         '<button class="note-card n-' + (type || 'none') + '" data-id="' + escapeHtml(c.id) + '">' +
+          '<span class="pin" aria-hidden="true"></span>' +
           '<div class="n-top">' +
             (type ? '<span class="n-badge">' + type + '</span>' : '') +
+            (visit ? '<span class="n-visit" title="Same visitor as other notes">' + escapeHtml(visit) + '</span>' : '') +
             (c.read ? '' : '<span class="n-dot" title="Unread"></span>') +
           '</div>' +
           '<div class="n-who">' + escapeHtml(who) + '</div>' +
@@ -614,6 +736,28 @@ const PAGE = `<!doctype html>
       $('mSummary').hidden = false;
     } else {
       $('mSummary').hidden = true;
+    }
+
+    /* Other conversations by the same person, so a returning lead reads as
+       one relationship rather than several unconnected notes. */
+    const group = visitsOf(chat);
+    if (group.length > 1) {
+      $('mVisits').innerHTML =
+        '<span>Same visitor, ' + group.length + ' conversations</span>' +
+        group.map((v, i) => {
+          const current = v.id === chat.id;
+          return '<button class="visit-link' + (current ? ' current' : '') + '"' +
+            (current ? ' disabled' : ' data-goto="' + escapeHtml(v.id) + '"') + '>' +
+            'Visit ' + (i + 1) + ' &middot; ' + escapeHtml(stamp(v.ts)) +
+            (current ? ' (this one)' : '') +
+          '</button>';
+        }).join('');
+      $('mVisits').hidden = false;
+      Array.prototype.forEach.call($('mVisits').querySelectorAll('[data-goto]'), (button) => {
+        button.onclick = () => openModal(button.getAttribute('data-goto'));
+      });
+    } else {
+      $('mVisits').hidden = true;
     }
 
     const messages = chat.messages || [];

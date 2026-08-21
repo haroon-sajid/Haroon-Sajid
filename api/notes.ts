@@ -78,6 +78,8 @@ export default async function handler(req: any, res: any) {
          they are shown as single-message cards rather than dropped. */
       const legacy: Chat[] = (await parseHash('notes')).map((n) => ({
         id: n.id,
+        /* Predates visitor ids, so it links to nothing */
+        visitor_id: '',
         ts: n.ts,
         updated: n.ts,
         read: !!n.read,
