@@ -114,6 +114,25 @@ opinion), thank them in a few words and immediately do the next thing in the
 same message: ask the one detail you still need, or hand them the button.
 Never reply with just "Thank you, Haroon really appreciates you sharing that".
 
+## Read the conversation before you answer
+Every message must actually respond to what the visitor just said. These are
+the mistakes that make you look like a machine, so never make them:
+- NEVER send the same reply twice in a conversation. If your last message
+  already asked something, do not ask it again. Look at what you have
+  already said and say something different.
+- NEVER ask for something the visitor has already given you. If they told
+  you their name, their number, their email, or what they want, you have it.
+  Thank them and move to the next thing, or just answer them.
+- A phone number is a contact detail. If someone gives a number, do not then
+  ask for an email. You already have a way to reach them.
+- If the visitor says goodbye, says they will contact Haroon themselves, or
+  says no, then stop asking questions. Say something warm and short like
+  "Sounds good, thanks Adil! Have a great day." That is the whole reply.
+- If they said they want to discuss a project, that is a project, not a job.
+  Do not ask them about "the role".
+Before writing, quickly check: does this reply repeat me, or ask for
+something I already know? If yes, write a different reply.
+
 ## About this website (if visitors ask)
 Haroon designed and built this whole portfolio himself, using React and
 TypeScript, with the styling done in SCSS, and he hosts it on Vercel. He also
@@ -440,16 +459,85 @@ export default async function handler(req: any, res: any) {
     `Once they clearly write in some language, always follow their language.`;
 
   try {
-    const parts = await callGemini(apiKey, contents, systemText);
-    const call = parts.find((p) => p.functionCall)?.functionCall;
+    /* The model may need more than one tool before it can answer: saving the
+       visitor's details AND attaching a button, say. So keep running tools
+       and feeding the results back until it writes actual text, rather than
+       stopping after one and falling back to a canned line. The cap is a
+       runaway guard; two rounds is the realistic maximum. */
+    const history: Array<Record<string, unknown>> = [...contents];
+    let link: string | undefined;
+    let linkKind: 'whatsapp' | 'calendly' | 'cv' | undefined;
+    let reply = '';
+    let fallbackReply = 'Sorry, I could not come up with a reply, please try again.';
+    const alreadyCalled = new Set<string>();
 
-    if (!call) {
-      const reply = parts.map((p) => p.text ?? '').join('').trim();
-      res.status(200).json({ reply: reply || 'Sorry, I could not come up with a reply, please try again.' });
-      return;
+    for (let round = 0; round < 4; round++) {
+      const parts = await callGemini(apiKey, history, systemText);
+      const text = parts.map((p) => p.text ?? '').join('').trim();
+      const call = parts.find((p) => p.functionCall)?.functionCall;
+
+      if (!call) {
+        reply = text;
+        break;
+      }
+
+      /* The same tool with the same arguments twice means the model is stuck
+         in a loop, so take whatever it has said and stop. */
+      const signature = call.name + ':' + JSON.stringify(call.args ?? {});
+      if (alreadyCalled.has(signature)) {
+        reply = text;
+        break;
+      }
+      alreadyCalled.add(signature);
+
+      const outcome = runTool(call);
+      const toolResult = { ...outcome.toolResult, status: await outcome.status };
+      if (outcome.link) {
+        link = outcome.link;
+        linkKind = outcome.linkKind;
+      }
+      fallbackReply = outcome.fallbackReply;
+
+      history.push({ role: 'model', parts: [{ functionCall: call }] });
+      history.push({ role: 'user', parts: [{ functionResponse: { name: call.name, response: toolResult } }] });
+
+      /* Some replies arrive as text and a tool call together, and that text
+         is already the answer. */
+      if (text) {
+        reply = text;
+        break;
+      }
     }
 
-    /* Execute the tool, then let the model turn the result into a reply. */
+    res.status(200).json({ reply: reply || fallbackReply, link, linkKind });
+  } catch (error) {
+    if (error instanceof QuotaError) {
+      res.status(429).json({ error: 'quota' });
+      return;
+    }
+    console.error(error);
+    /* `detail` surfaces the upstream failure reason (bad key, wrong model, …)
+       so it can be diagnosed without digging into the Vercel logs. It never
+       contains the API key — only Gemini's error description. */
+    res.status(502).json({
+      error: 'AI service unavailable',
+      detail: String(error instanceof Error ? error.message : error).slice(0, 300)
+    });
+  }
+}
+
+/* Runs one tool call and describes the outcome: what the model is told came
+   back, which button to hang under the reply, and the line to send if the
+   model somehow never writes one itself. */
+type ToolOutcome = {
+  status: string | Promise<string>;
+  toolResult: Record<string, string>;
+  fallbackReply: string;
+  link?: string;
+  linkKind?: 'whatsapp' | 'calendly' | 'cv';
+};
+
+function runTool(call: { name: string; args: Record<string, string> }): ToolOutcome {
     let link: string | undefined;
     let linkKind: 'whatsapp' | 'calendly' | 'cv' | undefined;
     let toolResult: Record<string, string>;
@@ -494,43 +582,20 @@ export default async function handler(req: any, res: any) {
           '- **Email** haroonsajid.ai@gmail.com\n\n' +
           'You can also tap the button below to message him right away!';
       }
-    } else {
-      toolResult = {
-        status: await saveNote(call.args ?? {}),
-        note:
-          'Saved. Never mention notes or saving. Do not stop at a thank you: ' +
-          'in this same reply, thank them in a few words and then keep the ' +
-          'conversation going, asking for the next detail you still need (for ' +
-          'a job that is the role first, then their email) or telling them ' +
-          'Haroon will get back to them. Use no dashes and no slashes.'
-      };
-      fallbackReply = 'Thank you, Haroon really appreciates that! Could you tell me a bit more about the role, and the best email to reach you on?';
+      return { status: 'attached', toolResult, fallbackReply, link, linkKind };
     }
 
-    let reply = '';
-    try {
-      const followUp = await callGemini(apiKey, [
-        ...contents,
-        { role: 'model', parts: [{ functionCall: call }] },
-        { role: 'user', parts: [{ functionResponse: { name: call.name, response: toolResult } }] }
-      ], systemText);
-      reply = followUp.map((p) => p.text ?? '').join('').trim();
-    } catch {
-      /* The canned confirmation below still carries the outcome. */
-    }
-    res.status(200).json({ reply: reply || fallbackReply, link, linkKind });
-  } catch (error) {
-    if (error instanceof QuotaError) {
-      res.status(429).json({ error: 'quota' });
-      return;
-    }
-    console.error(error);
-    /* `detail` surfaces the upstream failure reason (bad key, wrong model, …)
-       so it can be diagnosed without digging into the Vercel logs. It never
-       contains the API key — only Gemini's error description. */
-    res.status(502).json({
-      error: 'AI service unavailable',
-      detail: String(error instanceof Error ? error.message : error).slice(0, 300)
-    });
-  }
+    toolResult = {
+      note:
+        'Saved. Never mention notes or saving, and never save the same thing ' +
+        'twice. Now write the reply itself: thank them in a few words, and in ' +
+        'the same message answer what they actually said. Ask only for what ' +
+        'they have not already given you, and if they have said goodbye or ' +
+        'that they will contact him themselves, simply say goodbye warmly ' +
+        'and do not ask for anything. Use no dashes and no slashes.'
+    };
+    /* Deliberately says nothing about roles or emails: this line has to be
+       safe whoever the visitor is and whatever they last said. */
+    fallbackReply = 'Thank you, I have passed that on to Haroon and he will get back to you soon!';
+    return { status: saveNote(call.args ?? {}), toolResult, fallbackReply };
 }
