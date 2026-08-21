@@ -6,41 +6,22 @@
 
    Auth: HTTP Basic against ADMIN_USER / ADMIN_PASS env vars (set them in
    Vercel → Project → Settings → Environment Variables — your choice of
-   username and password). Storage: the Upstash Redis "chats" hash that
-   api/chat.ts writes into — keep the schema in sync across the two files.
-   The older "notes" hash is still read so anything saved before
-   conversations existed is not stranded. */
+   username and password). Every request must authenticate; with the vars
+   unset the endpoint returns 503 rather than running open.
 
-type Chat = {
-  id: string;
-  ts: string;
-  updated: string;
-  read: boolean;
-  lang: string;
-  visitor_type: string;
-  name: string;
-  contact: string;
-  note: string;
-  messages: { from: string; text: string }[];
-};
+   Storage: the Upstash Redis "chats" hash that api/chat.ts writes into. The
+   connection helpers and the StoredChat schema both live in _lib/redis.ts
+   and are imported by both files, so the two cannot drift apart. The older
+   "notes" hash is still read so anything saved before conversations existed
+   is not stranded. */
 
-function redisConfig() {
-  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
-  return url && token ? { url, token } : null;
-}
+import { redis, redisConfig, StoredChat } from './_lib/redis';
 
-async function redis(command: (string | number)[]): Promise<any> {
-  const config = redisConfig();
-  if (!config) throw new Error('storage-not-configured');
-  const response = await fetch(config.url, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${config.token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(command)
-  });
-  if (!response.ok) throw new Error(`redis ${response.status}`);
-  return (await response.json()).result;
-}
+/* The record shape is defined once in _lib/redis.ts and imported by both
+   endpoints, so the writer (api/chat.ts) and this reader cannot drift out
+   of sync. `Chat` is kept as a local alias so the rest of this file reads
+   unchanged. */
+type Chat = StoredChat;
 
 function isAuthorized(req: any): boolean {
   const user = process.env.ADMIN_USER;
@@ -56,8 +37,12 @@ function isAuthorized(req: any): boolean {
 }
 
 export default async function handler(req: any, res: any) {
+  /* Refuse to run open. With no credentials configured there is no way to
+     authenticate anyone, so the endpoint reports itself unavailable rather
+     than serving private conversations to whoever asks. 503, not 500: the
+     service is fine, it is unconfigured. */
   if (!process.env.ADMIN_USER || !process.env.ADMIN_PASS) {
-    res.status(500).json({ error: 'Set ADMIN_USER and ADMIN_PASS in Vercel environment variables' });
+    res.status(503).json({ error: 'Set ADMIN_USER and ADMIN_PASS in Vercel environment variables' });
     return;
   }
   if (!isAuthorized(req)) {

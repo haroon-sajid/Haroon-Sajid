@@ -362,7 +362,11 @@
    quiet grey for dates, body silver for prose, bright for the names that
    matter. A one-line answer produces a single paragraph, so plain replies
    look exactly as they did before. */
-.chat-widget .from-bot .chat-bubble {
+/* :not(.chat-typing) matters. The typing indicator is a bubble too, and it
+   lays its three dots out with inline-flex. Blockifying it turns the dots
+   back into inline spans, which ignore width and height, so the bubble
+   renders empty. */
+.chat-widget .from-bot .chat-bubble:not(.chat-typing) {
     display: block;
 
     > *:first-child {

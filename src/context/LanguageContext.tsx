@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, startTransition, useContext, useEffect, useMemo, useState } from 'react';
 import { translations, Lang } from '../data/translations';
 
 type LanguageValue = {
@@ -46,7 +46,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     lang,
     t: translations[lang],
     isRtl,
-    toggleLang: () => setLang((prev) => (prev === 'en' ? 'ar' : 'en'))
+    /* Switching language swaps every string on the page and flips the whole
+       layout between LTR and RTL, which is far too much work to do inside a
+       click handler: it measured ~600ms of blocked UI. startTransition marks
+       it as non-urgent, so React yields to the browser while it re-renders
+       and the interaction stays responsive. The work is the same, but it no
+       longer holds up paint. */
+    toggleLang: () =>
+      startTransition(() => setLang((prev) => (prev === 'en' ? 'ar' : 'en')))
   }), [lang, isRtl]);
 
   return (
