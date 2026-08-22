@@ -224,17 +224,21 @@ const PAGE = `<!doctype html>
   .btn.danger { color: var(--danger); }
   .btn.danger:hover { border-color: var(--danger); }
 
-  /* Filter chips */
+  /* Filter chips. These sit on the turf, not the header plaque, so unlike
+     most controls on this page they need their own solid background rather
+     than a transparent one — var(--muted) text has no contrast against
+     green. */
   .filters {
     display: flex; gap: 8px; flex-wrap: wrap;
-    max-width: 1180px; margin: 0 auto; padding: 0 20px 12px;
+    padding-bottom: 16px;
   }
   .chip {
     padding: 6px 13px; border-radius: 999px; border: 1px solid var(--line);
-    background: transparent; color: var(--muted); font-size: 12.5px; cursor: pointer;
+    background: var(--panel); color: var(--muted); font-size: 12.5px; cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .18);
     transition: all .15s ease;
   }
-  .chip:hover { color: var(--ink); border-color: var(--line); }
+  .chip:hover { color: var(--ink); border-color: var(--blue); }
   .chip.on { background: var(--ink); border-color: var(--ink); color: var(--chip-on-ink); font-weight: 600; }
 
   /* Sticky note grid.
@@ -470,9 +474,9 @@ const PAGE = `<!doctype html>
         <button class="btn" onclick="logout()">Log out</button>
       </div>
     </div>
-    <div class="filters" id="filters"></div>
   </header>
   <div class="wrap">
+    <div class="filters" id="filters"></div>
     <div class="grid" id="list"></div>
   </div>
 </div>
