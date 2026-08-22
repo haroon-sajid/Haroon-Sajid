@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.svg">
+<title>Scoping Notes: 4 Agent AI Outbound System</title>
+<style>
+  :root {
+    --ink: #111411;
+    --paper: #ffffff;
+    --soft: #f4f6f4;
+    --line: #d9ded9;
+    --green: #1d7a3e;
+    --green-dark: #145c2e;
+    --green-pale: #e8f3ec;
+    --muted: #5a625a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .page { max-width: 860px; margin: 0 auto; padding: 48px 28px 80px; }
+
+  .doc-head { border-bottom: 3px solid var(--ink); padding-bottom: 26px; margin-bottom: 8px; }
+  .doc-head .kicker {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--green); font-weight: bold; margin-bottom: 14px;
+  }
+  .doc-head h1 { font-size: 34px; line-height: 1.2; font-weight: normal; margin-bottom: 14px; }
+  .doc-head .sub { color: var(--muted); font-size: 16px; max-width: 640px; }
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 28px; margin-top: 22px;
+    font-family: Arial, Helvetica, sans-serif; font-size: 13px;
+  }
+  .meta-row div span { display: block; }
+  .meta-row .lbl { color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-size: 10px; margin-bottom: 2px; }
+  .meta-row .val { font-weight: bold; }
+
+  section { padding: 38px 0 6px; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: none; }
+
+  .sec-label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--green); font-weight: bold; margin-bottom: 8px;
+  }
+  h2 { font-size: 25px; font-weight: normal; margin-bottom: 16px; }
+  h3 { font-size: 17px; margin: 22px 0 8px; }
+  p { margin-bottom: 14px; max-width: 700px; }
+  p.note { color: var(--muted); font-size: 15px; }
+  strong { font-weight: bold; }
+
+  .lead-box {
+    background: var(--green-pale); border-left: 4px solid var(--green);
+    padding: 18px 22px; margin: 18px 0 22px; max-width: 700px;
+  }
+  .lead-box p { margin: 0; font-size: 17px; }
+
+  ul.clean { list-style: none; max-width: 700px; margin-bottom: 16px; }
+  ul.clean li { padding: 7px 0 7px 22px; position: relative; }
+  ul.clean li::before {
+    content: ""; position: absolute; left: 0; top: 15px;
+    width: 8px; height: 8px; background: var(--green);
+  }
+
+  .agent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 640px) { .agent-grid { grid-template-columns: 1fr; } }
+  .agent-card { border: 1px solid var(--line); padding: 20px; }
+  .agent-card .step {
+    font-family: Arial, Helvetica, sans-serif; font-size: 11px;
+    color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .agent-card h3 { margin: 0 0 8px; }
+  .agent-card p { margin: 0; font-size: 15px; color: var(--muted); }
+
+  .flow {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+    font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold;
+    margin: 22px 0 10px;
+  }
+  .flow .node { background: var(--ink); color: #fff; padding: 8px 16px; }
+  .flow .node.end { background: var(--green); }
+  .flow .arrow { color: var(--green); font-size: 18px; }
+
+  table {
+    width: 100%; border-collapse: collapse; margin: 16px 0 22px;
+    font-family: Arial, Helvetica, sans-serif; font-size: 14px;
+  }
+  th {
+    text-align: left; background: var(--ink); color: #fff;
+    padding: 10px 14px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+  }
+  td { padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--soft); }
+  td.em { font-weight: bold; }
+  td.green { color: var(--green-dark); font-weight: bold; }
+
+  .arch { border: 2px solid var(--ink); padding: 26px 24px; margin: 22px 0; }
+  .arch-band { margin-bottom: 0; }
+  .arch-band .band-lbl {
+    font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+  }
+  .arch-cells { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  @media (max-width: 640px) { .arch-cells { grid-template-columns: 1fr 1fr; } }
+  .cell {
+    border: 1px solid var(--line); background: var(--soft);
+    padding: 12px 12px; font-family: Arial, Helvetica, sans-serif;
+  }
+  .cell b { display: block; font-size: 13px; margin-bottom: 3px; }
+  .cell span { font-size: 11.5px; color: var(--muted); line-height: 1.45; display: block; }
+  .cell.agent { background: #fff; border: 2px solid var(--ink); }
+  .cell.agent b { font-size: 14px; }
+  .cell.agent .tag {
+    display: inline-block; background: var(--green); color: #fff;
+    font-size: 10px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;
+    padding: 2px 8px; margin-bottom: 7px;
+  }
+  .cell.out { background: var(--green-pale); border-color: var(--green); }
+  .cell.out b { color: var(--green-dark); }
+  .arch-connector {
+    display: flex; justify-content: center; align-items: center;
+    padding: 8px 0; color: var(--green); font-size: 20px; line-height: 1;
+  }
+  .arch-connector span {
+    font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold;
+    letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-left: 10px;
+  }
+  .arch-side {
+    margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--line);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  @media (max-width: 640px) { .arch-side { grid-template-columns: 1fr; } }
+
+  .risk { border: 1px solid var(--line); border-left: 4px solid var(--ink); padding: 16px 20px; margin-bottom: 14px; max-width: 720px; }
+  .risk h3 { margin: 0 0 6px; font-size: 16px; }
+  .risk p { margin: 0; font-size: 15px; }
+
+  .timeline { margin: 20px 0; max-width: 720px; }
+  .t-row { display: flex; border-bottom: 1px solid var(--line); padding: 14px 0; }
+  .t-row:last-child { border-bottom: none; }
+  .t-when {
+    flex: 0 0 110px; font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold; font-size: 14px; color: var(--green-dark);
+  }
+  .t-what { flex: 1; font-size: 15px; }
+  .t-what strong { display: block; margin-bottom: 3px; font-size: 15px; }
+
+  .price-band { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
+  @media (max-width: 640px) { .price-band { grid-template-columns: 1fr; } }
+  .price-card { border: 1px solid var(--line); padding: 22px 20px; text-align: left; }
+  .price-card.hero { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .price-card .p-lbl {
+    font-family: Arial, Helvetica, sans-serif; font-size: 11px;
+    letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; color: var(--muted);
+  }
+  .price-card.hero .p-lbl { color: #9fd4af; }
+  .price-card .p-num { font-size: 26px; font-family: Georgia, serif; margin-bottom: 8px; }
+  .price-card.hero .p-num { color: #fff; }
+  .price-card .p-note { font-size: 13px; color: var(--muted); font-family: Arial, Helvetica, sans-serif; line-height: 1.5; }
+  .price-card.hero .p-note { color: #c9d4cc; }
+
+  .kpi-strip { display: flex; flex-wrap: wrap; gap: 14px; margin: 18px 0; }
+  .kpi { background: var(--green-pale); padding: 14px 18px; flex: 1; min-width: 170px; }
+  .kpi .k-num { font-size: 21px; color: var(--green-dark); font-weight: bold; }
+  .kpi .k-lbl { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+  .closing {
+    background: var(--soft); border-top: 3px solid var(--green);
+    padding: 26px 26px; margin-top: 36px; max-width: 760px;
+  }
+  .closing p { margin-bottom: 10px; }
+  .closing p:last-child { margin-bottom: 0; }
+  .sig { margin-top: 18px; font-family: Arial, Helvetica, sans-serif; font-size: 14px; }
+  .sig strong { display: block; font-size: 15px; }
+  .sig span { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="doc-head">
+    <div class="kicker">Scoping Notes and Honest Assessment</div>
+    <h1>4 Agent AI Outbound System for the HORECA Market in Colombia</h1>
+    <p class="sub">My full read on the project: what the client is really building, the right technology to build it on, the risks nobody should ignore, realistic timeline, and cost ranges.</p>
+    <div class="meta-row">
+      <div><span class="lbl">Prepared for</span><span class="val">James</span></div>
+      <div><span class="lbl">Prepared by</span><span class="val">Muhammad Haroon Sajid</span></div>
+      <div><span class="lbl">Status</span><span class="val">Pre commitment review</span></div>
+      <div><span class="lbl">Timeline reviewed</span><span class="val">9 months</span></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-label">Section 1</div>
+    <h2>What the client is really doing</h2>
+    <div class="lead-box">
+      <p>This is not a normal automation project. The client is not automating an existing sales process. They are building a sales motion from zero in a new country, and the AI system is the sales team.</p>
+    </div>
+    <ul class="clean">
+      <li>A specialty kitchen equipment brand entering <strong>Colombia</strong> through a regional distributor.</li>
+      <li>Current sales are very low: about 1 to 2 deals per year, closed by their distributor in Spain.</li>
+      <li>No CRM, no sending domains, no mailboxes, no email reputation. Everything starts from zero.</li>
+      <li>Target market: hotels, restaurants, catering, hospitals, event venues, dark kitchens and resorts. Around 100 channel partners plus 35,000 to 40,000 end market establishments.</li>
+    </ul>
+    <p class="note">Why this matters: the automation is the easy part. The hard parts are data quality, email deliverability and brand safety in a market where the client has no history yet.</p>
+  </section>
+
+  <section>
+    <div class="sec-label">Section 2</div>
+    <h2>The system in plain words</h2>
+    <p>Four agents, each doing one clear job, chained together so a lead moves from discovery to a booked meeting without manual handoff.</p>
+    <div class="agent-grid">
+      <div class="agent-card">
+        <div class="step">Agent 1</div>
+        <h3>Scout</h3>
+        <p>Watches news, public tenders and new construction announcements. Finds the right decision maker, then finds and verifies their email and LinkedIn profile.</p>
+      </div>
+      <div class="agent-card">
+        <div class="step">Agent 2</div>
+        <h3>Qualifier</h3>
+        <p>Reads the prospect's website, scores the lead using BANT (budget, authority, need, timing). Only strong leads move forward.</p>
+      </div>
+      <div class="agent-card">
+        <div class="step">Agent 3</div>
+        <h3>Copywriter</h3>
+        <p>Writes outreach tailored to each segment. A hospital gets a different message than a boutique hotel. Creates A and B versions for testing.</p>
+      </div>
+      <div class="agent-card">
+        <div class="step">Agent 4</div>
+        <h3>Virtual SDR</h3>
+        <p>Sends sequences within safe limits, understands replies, answers questions, and always steers the conversation toward booking a meeting with the human sales team.</p>
+      </div>
+    </div>
+    <div class="flow">
+      <span class="node">Scout</span><span class="arrow">&#8594;</span>
+      <span class="node">Qualifier</span><span class="arrow">&#8594;</span>
+      <span class="node">Copywriter</span><span class="arrow">&#8594;</span>
+      <span class="node">Virtual SDR</span><span class="arrow">&#8594;</span>
+      <span class="node end">Booked Meeting</span>
+    </div>
+    <p class="note">Every lead and every booked meeting lands in the CRM automatically.</p>
+
+    <h3>Full system architecture</h3>
+    <div class="arch">
+
+      <div class="arch-band">
+        <div class="band-lbl">Layer 1: Data sources (Colombia)</div>
+        <div class="arch-cells">
+          <div class="cell"><b>RUES registry</b><span>1.8M plus registered businesses with NIT, activity codes and legal representative</span></div>
+          <div class="cell"><b>SECOP tenders</b><span>Public procurement portal for hospitals and institutional buyers</span></div>
+          <div class="cell"><b>Apollo and LinkedIn</b><span>Decision maker discovery and contact enrichment</span></div>
+          <div class="cell"><b>News and web monitoring</b><span>New hotel and restaurant openings, construction announcements</span></div>
+        </div>
+      </div>
+
+      <div class="arch-connector">&#8595;<span>raw leads flow into the pipeline</span></div>
+
+      <div class="arch-band">
+        <div class="band-lbl">Layer 2: The four agents, running on n8n</div>
+        <div class="arch-cells">
+          <div class="cell agent"><span class="tag">Agent 1</span><b>Scout</b><span>Collects leads, finds the decision maker, verifies every email before it enters the database</span></div>
+          <div class="cell agent"><span class="tag">Agent 2</span><b>Qualifier</b><span>Reads the prospect website, applies BANT scoring, passes only high scores forward</span></div>
+          <div class="cell agent"><span class="tag">Agent 3</span><b>Copywriter</b><span>Writes segment specific outreach in Spanish, grounded on real product content through RAG</span></div>
+          <div class="cell agent"><span class="tag">Agent 4</span><b>Virtual SDR</b><span>Sends sequences, reads replies, answers questions, pushes every conversation toward a meeting</span></div>
+        </div>
+      </div>
+
+      <div class="arch-connector">&#8595;<span>qualified conversations become meetings</span></div>
+
+      <div class="arch-band">
+        <div class="band-lbl">Layer 3: Delivery and results</div>
+        <div class="arch-cells">
+          <div class="cell"><b>Smartlead sending</b><span>15 to 30 warmed mailboxes across lookalike domains, safe daily limits, inbox rotation</span></div>
+          <div class="cell"><b>Human approval gate</b><span>One click approval on AI replies during the first weeks, then full autonomy</span></div>
+          <div class="cell out"><b>GoHighLevel CRM</b><span>Every lead, score, conversation and outcome recorded automatically</span></div>
+          <div class="cell out"><b>Booked meetings</b><span>Direct booking into the sales team calendar, synced with Google Calendar</span></div>
+        </div>
+      </div>
+
+      <div class="arch-side">
+        <div class="cell"><b>Knowledge base</b><span>Supabase vector store holding product catalogs, specs and pricing in Spanish. The Copywriter and SDR read from it before writing anything.</span></div>
+        <div class="cell"><b>Monitoring</b><span>Bounce rate, spam complaints, reply rates and mailbox health tracked continuously against fixed targets.</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-label">Section 3</div>
+    <h2>Recommended technology stack</h2>
+    <p>Every tool below is proven in production for this exact type of system. I have shipped several of these in live client projects.</p>
+    <table>
+      <tr><th>Layer</th><th>Tool</th><th>Why this one</th></tr>
+      <tr><td class="em">Orchestration</td><td class="green">n8n, self hosted</td><td>Full control, unlimited runs, handles all four agents as connected workflows. I run this in production today.</td></tr>
+      <tr><td class="em">CRM and calendar</td><td class="green">GoHighLevel</td><td>The client has no CRM. GHL gives CRM, pipeline, calendar and booking links in one product at one price, synced with their Google Calendar.</td></tr>
+      <tr><td class="em">Cold email sending</td><td class="green">Smartlead or Instantly</td><td>Built for cold email at scale: automatic warm up, inbox rotation and spam protection. Cold email should never be sent from the main brand domain or a normal Gmail.</td></tr>
+      <tr><td class="em">Contact data</td><td class="green">Apollo plus email verification</td><td>Decision maker discovery and enrichment. Every email is verified with a tool like ZeroBounce before sending. Never send to unverified addresses.</td></tr>
+      <tr><td class="em">Colombia data sources</td><td class="green">SECOP and RUES</td><td>SECOP is Colombia's public tender portal, ideal for hospitals and institutional buyers. RUES is the national business registry with over 1.8 million companies.</td></tr>
+      <tr><td class="em">AI layer</td><td class="green">Claude API with RAG</td><td>The scope mentions fine tuning. The correct approach is RAG: the AI reads the client's real product content before writing. Cheaper, faster to update, and far fewer wrong answers.</td></tr>
+      <tr><td class="em">Databases</td><td class="green">Supabase Postgres and vector store</td><td>Lead database, scoring history, sequence state, and the product knowledge base in one managed place.</td></tr>
+      <tr><td class="em">Safety layer</td><td class="green">Human approval gates</td><td>For the first weeks, AI written replies are approved by a human with one click before sending. I have built this pattern in production before.</td></tr>
+    </table>
+    <p class="note">All content, prompts and product knowledge will be built in Spanish from day one, since all outreach targets Colombia.</p>
+  </section>
+
+  <section>
+    <div class="sec-label">Section 4</div>
+    <h2>Honest risk assessment</h2>
+    <p>These are the things that are harder than they look. Naming them now is what protects the project later.</p>
+
+    <div class="risk">
+      <h3>1. Deliverability is the biggest risk, not the AI</h3>
+      <p>Reaching 35,000 to 40,000 contacts means roughly 800 to 900 emails per day at peak. A safe limit is about 30 to 50 emails per day per mailbox. So the project needs around 15 to 30 mailboxes spread across 8 to 15 lookalike domains, and every domain needs 3 to 4 weeks of warm up before real sending. This infrastructure must start in month 1, not month 5. Health targets once live: bounce rate under 2 percent, and spam complaints under 0.1 percent as the working target. Google enforces a hard ceiling of 0.3 percent, and senders above it lose deliverability with no way to appeal, so the system will pause any campaign that approaches this line automatically.</p>
+    </div>
+
+    <div class="risk">
+      <h3>2. Colombia specific realities</h3>
+      <p>Contact data coverage in Latin America is weaker than in the US or Europe. Expect email find rates around 40 to 60 percent, not 80. Colombia also has a strict data protection law, Ley 1581, enforced by the SIC. Important detail: a named employee email like juan.perez at a company domain counts as protected personal data under the SIC position, and only generic addresses like info at a company domain sit outside the law. The SIC has also fined companies hundreds of millions of pesos for unsolicited commercial prospecting. This does not kill the project, but it must be treated as a managed legal risk, not a solved problem. The compliant setup: clear sender identity, an opt out in every message, removal requests honored within 15 business days, the exclusion registry checked before prospecting, and a first touch built around asking permission where possible. I recommend a short review by the client's local legal counsel before mass sending begins.</p>
+    </div>
+
+    <div class="risk">
+      <h3>3. Scout is the hardest agent</h3>
+      <p>There is no single database of new hotels and restaurants opening in Colombia. Scout will combine SECOP tenders, the RUES registry, news monitoring and targeted scraping. It works, but it is an ongoing data pipeline that needs maintenance, not a one time build. Around a third of the total build effort sits here.</p>
+    </div>
+
+    <div class="risk">
+      <h3>4. LinkedIn automation carries account risk</h3>
+      <p>Automated LinkedIn outreach goes against LinkedIn terms and accounts can get restricted. The safe path is dedicated seats, low daily limits, and written acceptance of this risk from the client before launch.</p>
+    </div>
+
+    <div class="risk">
+      <h3>5. Fully autonomous from day one is dangerous</h3>
+      <p>For a brand with no presence in Colombia, one bad automated email to the wrong person can hurt the brand before it even starts. My recommendation: the system runs with human approval gates for the first 4 to 6 weeks, then moves to full autonomy once reply quality is proven. Serious buyers respect this answer.</p>
+    </div>
+
+    <div class="risk">
+      <h3>6. Success must mean booked meetings, not closed deals</h3>
+      <p>The client currently closes 1 to 2 deals per year. The system's job is a full calendar of qualified meetings for the human sales team. Closing those deals stays a human job, and expectations should be set that way from the start.</p>
+    </div>
+
+    <div class="risk">
+      <h3>7. The channel choice leaves out WhatsApp, and that is a real trade off</h3>
+      <p>WhatsApp is the dominant business channel in Colombia. Around 92 percent of Colombian internet users are on it, and many small restaurants, caterers and dark kitchens have no corporate email at all. This means the roughly 100 channel partners are the strong email and LinkedIn targets, while a meaningful part of the 35,000 to 40,000 end market establishments will be hard to reach by email alone. My recommendation: keep version 1 as email plus LinkedIn as scoped, but plan WhatsApp Business API as a fast follow phase, used only after a prospect replies and opts in, never as a cold first touch. The client should approve this channel decision knowingly, not discover it in month 6.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-label">Section 5</div>
+    <h2>Is 9 months realistic?</h2>
+    <div class="lead-box">
+      <p>Yes, 9 months is realistic. But only one part of the original plan must change: month 1 cannot be "build everything." Month 1 has to be foundation and infrastructure, because domain warm up cannot be skipped or rushed.</p>
+    </div>
+    <div class="timeline">
+      <div class="t-row"><div class="t-when">Months 1 to 2</div><div class="t-what"><strong>Foundation</strong>Domains bought and warming, mailboxes ready, CRM and databases live, product knowledge base built in Spanish, Scout version 1 collecting leads.</div></div>
+      <div class="t-row"><div class="t-when">Months 2 to 3</div><div class="t-what"><strong>Agent build and pilot</strong>All four agents connected end to end. Pilot launch to the roughly 100 channel partners with human approval on every message. This small group is the perfect low risk testing ground.</div></div>
+      <div class="t-row"><div class="t-when">Months 4 to 8</div><div class="t-what"><strong>Scaled prospecting</strong>Mass outreach to the end market, rolled out region by region and segment by segment, volume increasing weekly while bounce and spam numbers stay inside the health targets.</div></div>
+      <div class="t-row"><div class="t-when">Month 9</div><div class="t-what"><strong>Optimization and proof</strong>Tuning based on real meeting outcomes, final ROI report, and the plan for what comes next.</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-label">Section 6</div>
+    <h2>Cost ranges</h2>
+    <p>Three separate numbers, so there are no surprises later. Tool accounts and domains should be owned and paid by the client from day one.</p>
+    <div class="price-band">
+      <div class="price-card hero">
+        <div class="p-lbl">One time build</div>
+        <div class="p-num">$9,000 to $15,000</div>
+        <div class="p-note">Milestone based payments across the build. Covers all four agents, integrations, data pipelines, knowledge base and the approval system.</div>
+      </div>
+      <div class="price-card">
+        <div class="p-lbl">Monthly tools, paid by client</div>
+        <div class="p-num">$600 to $1,400</div>
+        <div class="p-note">Sending platform, domains and mailboxes, contact data, email verification, AI usage, hosting. Scales with volume.</div>
+      </div>
+      <div class="price-card">
+        <div class="p-lbl">Monthly support retainer</div>
+        <div class="p-num">$1,000 to $2,000</div>
+        <div class="p-note">Deliverability monitoring, prompt tuning, Scout source maintenance and reporting. This system needs ongoing care to stay out of spam folders.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-label">Section 7</div>
+    <h2>What I need from the client to lock numbers</h2>
+    <ul class="clean">
+      <li>Spanish product content ready for the knowledge base: catalogs, spec sheets, pricing.</li>
+      <li>Who on the client side approves messaging tone before launch.</li>
+      <li>Written acceptance of the LinkedIn automation risk.</li>
+      <li>Meeting capacity of the human sales team, so the booking volume matches what they can handle.</li>
+      <li>Confirmation of the monthly tool budget range above.</li>
+      <li>Confirmation that the client owns all domains and tool accounts.</li>
+      <li>Client sign off on the email plus LinkedIn channel choice for version 1, knowing WhatsApp is the dominant channel in Colombia and is planned as a follow up phase.</li>
+      <li>A short local legal review of the outreach approach under Ley 1581 before mass sending starts.</li>
+    </ul>
+  </section>
+
+  <div class="closing">
+    <p><strong>Bottom line.</strong> This project is very buildable, and 9 months is enough with the right phasing. My one condition is that we build it right, not fast. A system that lands in spam folders is worse than no system at all.</p>
+    <p>Happy to walk through any section of this on a call and adjust wherever the client's answers change the picture.</p>
+    <div class="sig">
+      <strong>Muhammad Haroon Sajid</strong>
+      <span>AI Automation and Full Stack Engineer</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

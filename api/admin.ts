@@ -189,9 +189,32 @@ const PAGE = `<!doctype html>
 
   /* Dashboard */
   .wrap { max-width: 1180px; }
-  .bar { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
-  .bar h1 { font-size: 26px; letter-spacing: -.02em; margin-right: auto; }
-  .count { color: var(--muted); font-size: 13px; margin-bottom: 22px; }
+
+  /* ---- Board header ----
+     A solid plaque, not the grass, is what the title and counts sit on. The
+     turf tokens gave the earlier version its texture but nowhere near enough
+     contrast for small grey text, which is why the visit count read as
+     blank. This bar owns its own background, sticks to the top so it stays
+     reachable while the board scrolls, and everything inside it uses the
+     same panel-paired tokens as the lock screen, which were built for
+     exactly this contrast. */
+  .board-header {
+    position: sticky; top: 0; z-index: 40;
+    background: var(--panel);
+    border-top: 3px solid var(--blue);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .28);
+  }
+  .board-header-inner {
+    max-width: 1180px; margin: 0 auto; padding: 20px 16px 14px;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .board-title h1 {
+    font-size: 25px; font-weight: 800; letter-spacing: -.02em; color: var(--ink);
+  }
+  .count { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .board-actions { display: flex; gap: 8px; flex-wrap: wrap; }
   .btn {
     padding: 7px 13px; border-radius: 8px; border: 1px solid var(--line);
     background: var(--panel-2); color: var(--ink); font-size: 13px; cursor: pointer;
@@ -202,7 +225,10 @@ const PAGE = `<!doctype html>
   .btn.danger:hover { border-color: var(--danger); }
 
   /* Filter chips */
-  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+  .filters {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    max-width: 1180px; margin: 0 auto; padding: 0 16px 16px;
+  }
   .chip {
     padding: 6px 13px; border-radius: 999px; border: 1px solid var(--line);
     background: transparent; color: var(--muted); font-size: 12.5px; cursor: pointer;
@@ -211,22 +237,39 @@ const PAGE = `<!doctype html>
   .chip:hover { color: var(--ink); border-color: var(--line); }
   .chip.on { background: var(--ink); border-color: var(--ink); color: var(--chip-on-ink); font-weight: 600; }
 
-  /* Sticky note grid */
+  /* Sticky note grid.
+     position: relative makes this the anchor a dragged note's left/top
+     percentages are measured against. It stays underneath the notes that
+     are still in normal grid flow, and a min-height keeps the board from
+     collapsing if every visible note has been pulled out of that flow. */
   .grid {
-    display: grid; gap: 18px;
+    position: relative;
+    display: grid; gap: 18px; min-height: 60vh;
     grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+    padding-top: 10px;
   }
-  .grid { padding-top: 10px; }
   .note-card {
     position: relative; display: flex; flex-direction: column;
     /* Top padding clears the pin that sits over the paper */
     min-height: 208px; padding: 30px 16px 14px; border: none; text-align: left;
-    border-radius: 2px; cursor: pointer; color: #1a1a1a;
+    border-radius: 2px; cursor: grab; color: #1a1a1a; touch-action: none;
     font-family: inherit; font-size: 14px;
     /* Two shadows: a tight one where the paper meets the board, and a soft
        wide one so the note reads as lifted off it */
     box-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 22px rgba(0, 0, 0, .35);
     transition: transform .18s ease, box-shadow .18s ease;
+  }
+  /* Pulled out of the grid to sit wherever it was dropped. left is a
+     percentage of the board's width, so a layout saved on a wide screen
+     still lands somewhere sane on a phone; top is plain pixels, since the
+     board's height is auto (min-height plus whatever content gives it), and
+     a percentage top against an auto-height container is not reliably
+     computable, only an offset from the top edge is. */
+  .note-card.placed { position: absolute; width: 232px; }
+  .note-card.dragging {
+    cursor: grabbing; z-index: 30; transition: none !important;
+    transform: rotate(0deg) scale(1.04) !important;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .35), 0 26px 44px rgba(0, 0, 0, .5) !important;
   }
   /* Pinned paper never hangs perfectly straight. Cycling four small angles
      keeps the wall from looking like a spreadsheet, and the rotation origin
@@ -414,15 +457,24 @@ const PAGE = `<!doctype html>
   </form>
 </div>
 
-<div id="app" class="wrap" hidden>
-  <div class="bar">
-    <h1>Notes</h1>
-    <button class="btn" onclick="load()">Refresh</button>
-    <button class="btn" onclick="logout()">Log out</button>
+<div id="app" hidden>
+  <header class="board-header">
+    <div class="board-header-inner">
+      <div class="board-title">
+        <h1>Notes for Haroon</h1>
+        <p class="count" id="count"></p>
+      </div>
+      <div class="board-actions">
+        <button class="btn" onclick="load()">Refresh</button>
+        <button class="btn" id="resetLayoutBtn">Reset layout</button>
+        <button class="btn" onclick="logout()">Log out</button>
+      </div>
+    </div>
+    <div class="filters" id="filters"></div>
+  </header>
+  <div class="wrap">
+    <div class="grid" id="list"></div>
   </div>
-  <p class="count" id="count"></p>
-  <div class="filters" id="filters"></div>
-  <div class="grid" id="list"></div>
 </div>
 
 <div class="modal" id="modal" hidden>
@@ -550,6 +602,90 @@ const PAGE = `<!doctype html>
   let chats = [];
   let filter = 'all';
   let openId = null;
+
+  /* ---- Board layout ----
+     Where each note has been dragged to, as a percentage of the board's own
+     width and height rather than raw pixels, so a layout saved on a wide
+     monitor still lands somewhere sane on a phone. Kept in localStorage: this
+     is one admin's personal arrangement, not something visitors or other
+     data touches, so it belongs next to the theme choice, not in Redis. */
+  const POSITIONS_KEY = 'notes-positions';
+  let positions = {};
+  try {
+    positions = JSON.parse(localStorage.getItem(POSITIONS_KEY) || '{}') || {};
+  } catch {
+    positions = {};
+  }
+  function savePositions() {
+    try { localStorage.setItem(POSITIONS_KEY, JSON.stringify(positions)); } catch {}
+  }
+
+  /* Set by a drag right before the browser's own click event would fire, so
+     the tap that ends a drag does not also reopen the conversation you just
+     finished repositioning. */
+  let suppressClick = false;
+
+  /* Pointer events cover mouse, touch and pen in one API. A drag only
+     starts once the pointer has actually moved a few pixels, so an ordinary
+     tap still opens the modal instead of being swallowed as a micro-drag. */
+  function enableDrag(card) {
+    const id = card.getAttribute('data-id');
+    let dragging = false;
+    let startX = 0;
+    let startY = 0;
+    let startLeft = 0;
+    let startTop = 0;
+    let boardRect = null;
+
+    card.addEventListener('pointerdown', (event) => {
+      if (event.button !== undefined && event.button !== 0) return;
+      dragging = false;
+      startX = event.clientX;
+      startY = event.clientY;
+      boardRect = $('list').getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+      startLeft = cardRect.left - boardRect.left;
+      startTop = cardRect.top - boardRect.top;
+      card.setPointerCapture(event.pointerId);
+    });
+
+    card.addEventListener('pointermove', (event) => {
+      if (!boardRect) return;
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+      if (!dragging && Math.hypot(dx, dy) < 6) return;
+      if (!dragging) {
+        dragging = true;
+        card.classList.add('placed', 'dragging');
+      }
+      event.preventDefault();
+      const width = boardRect.width || 1;
+      const height = boardRect.height || 1;
+      /* Clamped so a note can hang half off the edge, like a real pinned
+         note, but never gets dragged somewhere it can no longer be found */
+      const left = Math.max(-140, Math.min(width - 60, startLeft + dx));
+      const top = Math.max(-10, Math.min(height - 40, startTop + dy));
+      card.style.left = (left / width * 100) + '%';
+      card.style.top = top + 'px';
+    });
+
+    const finish = (event) => {
+      if (!boardRect) return;
+      try { card.releasePointerCapture(event.pointerId); } catch {}
+      if (dragging) {
+        card.classList.remove('dragging');
+        positions[id] = { x: parseFloat(card.style.left), y: parseFloat(card.style.top) };
+        savePositions();
+        /* The pointerup that ends a drag is immediately followed by a click
+           event; this is what that click checks before opening the modal. */
+        suppressClick = true;
+      }
+      dragging = false;
+      boardRect = null;
+    };
+    card.addEventListener('pointerup', finish);
+    card.addEventListener('pointercancel', finish);
+  }
 
   const TYPES = ['lead', 'recruiter', 'visitor', 'other'];
   const typeOf = (c) => (TYPES.indexOf(c.visitor_type) >= 0 ? c.visitor_type : '');
@@ -680,8 +816,13 @@ const PAGE = `<!doctype html>
       const sub = contact && contact !== who ? contact : '';
       const turns = (c.messages || []).filter((m) => m.from === 'user').length;
       const visit = visitLabel(c);
+      /* A note the admin has dragged before is pulled out of the grid and
+         put back exactly where they left it */
+      const pos = positions[c.id];
+      const placedClass = pos ? ' placed' : '';
+      const placedStyle = pos ? ' style="left:' + pos.x + '%;top:' + pos.y + 'px"' : '';
       return (
-        '<button class="note-card n-' + (type || 'none') + '" data-id="' + escapeHtml(c.id) + '">' +
+        '<button class="note-card n-' + (type || 'none') + placedClass + '" data-id="' + escapeHtml(c.id) + '"' + placedStyle + '>' +
           '<span class="pin" aria-hidden="true"></span>' +
           '<div class="n-top">' +
             (type ? '<span class="n-badge">' + type + '</span>' : '') +
@@ -699,7 +840,11 @@ const PAGE = `<!doctype html>
       );
     }).join('');
     Array.prototype.forEach.call($('list').querySelectorAll('.note-card'), (card) => {
-      card.onclick = () => openModal(card.getAttribute('data-id'));
+      card.onclick = () => {
+        if (suppressClick) { suppressClick = false; return; }
+        openModal(card.getAttribute('data-id'));
+      };
+      enableDrag(card);
     });
   }
 
@@ -710,6 +855,13 @@ const PAGE = `<!doctype html>
     renderFilters();
     renderCards();
   }
+
+  /* Drops every dragged note back into the organised grid it started in */
+  $('resetLayoutBtn').addEventListener('click', () => {
+    positions = {};
+    try { localStorage.removeItem(POSITIONS_KEY); } catch {}
+    renderCards();
+  });
 
   /* ---- Conversation modal ---- */
 
