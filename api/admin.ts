@@ -201,19 +201,19 @@ const PAGE = `<!doctype html>
   .board-header {
     position: sticky; top: 0; z-index: 40;
     background: var(--panel);
-    border-top: 3px solid var(--blue);
     border-bottom: 1px solid var(--line);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, .28);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .16);
   }
   .board-header-inner {
-    max-width: 1180px; margin: 0 auto; padding: 20px 16px 14px;
-    display: flex; align-items: flex-start; justify-content: space-between;
+    max-width: 1180px; margin: 0 auto; padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
     gap: 16px; flex-wrap: wrap;
   }
+  .board-title { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
   .board-title h1 {
-    font-size: 25px; font-weight: 800; letter-spacing: -.02em; color: var(--ink);
+    font-size: 18px; font-weight: 700; letter-spacing: -.01em; color: var(--ink);
   }
-  .count { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .count { color: var(--muted); font-size: 12.5px; }
   .board-actions { display: flex; gap: 8px; flex-wrap: wrap; }
   .btn {
     padding: 7px 13px; border-radius: 8px; border: 1px solid var(--line);
@@ -227,7 +227,7 @@ const PAGE = `<!doctype html>
   /* Filter chips */
   .filters {
     display: flex; gap: 8px; flex-wrap: wrap;
-    max-width: 1180px; margin: 0 auto; padding: 0 16px 16px;
+    max-width: 1180px; margin: 0 auto; padding: 0 20px 12px;
   }
   .chip {
     padding: 6px 13px; border-radius: 999px; border: 1px solid var(--line);
@@ -244,7 +244,7 @@ const PAGE = `<!doctype html>
      collapsing if every visible note has been pulled out of that flow. */
   .grid {
     position: relative;
-    display: grid; gap: 18px; min-height: 60vh;
+    display: grid; gap: 18px; min-height: 60vh; align-items: start;
     grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
     padding-top: 10px;
   }
@@ -462,7 +462,7 @@ const PAGE = `<!doctype html>
     <div class="board-header-inner">
       <div class="board-title">
         <h1>Notes for Haroon</h1>
-        <p class="count" id="count"></p>
+        <span class="count" id="count"></span>
       </div>
       <div class="board-actions">
         <button class="btn" onclick="load()">Refresh</button>
