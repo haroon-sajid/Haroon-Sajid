@@ -7,7 +7,7 @@
 <link rel="icon" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&display=swap" rel="stylesheet">
 <title>Scoping Notes: 4 Agent AI Outbound System</title>
 <style>
   :root {
@@ -19,11 +19,12 @@
     --green-dark: #145c2e;
     --green-pale: #e8f3ec;
     --muted: #5a625a;
-    /* A display serif with real personality for headings, so a title reads
-       as designed rather than as oversized body copy. Georgia stays as the
-       body face and as the fallback if the web font is still loading, so
-       nothing shifts awkwardly before it arrives. */
-    --font-head: 'Fraunces', Georgia, 'Times New Roman', serif;
+    /* A heavy geometric sans for headings, the same modern-SaaS register as
+       Loom or a product launch banner: confident, tight, no serif flourish.
+       Body copy stays Georgia, so the document still reads like a document;
+       the headings are what carry the punch. The Georgia-based fallback
+       only matters for the instant before the web font arrives. */
+    --font-head: 'Inter', -apple-system, 'Segoe UI', Arial, Helvetica, sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -42,8 +43,8 @@
     color: var(--green); font-weight: bold; margin-bottom: 14px;
   }
   .doc-head h1 {
-    font-family: var(--font-head); font-size: 42px; line-height: 1.12; font-weight: 700;
-    letter-spacing: -0.015em; margin-bottom: 16px;
+    font-family: var(--font-head); font-size: 40px; line-height: 1.1; font-weight: 800;
+    letter-spacing: -0.025em; margin-bottom: 16px;
   }
   .doc-head .sub { color: var(--muted); font-size: 16px; max-width: 640px; }
   .meta-row {
@@ -63,12 +64,12 @@
     color: var(--green); font-weight: bold; margin-bottom: 8px;
   }
   h2 {
-    font-family: var(--font-head); font-size: 28px; font-weight: 700;
-    letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 16px;
+    font-family: var(--font-head); font-size: 27px; font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 16px;
   }
   h3 {
-    font-family: var(--font-head); font-size: 18px; font-weight: 600;
-    letter-spacing: -0.005em; margin: 22px 0 8px;
+    font-family: var(--font-head); font-size: 17px; font-weight: 700;
+    letter-spacing: -0.01em; margin: 22px 0 8px;
   }
   p { margin-bottom: 14px; max-width: 700px; }
   p.note { color: var(--muted); font-size: 15px; }
@@ -179,7 +180,7 @@
     letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; color: var(--muted);
   }
   .price-card.hero .p-lbl { color: #9fd4af; }
-  .price-card .p-num { font-size: 27px; font-family: var(--font-head); font-weight: 700; margin-bottom: 8px; }
+  .price-card .p-num { font-size: 26px; font-family: var(--font-head); font-weight: 800; letter-spacing: -0.015em; margin-bottom: 8px; }
   .price-card.hero .p-num { color: #fff; }
   .price-card .p-note { font-size: 13px; color: var(--muted); font-family: Arial, Helvetica, sans-serif; line-height: 1.5; }
   .price-card.hero .p-note { color: #c9d4cc; }
