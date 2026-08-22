@@ -56,6 +56,10 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
+  /* Every response here is live private data (a conversation list or the
+     result of a mutation), never something safe to reuse from a cache. */
+  res.setHeader('Cache-Control', 'no-store, must-revalidate');
+
   try {
     if (req.method === 'GET') {
       /* HGETALL over REST returns a flat [field, value, field, value] array */

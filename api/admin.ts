@@ -1001,5 +1001,11 @@ export default function handler(req: any, res: any) {
   }
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  /* This page changes every time the code is redeployed, and it is the
+     admin's only view onto live, private data, so a stale cached copy is
+     never acceptable. Without this the browser (and any CDN in front of it)
+     is free to reuse an old response, which is exactly what silently served
+     the previous layout after the last few deploys. */
+  res.setHeader('Cache-Control', 'no-store, must-revalidate');
   res.status(200).send(PAGE);
 }
